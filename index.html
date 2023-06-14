@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>Bento E-Commerce</title>
+  <meta name="description" content="">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <nav>
+    <ul class="header-menu">
+      <li><a href="#home">Produtos</a></li>
+      <li><a href="pedidos.html">Meus Pedidos</a></li>
+      <li><a data-modal="abrir" href="login.html">Login →</a></li>
+      <li><a data-modal="abrir1" href="registro.html">Registrar →</a></li>
+    </ul>
+  </nav>
+
+  <section class="catalogoPrincipal">
+    <div class="catalogoPrincipalb"> 
+
+    </div>
+   
+  </section>  
+  <div class="paginacaob">
+      
+    <li class="pagina">1</li>
+    <li class="pagina">2</li>
+    <li class="pagina">3</li>
+    <li class="pagina">4</li>
+   
+  </div> 
+
+  <section class="modal-container" data-modal="container">
+    <div class="modal">
+      <button data-modal="fechar" class="fechar">X</button>
+      <form action="/login" method="POST">
+        <label for="email">Email</label>
+        <input type="text" name= "username" for="email" id="email">
+        <label for="senha">Senha</label>
+        <input type="password" name="password" for="senha" id="password">
+        <button type="submit" value="Login">Entrar</button>
+        <p>
+          <a href="/users/forgot">Esqueceu sua senha?</a> | <a href="/users/signup">Não possui cadastro?</a>
+        </p>
+      </form>
+    </div>
+  </section>
+
+  <section class="modal-container" data-modal="container1">
+    <div class="modal">
+      <button data-modal="fechar1" class="fechar">X</button>
+      <form action="registro.php" method="post">
+        <label for="email">Username</label>
+        <input type="text" name= "username" for="email" id="username">
+        <label for="email">Email</label>
+        <input type="email" name= "email" for="email" id="email">
+        <label for="senha">Senha</label>
+        <input type="password" name="password" for="password" id="password">
+        <button type="submit" value="Registrar">Registrar</button>
+      
+      </form>
+    </div>
+  </section>
+  <section class="modal-container" data-modal="container1">
+    <div class="modal">
+      <button data-modal="fechar1" class="fechar">X</button>
+      <form action="registro.php" method="post">
+        <label for="text">Numero do cartão</label>
+        <input type="text" name= "username" for="email" id="username">
+        <label for="email">Email</label>
+        <input type="email" name= "email" for="email" id="email">
+        <label for="senha">Senha</label>
+        <input type="password" name="password" for="password" id="password">
+        <button type="submit" value="Registrar">Registrar</button>
+       
+      </form>
+    </div>
+  </section>
+  
+  
+
+  <section class="texto-slide2">
+    <div>
+      <div class="conteudoItem1">
+        <h1>Aumente a conversão</h1>
+        <p>Amplie a conversão de vendas com site e aplicativo mobile otimizados para o cliente encontrar produtos de interesse inicial, receber indicações inteligentes e recuperar pedidos não finalizados.</p>
+        <img class="sec2" src="img/Sacola.png" alt="">
+      </div>
+    </div>
+  </section>
+
+  <footer class="copy">
+    <p>Todos os direitos reservados.</p>
+  </footer>
+
+  <script type="module" src="index.js" async defer></script>
+</body>
+</html>
