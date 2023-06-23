@@ -56,6 +56,12 @@ export default function initModal() {
     ]
     
   ];
+  const dadosUnificados = dadosPaginas.flat();
+  const dadosComId = dadosUnificados.map((item, index) => ({
+    id: index,
+    ...item,
+  }));
+  console.log(dadosComId); 
 
   // Página inicial
   let paginaAtual = 0;
@@ -73,6 +79,7 @@ export default function initModal() {
       // Criar os elementos HTML
       const itemContainer = document.createElement('div');
       itemContainer.className = 'itemComprar';
+      itemContainer.id = "card";
 
       const imgContainer = document.createElement('div');
       imgContainer.className = 'imgProduto';
@@ -129,10 +136,12 @@ export default function initModal() {
   paginas.forEach(pagina => {
     pagina.addEventListener('click', trocarPagina);
   });
+  
+
 
   // Renderizar os itens iniciais
   renderizarItens();
- 
+
   
 }
 
