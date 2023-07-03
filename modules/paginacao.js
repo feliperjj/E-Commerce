@@ -101,8 +101,8 @@ export default function initModal() {
 
 initModal();
 
-// const conteudos = document.querySelectorAll(".itemComprar");
-// console.log(conteudos)
+const conteudos = document.querySelectorAll(".itemComprar");
+console.log(conteudos)
 // const botoesPaginacao = document.querySelectorAll(".paginacaob li:not(.paginacao-seta)");
 
 // const itemsPerPage = 4; // quantidade de itens por página
