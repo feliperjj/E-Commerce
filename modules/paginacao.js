@@ -60,7 +60,7 @@ export default function initModal() {
 
       const nomeProduto = document.createElement("p");
       nomeProduto.id = "nome";
-      precoParagrafo.textContent = nomeProduto.nome;
+      nomeProduto.textContent = produto.nome;
 
       const botaoComprar = document.createElement("button");
       botaoComprar.className = "comprar";
@@ -72,6 +72,7 @@ export default function initModal() {
       botaoCarrinho.id = "carrinho";
       // Adicionar os elementos à estrutura do DOM
       
+      preco.appendChild(nomeProduto)
       preco.appendChild(precoParagrafo);
       conteudoItem.appendChild(preco);
       conteudoItem.appendChild(botaoComprar);

@@ -1,44 +1,32 @@
 export default function carrinho() {
-  const nomeProduto = document.querySelector("#nomeProduto");
+  const nomeProduto = document.querySelector("#nome");
   const precoEmTexto = document.querySelector("#precoTexto");
   const botaoCarrinho = document.querySelectorAll("#carrinho");
   const itensNoCarrinho = [];
-  // let  itensDoLocalStorageString  = document.getElementById("carro");
   const botaoToArray = Array.from(botaoCarrinho);
-  
+
   botaoToArray.forEach((botao) => {
     botao.addEventListener("click", () => {
       // Atualizar o carrinho e armazenar no localStorage
-      atualizarCarrinho(precoEmTexto.textContent,nomeProduto.textContent);
-
+      atualizarCarrinho(precoEmTexto.textContent, nomeProduto.textContent);
     });
-  })
+  });
 
-  function atualizarCarrinho(precoDoTexto,nomeProduto) { 
-   
+  function atualizarCarrinho(precoDoTexto, nomeProduto) {
+    const ObjetoPokemon = {
+      nome: nomeProduto,
+      descricao: '',
+      preco: precoDoTexto,
+    };
+    itensNoCarrinho.push(ObjetoPokemon);
 
-    const ObjetoPokemon = {      
-        nome: nome,
-        descricao: '',
-        preco: precoDoTexto,
-    }
-
-    itensNoCarrinho.push(ObjetoPokemon)
     const carrinhoJSON = JSON.stringify(itensNoCarrinho);
     localStorage.setItem("carrinho", carrinhoJSON);
-
-    // * Trecho de codigo que incluia uma div inteira dentro do botao
-    // itensNoCarrinho.forEach((nomeItem) => {
-    //   const itemCarrinho = document.createElement("div");
-    //   itemCarrinho.textContent = nomeItem;
-      // carrinhoItens.appendChild();
-    // });
   }
 
   function clearStorage() {
     console.log("O Storage foi Limpo");
     localStorage.removeItem("carrinho");
-    carrinhoItens.innerHTML = "";
   }
 
   setTimeout(clearStorage, 3000 * 1000 * 60);
@@ -49,9 +37,20 @@ export default function carrinho() {
     if (carrinhoJSON) {
       const carrinhoItens = JSON.parse(carrinhoJSON);
       itensNoCarrinho.push(...carrinhoItens);
-      atualizarCarrinho();
+      // A parte comentada para criar elementos HTML para exibir os itens do carrinho não foi alterada.
     }
   });
+}
+
+
+ // * Trecho de codigo que incluia uma div inteira dentro do botao
+    // itensNoCarrinho.forEach((nomeItem) => {
+    //   const itemCarrinho = document.createElement("div");
+    //   itemCarrinho.textContent = nomeItem;
+      // carrinhoItens.appendChild();
+    // });
+  // }
+
 
   // const itensDoLocalStorage = [
   //   {
@@ -80,7 +79,7 @@ export default function carrinho() {
   // });
 
   // itensDoLocalStorage.innerHTML = itensDoLocalStorageString;
-}
+// }
 
 // pegaCarrinhos.forEach(carrinho => {
 //   // const cardId =document.getElementById(".carrinhocard");
