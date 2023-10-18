@@ -1,21 +1,22 @@
 export default function carrinho() {
-  const nomeProduto = document.querySelector("#nome");
-  const precoEmTexto = document.querySelector("#precoTexto");
   const botaoCarrinho = document.querySelectorAll("#carrinho");
   const itensNoCarrinho = [];
   const botaoToArray = Array.from(botaoCarrinho);
 
   botaoToArray.forEach((botao) => {
     botao.addEventListener("click", () => {
+      // Você precisa encontrar os elementos de nome e preço para o item clicado.
+      const nomeProduto = botao.parentElement.querySelector("#nome").textContent;
+      const precoEmTexto = botao.parentElement.querySelector("#precoTexto").textContent;
       // Atualizar o carrinho e armazenar no localStorage
-      atualizarCarrinho(precoEmTexto.textContent, nomeProduto.textContent);
+      atualizarCarrinho(precoEmTexto, nomeProduto);
     });
   });
 
   function atualizarCarrinho(precoDoTexto, nomeProduto) {
     const ObjetoPokemon = {
       nome: nomeProduto,
-      descricao: '',
+      descricao: "",
       preco: precoDoTexto,
     };
     itensNoCarrinho.push(ObjetoPokemon);
@@ -41,7 +42,6 @@ export default function carrinho() {
     }
   });
 }
-
 
  // * Trecho de codigo que incluia uma div inteira dentro do botao
     // itensNoCarrinho.forEach((nomeItem) => {
