@@ -37,13 +37,13 @@ export const dadosPaginas = [
   },
   {
     id: 6,
-    nome: 'Machop',
+    nome: 'Wiglypuff',
     imagem: 'img/pokemon5.jpg',
     preco: '300 Bilhões de Kwanzas',
   },
   {
     id: 7,
-    nome: 'Mewtwo',
+    nome: 'Verdinho',
     imagem: 'img/pokemon6.jpg',
     preco: '300 Bilhões de Kwanzas',
   },
@@ -73,7 +73,7 @@ export const dadosPaginas = [
   },
   {
     id: 12,
-    nome: 'Machop',
+    nome: 'Wiglypuff',
     imagem: 'img/pokemon5.jpg',
     preco: '300 Bilhões de Kwanzas',
   },
@@ -139,7 +139,7 @@ export const dadosPaginas = [
   },
   {
     id: 23,
-    nome: 'Machop',
+    nome: 'Wiglypuff',
     imagem: 'img/pokemon5.jpg',
     preco: '300 Bilhões de Kwanzas',
   },
@@ -175,7 +175,7 @@ export const dadosPaginas = [
   },
   {
     id: 29,
-    nome: 'Machop',
+    nome: 'Wiglypuff',
     imagem: 'img/pokemon5.jpg',
     preco: '300 Bilhões de Kwanzas',
   },
