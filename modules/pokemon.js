@@ -1,29 +1,41 @@
+
 export default function carrinho() {
   const botaoCarrinho = document.querySelectorAll("#carrinho");
   const itensNoCarrinho = [];
   const botaoToArray = Array.from(botaoCarrinho);
 
+
+
   botaoToArray.forEach((botao) => {
     botao.addEventListener("click", () => {
-      // Você precisa encontrar os elementos de nome e preço para o item clicado.
       const nomeProduto = botao.parentElement.querySelector("#nome").textContent;
       const precoEmTexto = botao.parentElement.querySelector("#precoTexto").textContent;
-      // Atualizar o carrinho e armazenar no localStorage
-      atualizarCarrinho(precoEmTexto, nomeProduto);
+
+
+      const itemExistente = itensNoCarrinho.find(item => item.nome === nomeProduto);
+
+      if (itemExistente) {
+
+        itemExistente.quantidade++;
+      } else {
+
+        const novoItem = {
+          nome: nomeProduto,
+          descricao: "",
+          preco: precoEmTexto,
+          quantidade: 1,
+        };
+        itensNoCarrinho.push(novoItem);
+      }
+      atualizarCarrinho();
     });
   });
 
-  function atualizarCarrinho(precoDoTexto, nomeProduto) {
-    const ObjetoPokemon = {
-      nome: nomeProduto,
-      descricao: "",
-      preco: precoDoTexto,
-    };
-    itensNoCarrinho.push(ObjetoPokemon);
-
+  function atualizarCarrinho() {
     const carrinhoJSON = JSON.stringify(itensNoCarrinho);
     localStorage.setItem("carrinho", carrinhoJSON);
   }
+
 
   function clearStorage() {
     console.log("O Storage foi Limpo");
@@ -38,7 +50,6 @@ export default function carrinho() {
     if (carrinhoJSON) {
       const carrinhoItens = JSON.parse(carrinhoJSON);
       itensNoCarrinho.push(...carrinhoItens);
-      // A parte comentada para criar elementos HTML para exibir os itens do carrinho não foi alterada.
     }
   });
 }

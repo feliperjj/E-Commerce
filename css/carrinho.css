@@ -1,0 +1,50 @@
+.tabela-carro {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  margin: 20px 0;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  font-family: 'Arial', sans-serif;
+}
+
+.tabela-carro th {
+  background-color: #007bff; /* Um azul elegante */
+  color: white;
+  padding: 15px;
+  text-align: left;
+  border-bottom: 2px solid #0056b3; /* Um azul mais escuro para contraste */
+}
+
+.tabela-carro tr:nth-child(even) {
+  background-color: #f8f9fa; /* Um cinza muito claro para as linhas pares */
+}
+.tabela-carro tr:nth-child(odd) {
+  background-color: white;
+}
+
+#quantidade {
+  text-align: center;
+}
+
+.tabela-carro tr:hover {
+  background-color: #f0f0f0;
+}
+.tabela-carro thead th {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+body {
+  font-family: 'Arial', sans-serif;
+  background-color: #f5f5f5;
+  color: #333;
+  margin: 0;
+  padding: 0;
+}
+h1 {
+  text-align: center;
+  color: #333;
+  margin-top: 20px;
+}
+
+
