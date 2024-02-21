@@ -16,7 +16,7 @@ export default function injetaDadosTabela() {
 
       td1.textContent = itens.nome;
       td2.textContent = itens.preco;
-      td3.textContent = itens.id;
+      td3.textContent = itens.quantidade;
       linhaDaTabela.appendChild(td1);
       linhaDaTabela.appendChild(td2);
       linhaDaTabela.appendChild(td3);
