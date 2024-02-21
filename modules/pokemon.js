@@ -10,6 +10,7 @@ export default function carrinho() {
     botao.addEventListener("click", () => {
       const nomeProduto = botao.parentElement.querySelector("#nome").textContent;
       const precoEmTexto = botao.parentElement.querySelector("#precoTexto").textContent;
+      const quant = botao.parentElement.querySelector("#quantidade").querySelector.textContent;
 
 
       const itemExistente = itensNoCarrinho.find(item => item.nome === nomeProduto);
@@ -23,7 +24,7 @@ export default function carrinho() {
           nome: nomeProduto,
           descricao: "",
           preco: precoEmTexto,
-          quantidade: 1,
+          quantidade: quant,
         };
         itensNoCarrinho.push(novoItem);
       }

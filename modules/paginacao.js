@@ -57,6 +57,10 @@ export default function initModal() {
       const precoParagrafo = document.createElement("p");
       precoParagrafo.id = "precoTexto";
       precoParagrafo.textContent = produto.preco;
+      
+      const quantiParagrafo = document.createElement("p");
+      quantiParagrafo.id = "quantidade";
+      quantiParagrafo.textContent = produto.quantidade;
 
       const nomeProduto = document.createElement("p");
       nomeProduto.id = "nome";
@@ -75,6 +79,7 @@ export default function initModal() {
       preco.appendChild(nomeProduto)
       preco.appendChild(precoParagrafo);
       conteudoItem.appendChild(preco);
+      conteudoItem.appendChild(quantiParagrafo)
       conteudoItem.appendChild(botaoComprar);
       conteudoItem.appendChild(botaoCarrinho);
       imgContainer.appendChild(img);
