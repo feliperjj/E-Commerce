@@ -33,7 +33,7 @@ git clone https://github.com/feliperjj/E-Commerce.git
 
     Configure um servidor local ou utilize um servidor web como Apache.
     Importe o arquivo pokemons.json para o seu banco de dados ou utilize os dados fictícios fornecidos.
-    Inicie o servidor e abra o arquivo index.html no seu navegador para acessar o e-commerce.
+    Inicie o servidor e abra o arquivo index.html no seu navegador para acessar o e-commerce,devido a utilização de Modules no Javascript o mesmo só funcionará corretamente utilizando o Liveserver.
     Para acessar funcionalidades de login e registro, utilize as páginas login.php e registro.php, respectivamente.
 
 Contribuição
