@@ -29,7 +29,7 @@ Configuração e Uso
 
 bash
 
-git clone https://github.com/seu-usuario/seu-repositorio.git
+git clone https://github.com/feliperjj/E-Commerce.git
 
     Configure um servidor local ou utilize um servidor web como Apache.
     Importe o arquivo pokemons.json para o seu banco de dados ou utilize os dados fictícios fornecidos.
