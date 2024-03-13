@@ -34,7 +34,7 @@ export default function carrinho() {
         itensNoCarrinho.push(novoItem);
       }
       atualizarCarrinho();
-      console.log(itemExistente.total)
+    
      
     });
   });

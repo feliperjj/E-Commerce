@@ -73,7 +73,7 @@ export default function initModal() {
       
       const botaoDeleta = document.createElement("button");
       botaoDeleta.id="deleta";
-      nomeProduto.textContent="Obliterar";
+      
       
   
 
@@ -99,7 +99,7 @@ export default function initModal() {
       itemContainer.appendChild(conteudoItem);
       catalogoContainer.appendChild(itemContainer);
 
-      botaoDeleta.appendChild()
+
 
     });
   }
