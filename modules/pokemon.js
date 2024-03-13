@@ -10,25 +10,32 @@ export default function carrinho() {
     botao.addEventListener("click", () => {
       const nomeProduto = botao.parentElement.querySelector("#nome").textContent;
       const precoEmTexto = botao.parentElement.querySelector("#precoTexto").textContent;
+      const precoFormat = parseInt(precoEmTexto);
       const quant = botao.parentElement.querySelector("#quantidade").textContent;
-
-
+      
+      const total = botao.parentElement.querySelector("#total").textContent;
+      let totalFormat = parseFloat(total); 
+      
       const itemExistente = itensNoCarrinho.find(item => item.nome === nomeProduto);
-
+      
       if (itemExistente) {
-
         itemExistente.quantidade++;
+     
+        itemExistente.total += parseFloat(itemExistente.preco) * parseInt(itemExistente.quantidade); // Você deve adicionar o total atual ao total existente
       } else {
 
         const novoItem = {
           nome: nomeProduto,
           descricao: "",
-          preco: precoEmTexto,
-          quantidade: quant,
+          preco: precoFormat,
+          quantidade: parseInt(quant), // Convertendo para inteiro
+          total: precoFormat * parseInt(quant), // Calculando o total corretamente
         };
         itensNoCarrinho.push(novoItem);
       }
       atualizarCarrinho();
+      console.log(itemExistente.total)
+     
     });
   });
 

@@ -62,9 +62,20 @@ export default function initModal() {
       quantiParagrafo.id = "quantidade";
       quantiParagrafo.textContent = produto.quantidade;
 
+      const totalParagrafo = document.createElement("p");
+      totalParagrafo.id = "total";
+      totalParagrafo.textContent = produto.total;
+
       const nomeProduto = document.createElement("p");
       nomeProduto.id = "nome";
       nomeProduto.textContent = produto.nome;
+      
+      
+      const botaoDeleta = document.createElement("button");
+      botaoDeleta.id="deleta";
+      nomeProduto.textContent="Obliterar";
+      
+  
 
       const botaoComprar = document.createElement("button");
       botaoComprar.className = "comprar";
@@ -78,6 +89,7 @@ export default function initModal() {
       
       preco.appendChild(nomeProduto)
       preco.appendChild(precoParagrafo);
+      conteudoItem.appendChild(totalParagrafo);
       conteudoItem.appendChild(preco);
       conteudoItem.appendChild(quantiParagrafo)
       conteudoItem.appendChild(botaoComprar);
@@ -86,6 +98,9 @@ export default function initModal() {
       itemContainer.appendChild(imgContainer);
       itemContainer.appendChild(conteudoItem);
       catalogoContainer.appendChild(itemContainer);
+
+      botaoDeleta.appendChild()
+
     });
   }
 
