@@ -28,9 +28,8 @@ export default function carrinho() {
         const novoItem = {
           nome: nomeProduto,
           descricao: "",
-          preco: precoFormat,
           quantidade: parseInt(quant), // Convertendo para inteiro
-          total: precoFormat * parseInt(quant), // Calculando o total corretamente
+          total: precoFormat * parseInt(quant) , // Calculando o total corretamente
         };
         itensNoCarrinho.push(novoItem);
       }
@@ -42,14 +41,15 @@ export default function carrinho() {
 
   btnExclui.forEach((btn, index) => {
     btn.addEventListener("click", () => {
-      console.log("btnExclui")     
-          itensNoCarrinho[index].total -= parseFloat(itensNoCarrinho[index].preco);
+     
+        itensNoCarrinho[index].total -= parseFloat(itensNoCarrinho[index].preco);
       itensNoCarrinho[index].quantidade--;
   
       
       if (itensNoCarrinho[index].quantidade <= 0) {
-        itensNoCarrinho.splice(index, 1);
+        itensNoCarrinho.slice(index, 1);
       }
+     
   
       // Atualizar o carrinho no localStorage e na interface
       atualizarCarrinho();
