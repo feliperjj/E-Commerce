@@ -3,6 +3,7 @@ export default function carrinho() {
   const botaoCarrinho = document.querySelectorAll("#carrinho");
   const itensNoCarrinho = [];
   const botaoToArray = Array.from(botaoCarrinho);
+  const btnExclui = document.querySelectorAll("#excluir");
 
 
 
@@ -38,6 +39,24 @@ export default function carrinho() {
      
     });
   });
+
+  btnExclui.forEach((btn, index) => {
+    btn.addEventListener("click", () => {
+      console.log("btnExclui")     
+          itensNoCarrinho[index].total -= parseFloat(itensNoCarrinho[index].preco);
+      itensNoCarrinho[index].quantidade--;
+  
+      
+      if (itensNoCarrinho[index].quantidade <= 0) {
+        itensNoCarrinho.splice(index, 1);
+      }
+  
+      // Atualizar o carrinho no localStorage e na interface
+      atualizarCarrinho();
+    });
+  });
+  
+ 
 
   function atualizarCarrinho() {
     const carrinhoJSON = JSON.stringify(itensNoCarrinho);

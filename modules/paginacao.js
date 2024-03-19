@@ -71,8 +71,7 @@ export default function initModal() {
       nomeProduto.textContent = produto.nome;
       
       
-      const botaoDeleta = document.createElement("button");
-      botaoDeleta.id="deleta";
+   
       
       
   

@@ -18,12 +18,9 @@ export default function injetaDadosTabela() {
 
       const btnExcluir = document.createElement("button");
       btnExcluir.textContent = "Excluir";
+      btnExcluir.id="excluir"
 
-      // Aqui você pode adicionar a lógica para excluir o item da tabela e do localStorage
-      btnExcluir.addEventListener("click", () => {
-        console.log("Excluir item:", itens);
-      });
-
+    
    
       td5.appendChild(btnExcluir);
 
