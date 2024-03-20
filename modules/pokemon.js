@@ -1,68 +1,53 @@
-
 export default function carrinho() {
   const botaoCarrinho = document.querySelectorAll("#carrinho");
   const itensNoCarrinho = [];
   const botaoToArray = Array.from(botaoCarrinho);
-  const btnExclui = document.querySelectorAll("#excluir");
-
-
+  const btnExclui = document.querySelectorAll("#exclui");
 
   botaoToArray.forEach((botao) => {
     botao.addEventListener("click", () => {
       const nomeProduto = botao.parentElement.querySelector("#nome").textContent;
       const precoEmTexto = botao.parentElement.querySelector("#precoTexto").textContent;
-      const precoFormat = parseInt(precoEmTexto);
+      const precoFormat = parseFloat(precoEmTexto.replace("R$", "").replace(",", "."));
       const quant = botao.parentElement.querySelector("#quantidade").textContent;
       
       const total = botao.parentElement.querySelector("#total").textContent;
-      let totalFormat = parseFloat(total); 
+      let totalFormat = parseFloat(total.replace("R$", "").replace(",", ".")); 
       
       const itemExistente = itensNoCarrinho.find(item => item.nome === nomeProduto);
       
       if (itemExistente) {
         itemExistente.quantidade++;
-     
-        itemExistente.total += parseFloat(itemExistente.preco) * parseInt(itemExistente.quantidade); // Você deve adicionar o total atual ao total existente
+        itemExistente.total += parseFloat(itemExistente.preco) * parseInt(itemExistente.quantidade);
       } else {
-
         const novoItem = {
           nome: nomeProduto,
           descricao: "",
-          quantidade: parseInt(quant), // Convertendo para inteiro
-          total: precoFormat * parseInt(quant) , // Calculando o total corretamente
+          preco: precoFormat,
+          quantidade: parseInt(quant),
+          total: precoFormat * parseInt(quant),
         };
         itensNoCarrinho.push(novoItem);
       }
       atualizarCarrinho();
-    
-     
     });
   });
 
   btnExclui.forEach((btn, index) => {
     btn.addEventListener("click", () => {
-     
-        itensNoCarrinho[index].total -= parseFloat(itensNoCarrinho[index].preco);
+      itensNoCarrinho[index].total -= itensNoCarrinho[index].preco;
       itensNoCarrinho[index].quantidade--;
-  
-      
       if (itensNoCarrinho[index].quantidade <= 0) {
-        itensNoCarrinho.slice(index, 1);
+        itensNoCarrinho.splice(index, 1);
       }
-     
-  
-      // Atualizar o carrinho no localStorage e na interface
       atualizarCarrinho();
     });
   });
-  
- 
 
   function atualizarCarrinho() {
     const carrinhoJSON = JSON.stringify(itensNoCarrinho);
     localStorage.setItem("carrinho", carrinhoJSON);
   }
-
 
   function clearStorage() {
     console.log("O Storage foi Limpo");

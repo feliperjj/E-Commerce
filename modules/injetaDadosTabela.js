@@ -18,10 +18,9 @@ export default function injetaDadosTabela() {
 
       const btnExcluir = document.createElement("button");
       btnExcluir.textContent = "Excluir";
-      btnExcluir.id="excluir"
+      btnExcluir.id = "exclui";
 
     
-   
       td5.appendChild(btnExcluir);
 
       // Adiciona todas as células à linha da tabela
