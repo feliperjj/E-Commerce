@@ -1,9 +1,9 @@
-@import './css/geral.css';
-@import './css/header.css';
-@import './css/card.css';
-@import './css/modal.css';
-@import './css/pagination.css';
-@import './css/carrinho.css';
+@import './geral.css';
+@import './header.css';
+@import './card.css';
+@import './modal.css';
+@import './pagination.css';
+@import './carrinho.css';
 table {
   border-collapse: collapse;
   width: 100%;
