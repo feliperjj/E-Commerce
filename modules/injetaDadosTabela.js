@@ -10,15 +10,13 @@ export default function injetaDadosTabela() {
       const td3 = document.createElement("td");
       const td4 = document.createElement("td");
       const td5 = document.createElement("td"); // Célula para o botão de exclusão
-
+      const btnExcluir = document.createElement("button");  
       td1.textContent = itens.nome;
       td2.textContent = itens.preco;
       td3.textContent = itens.quantidade;
       td4.textContent = itens.total;
-
-      const btnExcluir = document.createElement("button");
       btnExcluir.textContent = "Excluir";
-      btnExcluir.id = "exclui";
+      btnExcluir.className = "exclui";
 
     
       td5.appendChild(btnExcluir);

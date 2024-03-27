@@ -1,18 +1,20 @@
+
 export default function carrinho() {
   const botaoCarrinho = document.querySelectorAll("#carrinho");
   const itensNoCarrinho = [];
   const botaoToArray = Array.from(botaoCarrinho);
-  const btnExclui = document.querySelectorAll("#exclui");
+  const btnExclui = document.querySelectorAll(".exclui");
+
 
   botaoToArray.forEach((botao) => {
     botao.addEventListener("click", () => {
       const nomeProduto = botao.parentElement.querySelector("#nome").textContent;
       const precoEmTexto = botao.parentElement.querySelector("#precoTexto").textContent;
-      const precoFormat = parseFloat(precoEmTexto.replace("R$", "").replace(",", "."));
+      const precoFormat = parseFloat(precoEmTexto);
       const quant = botao.parentElement.querySelector("#quantidade").textContent;
       
       const total = botao.parentElement.querySelector("#total").textContent;
-      let totalFormat = parseFloat(total.replace("R$", "").replace(",", ".")); 
+      let totalFormat = parseFloat(total); 
       
       const itemExistente = itensNoCarrinho.find(item => item.nome === nomeProduto);
       
@@ -35,6 +37,7 @@ export default function carrinho() {
 
   btnExclui.forEach((btn, index) => {
     btn.addEventListener("click", () => {
+      
       itensNoCarrinho[index].total -= itensNoCarrinho[index].preco;
       itensNoCarrinho[index].quantidade--;
       if (itensNoCarrinho[index].quantidade <= 0) {
