@@ -10,4 +10,3 @@ carrinho();
 
 // const catalogoPrincipalElement = document.querySelector('.catalogoPrincipal');
 // pokemon(catalogoPrincipalElement);
-

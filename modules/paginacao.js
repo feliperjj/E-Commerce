@@ -1,8 +1,8 @@
-import { dadosPaginas } from "./dados.js";
+import { dadosPaginas } from './dados.js';
 
 export default function initModal() {
   // Obter o catálogo de container do HTML
-  const catalogoContainer = document.querySelector(".catalogoPrincipal");
+  const catalogoContainer = document.querySelector('.catalogoPrincipal');
 
   const itensPorPagina = 8;
   const numTotalDePaginas = Math.ceil(dadosPaginas.length / itensPorPagina);
@@ -29,7 +29,7 @@ export default function initModal() {
   // Função para renderizar os itens da página atual
   function renderizarItens() {
     // Limpar o conteúdo do catálogo
-    catalogoContainer.innerHTML = "";
+    catalogoContainer.innerHTML = '';
 
     // Obter os dados da página atual
     const dadosPaginaAtual = itensDivididoPorPaginas[paginaAtual];
@@ -37,69 +37,60 @@ export default function initModal() {
     // Loop através dos dados da página atual
     dadosPaginaAtual.forEach((produto) => {
       // Criar os elementos HTML
-      const itemContainer = document.createElement("div");
-      itemContainer.className = "itemComprar";
+      const itemContainer = document.createElement('div');
+      itemContainer.className = 'itemComprar';
 
-      const imgContainer = document.createElement("div");
-      imgContainer.className = "imgProduto";
+      const imgContainer = document.createElement('div');
+      imgContainer.className = 'imgProduto';
 
-      const img = document.createElement("img");
-      img.className = "itemImg";
+      const img = document.createElement('img');
+      img.className = 'itemImg';
       img.src = produto.imagem;
-      img.alt = "";
+      img.alt = '';
 
-      const conteudoItem = document.createElement("div");
-      conteudoItem.className = "conteudoItem";
+      const conteudoItem = document.createElement('div');
+      conteudoItem.className = 'conteudoItem';
 
-      const preco = document.createElement("div");
-      preco.className = "preco";
+      const preco = document.createElement('div');
+      preco.className = 'preco';
 
-      const precoParagrafo = document.createElement("p");
-      precoParagrafo.id = "precoTexto";
+      const precoParagrafo = document.createElement('p');
+      precoParagrafo.id = 'precoTexto';
       precoParagrafo.textContent = produto.preco;
-      
-      const quantiParagrafo = document.createElement("p");
-      quantiParagrafo.id = "quantidade";
+
+      const quantiParagrafo = document.createElement('p');
+      quantiParagrafo.id = 'quantidade';
       quantiParagrafo.textContent = produto.quantidade;
 
-      const totalParagrafo = document.createElement("p");
-      totalParagrafo.id = "total";
+      const totalParagrafo = document.createElement('p');
+      totalParagrafo.id = 'total';
       totalParagrafo.textContent = produto.total;
 
-      const nomeProduto = document.createElement("p");
-      nomeProduto.id = "nome";
+      const nomeProduto = document.createElement('p');
+      nomeProduto.id = 'nome';
       nomeProduto.textContent = produto.nome;
-      
-      
-   
-      
-      
-  
 
-      const botaoComprar = document.createElement("button");
-      botaoComprar.className = "comprar";
-      botaoComprar.textContent = "Comprar";
+      const botaoComprar = document.createElement('button');
+      botaoComprar.className = 'comprar';
+      botaoComprar.textContent = 'Comprar';
 
-      const botaoCarrinho = document.createElement("button");
-      botaoCarrinho.className = "carrinho";
-      botaoCarrinho.textContent = "Adicionar ao Carrinho";
-      botaoCarrinho.id = "carrinho";
+      const botaoCarrinho = document.createElement('button');
+      botaoCarrinho.className = 'carrinho';
+      botaoCarrinho.textContent = 'Adicionar ao Carrinho';
+      // botaoCarrinho.id = 'carrinho';
       // Adicionar os elementos à estrutura do DOM
-      
-      preco.appendChild(nomeProduto)
+
+      preco.appendChild(nomeProduto);
       preco.appendChild(precoParagrafo);
       conteudoItem.appendChild(totalParagrafo);
       conteudoItem.appendChild(preco);
-      conteudoItem.appendChild(quantiParagrafo)
+      conteudoItem.appendChild(quantiParagrafo);
       conteudoItem.appendChild(botaoComprar);
       conteudoItem.appendChild(botaoCarrinho);
       imgContainer.appendChild(img);
       itemContainer.appendChild(imgContainer);
       itemContainer.appendChild(conteudoItem);
       catalogoContainer.appendChild(itemContainer);
-
-
-
     });
   }
 
@@ -114,11 +105,11 @@ export default function initModal() {
   }
 
   // Botões de página
-  const paginas = document.querySelectorAll(".paginacaob li");
+  const paginas = document.querySelectorAll('.paginacaob li');
 
   // Adicionar event listeners aos botões
   paginas.forEach((pagina) => {
-    pagina.addEventListener("click", trocarPagina);
+    pagina.addEventListener('click', trocarPagina);
   });
 
   // Renderizar os itens iniciais
@@ -127,8 +118,7 @@ export default function initModal() {
 
 initModal();
 
-const conteudos = document.querySelectorAll(".itemComprar");
-console.log(conteudos);
+const conteudos = document.querySelectorAll('.itemComprar');
 // const botoesPaginacao = document.querySelectorAll(".paginacaob li:not(.paginacao-seta)");
 
 // const itemsPerPage = 4; // quantidade de itens por página

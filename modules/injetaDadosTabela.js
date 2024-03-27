@@ -1,24 +1,23 @@
 export default function injetaDadosTabela() {
-  const tbody = document.querySelector("tbody");
-  const itensDoLocalStorage = JSON.parse(localStorage.getItem("carrinho"));
+  const tbody = document.querySelector('tbody');
+  const itensDoLocalStorage = JSON.parse(localStorage.getItem('carrinho'));
 
   if (itensDoLocalStorage) {
     itensDoLocalStorage.forEach((itens) => {
-      const linhaDaTabela = document.createElement("tr");
-      const td1 = document.createElement("td");
-      const td2 = document.createElement("td");
-      const td3 = document.createElement("td");
-      const td4 = document.createElement("td");
-      const td5 = document.createElement("td"); // Célula para o botão de exclusão
-      const btnExcluir = document.createElement("button");  
+      const linhaDaTabela = document.createElement('tr');
+      const td1 = document.createElement('td');
+      const td2 = document.createElement('td');
+      const td3 = document.createElement('td');
+      const td4 = document.createElement('td');
+      const td5 = document.createElement('td'); // Célula para o botão de exclusão
+      const btnExcluir = document.createElement('button');
       td1.textContent = itens.nome;
       td2.textContent = itens.preco;
       td3.textContent = itens.quantidade;
       td4.textContent = itens.total;
-      btnExcluir.textContent = "Excluir";
-      btnExcluir.className = "exclui";
+      btnExcluir.textContent = 'Excluir';
+      btnExcluir.className = 'exclui';
 
-    
       td5.appendChild(btnExcluir);
 
       // Adiciona todas as células à linha da tabela
@@ -35,4 +34,4 @@ export default function injetaDadosTabela() {
 }
 
 // Chama a função para injetar os dados na tabela
-injetaDadosTabela();
+// injetaDadosTabela();
