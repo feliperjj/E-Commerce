@@ -1,49 +1,36 @@
-
-
-
 <?php
+
 session_start();
 
-// verificar se o usuário está logado
+// Verificar se o usuário está logado
 if (!isset($_SESSION['user_id'])) {
-    header('Location: login.php');
+    header('Location: form_login.php'); // Redirecione para o formulário de login
+    exit();
 }
 
-// receber o ID do usuário
-$user_id = $_SESSION['user_id'];
+// Receber o ID do usuário
+$user_id = intval($_SESSION['user_id']);
 
-// buscar os dados do usuário no banco de dados
+// Conectar ao banco de dados (ajuste os dados de conexão)
 $conn = new mysqli('localhost', 'usuario', 'senha', 'banco_de_dados');
 
 if ($conn->connect_error) {
     die('Erro de conexão: ' . $conn->connect_error);
 }
 
-$sql = "SELECT * FROM usuarios WHERE id = $user_id";
-$result = $conn->query($sql);
+// Buscar os dados do usuário de forma segura
+$sql = "SELECT * FROM usuarios WHERE id = ?";
+$stmt = $conn->prepare($sql);
+$stmt->bind_param("i", $user_id);
+$stmt->execute();
+$result = $stmt->get_result();
 $userData = $result->fetch_assoc();
 
-// exibir os dados do usuário
-echo 'Usuário logado: ' . $userData['nome'];
-
-// fechar a conxão com o banco de dados
-$conn->close();
-?>
-
-
-5. Verificação da sessão
-
-PHP
-<?php
-session_start();
-
-// verificar se o usuário está logado
-if (!isset($_SESSION['user_id'])) {
-    header('Location: login.php');
+if ($userData) {
+    echo 'Usuário logado: ' . htmlspecialchars($userData['nome']);
+} else {
+    echo 'Usuário não encontrado.';
 }
 
-
-
-// fechar a conexão com o banco de dados
 $conn->close();
 ?>
