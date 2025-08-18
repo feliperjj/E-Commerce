@@ -2,35 +2,37 @@
 
 session_start();
 
-// Verificar se o usuário está logado
-if (!isset($_SESSION['user_id'])) {
-    header('Location: form_login.php'); // Redirecione para o formulário de login
-    exit();
+// Conecta ao banco de dados SQLite
+$db = new SQLite3('ecommerce.db');
+
+// Processa o formulário de login quando enviado via POST
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $email = $_POST['email'];
+    $password = $_POST['password'];
+
+    // Prepara a query para buscar o usuário pelo email
+    $stmt = $db->prepare('SELECT id, password FROM usuarios WHERE email = ?');
+    $stmt->bindValue(1, $email, SQLITE3_TEXT);
+    $result = $stmt->execute();
+    $userData = $result->fetchArray(SQLITE3_ASSOC);
+
+    // Verifica se o usuário foi encontrado
+    if ($userData) {
+        // Verifica a senha criptografada
+        if (password_verify($password, $userData['password'])) {
+            // Senha correta, inicia a sessão
+            $_SESSION['user_id'] = $userData['id'];
+            // Redireciona para a página principal (ou onde desejar)
+            header('Location: index.php');
+            exit();
+        } else {
+            echo "Senha incorreta.";
+        }
+    } else {
+        echo "Usuário não encontrado.";
+    }
 }
 
-// Receber o ID do usuário
-$user_id = intval($_SESSION['user_id']);
+$db->close();
 
-// Conectar ao banco de dados (ajuste os dados de conexão)
-$conn = new mysqli('localhost', 'usuario', 'senha', 'banco_de_dados');
-
-if ($conn->connect_error) {
-    die('Erro de conexão: ' . $conn->connect_error);
-}
-
-// Buscar os dados do usuário de forma segura
-$sql = "SELECT * FROM usuarios WHERE id = ?";
-$stmt = $conn->prepare($sql);
-$stmt->bind_param("i", $user_id);
-$stmt->execute();
-$result = $stmt->get_result();
-$userData = $result->fetch_assoc();
-
-if ($userData) {
-    echo 'Usuário logado: ' . htmlspecialchars($userData['nome']);
-} else {
-    echo 'Usuário não encontrado.';
-}
-
-$conn->close();
 ?>
