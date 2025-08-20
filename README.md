@@ -4,9 +4,6 @@
 ![GitHub top language](https://img.shields.io/github/languages/top/feliperjj/E-Commerce?style=for-the-badge)
 ![GitHub repo size](https://img.shields.io/github/repo-size/feliperjj/E-Commerce?style=for-the-badge)
 
-<p align="center">
-  <img src="https://i.imgur.com/your-project-image.png" alt="Demonstração do E-commerce" width="700"/>
-</p>
 
 ## 🚀 Sobre o Projeto
 
