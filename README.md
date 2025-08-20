@@ -1,4 +1,4 @@
-# E-Commerce de Pokémon 🛒
+# E-Commerce de Pokémon em construção 🛒
 
 ![GitHub language count](https://img.shields.io/github/languages/count/feliperjj/E-Commerce?style=for-the-badge)
 ![GitHub top language](https://img.shields.io/github/languages/top/feliperjj/E-Commerce?style=for-the-badge)
