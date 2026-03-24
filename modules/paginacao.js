@@ -2,9 +2,13 @@
 
 import { dadosPaginas } from './dados.js';
 
+// IMPORTANTE: Importe a função de adicionar ao carrinho aqui. 
+// Ajuste o caminho se o arquivo tiver outro nome (ex: ./pokemon.js)
+import { adicionarAoCarrinho } from './pokemon.js'; 
+
 export default function initPagin() {
   const catalogoContainer = document.querySelector('.catalogoPrincipal');
-  const ulPaginacao = document.querySelector('.paginacaob'); // Pegamos a <ul> da paginação
+  const ulPaginacao = document.querySelector('.paginacaob'); 
   
   if (!catalogoContainer) return; 
 
@@ -26,7 +30,6 @@ export default function initPagin() {
 
   let paginaAtual = 0;
 
-  // Função para renderizar os itens (Pokémons) da página
   function renderizarItens() {
     catalogoContainer.innerHTML = '';
     const dadosPaginaAtual = itensDivididoPorPaginas[paginaAtual];
@@ -66,13 +69,24 @@ export default function initPagin() {
       nomeProduto.id = 'nome';
       nomeProduto.textContent = produto.nome;
 
+      // BOTÃO COMPRAR
       const botaoComprar = document.createElement('button');
       botaoComprar.className = 'comprar';
       botaoComprar.textContent = 'Comprar';
+      // EVENTO COMPRAR: Adiciona e vai para o carrinho
+      botaoComprar.addEventListener('click', () => {
+        adicionarAoCarrinho(produto);
+        window.location.href = 'carrinho.html';
+      });
 
+      // BOTÃO ADICIONAR AO CARRINHO
       const botaoCarrinho = document.createElement('button');
       botaoCarrinho.className = 'carrinho';
       botaoCarrinho.textContent = 'Adicionar ao Carrinho';
+      // EVENTO CARRINHO: Apenas adiciona
+      botaoCarrinho.addEventListener('click', () => {
+        adicionarAoCarrinho(produto);
+      });
 
       preco.appendChild(nomeProduto);
       preco.appendChild(precoParagrafo);
@@ -88,39 +102,34 @@ export default function initPagin() {
     });
   }
 
-  // NOVA FUNÇÃO: Renderizar os botões de página dinamicamente
   function renderizarBotoesPaginacao() {
     if (!ulPaginacao) return;
-    ulPaginacao.innerHTML = ''; // Limpa os botões antigos
+    ulPaginacao.innerHTML = ''; 
 
     for (let i = 1; i <= numTotalDePaginas; i++) {
       const li = document.createElement('li');
       li.textContent = i;
       li.className = 'pagina';
       
-      // Se for a página atual, adiciona a classe 'active' do seu CSS
       if (i - 1 === paginaAtual) {
         li.classList.add('active');
       }
 
-      // Adiciona o evento de clique direto na criação do botão
       li.addEventListener('click', trocarPagina);
       ulPaginacao.appendChild(li);
     }
   }
 
-  // Função para trocar a página
   function trocarPagina(event) {
     const paginaSelecionada = Number(event.target.textContent) - 1;
 
     if (paginaSelecionada !== paginaAtual && !isNaN(paginaSelecionada)) {
       paginaAtual = paginaSelecionada;
-      renderizarItens(); // Atualiza os Pokémons
-      renderizarBotoesPaginacao(); // Atualiza a cor do botão ativo
+      renderizarItens(); 
+      renderizarBotoesPaginacao(); 
     }
   }
 
-  // Inicializa a tela pela primeira vez
   renderizarItens();
   renderizarBotoesPaginacao();
 }

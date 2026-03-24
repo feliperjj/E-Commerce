@@ -7,7 +7,7 @@ export default function carrinho() {
   // Função para adicionar item ao carrinho no backend
   async function adicionarAoCarrinho(item) {
     try {
-      const response = await fetch('criar_carrinho.php', {
+      const response = await fetch('adicionar_carrinho.php', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(item)

@@ -1,53 +1,32 @@
 <?php
-// Inclui o arquivo de configuração
-include 'db_config.php';
+// adicionar_carrinho.php
+header('Content-Type: application/json'); // Garante que o JS receba JSON
+require_once 'db_config.php';
+session_start();
 
-// Define o cabeçalho para a resposta JSON
-header('Content-Type: application/json');
+// Simulamos um usuário se não houver sessão para não quebrar o teste
+$usuario = isset($_SESSION['username']) ? $_SESSION['username'] : 'visitante';
 
-// Recebe o JSON da requisição
-$input = file_get_contents('php://input');
-$data = json_decode($input, true);
+// Pega os dados enviados pelo JS
+$input = json_decode(file_get_contents('php://input'), true);
 
-// Verifica se a decodificação foi bem-sucedida
-if ($data === null) {
-    echo json_encode(['status' => 'erro', 'message' => 'Erro ao decodificar JSON']);
-    exit;
-}
+if ($input) {
+    try {
+        $sql = "INSERT INTO carrinho (nome, preco, quantidade, total, usuario) 
+                VALUES (:nome, :preco, :qtd, :total, :usuario)";
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute([
+            ':nome'    => $input['nome'],
+            ':preco'   => $input['preco'],
+            ':qtd'     => 1,
+            ':total'   => $input['preco'],
+            ':usuario' => $usuario
+        ]);
 
-$usuario = $data['usuario'];
-$nome = $data['nome'];
-$preco = $data['preco'];
-$quantidade = $data['quantidade'];
-$total = $data['total'];
-
-// Prepara a query de inserção para evitar SQL Injection
-$sql = "INSERT INTO carrinho (usuario, nome, preco, quantidade, total) VALUES (?, ?, ?, ?, ?)";
-$stmt = mysqli_prepare($conn, $sql);
-
-// Verifica se a preparação foi bem-sucedida
-if ($stmt === false) {
-    echo json_encode(['status' => 'erro', 'message' => 'Erro na preparação da query: ' . mysqli_error($conn)]);
-    exit;
-}
-
-// Binda os parâmetros
-mysqli_stmt_bind_param($stmt, "ssdid", $usuario, $nome, $preco, $quantidade, $total);
-
-// 'ssdid' é o tipo de dado de cada parâmetro:
-// s = string
-// d = double (para float)
-// i = integer
-
-// Executa a query
-if (mysqli_stmt_execute($stmt)) {
-    echo json_encode(['status' => 'ok']);
+        echo json_encode(['sucesso' => true, 'mensagem' => 'Item adicionado!']);
+    } catch (PDOException $e) {
+        echo json_encode(['sucesso' => false, 'erro' => $e->getMessage()]);
+    }
 } else {
-    echo json_encode(['status' => 'erro', 'message' => 'Erro ao executar a query: ' . mysqli_stmt_error($stmt)]);
+    echo json_encode(['sucesso' => false, 'erro' => 'Dados inválidos']);
 }
-
-// Fecha a declaração e a conexão
-mysqli_stmt_close($stmt);
-mysqli_close($conn);
-
-?>

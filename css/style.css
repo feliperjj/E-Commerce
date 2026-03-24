@@ -36,3 +36,21 @@ th {
   margin-top: 20px;
   width: 100%;
 }
+
+.header-menu {
+  display: flex;
+  align-items: center;
+  list-style: none;
+  gap: 20px;
+}
+
+.header-menu li a {
+  text-decoration: none;
+  font-weight: bold;
+}
+
+/* Estilo para o link de Sair */
+.header-menu li a[href="logout.php"]:hover {
+  text-decoration: underline;
+  color: #ff0000 !important;
+}

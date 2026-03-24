@@ -1,14 +1,10 @@
 <?php
-$servername = "localhost"; // Geralmente 'localhost' no XAMPP
-$username = "root";       // Usuário padrão do XAMPP
-$password = "";           // Senha padrão do XAMPP (em branco)
-$dbname = "e_commerce";   // O nome do banco de dados que você criou
-
-// Cria a conexão
-$conn = mysqli_connect($servername, $username, $password, $dbname);
-
-// Verifica a conexão
-if (!$conn) {
-    die("Conexão falhou: " . mysqli_connect_error());
+// db_config.php
+try {
+    $dbPath = __DIR__ . '/ecommerce.db';
+    $pdo = new PDO("sqlite:" . $dbPath);
+    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+    $pdo->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
+} catch (PDOException $e) {
+    die("Erro de conexão: " . $e->getMessage());
 }
-?>
