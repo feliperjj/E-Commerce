@@ -1,42 +1,37 @@
+// paginacao.js
+
 import { dadosPaginas } from './dados.js';
 
-export default function initModal() {
-  // Obter o catálogo de container do HTML
+export default function initPagin() {
   const catalogoContainer = document.querySelector('.catalogoPrincipal');
+  const ulPaginacao = document.querySelector('.paginacaob'); // Pegamos a <ul> da paginação
+  
+  if (!catalogoContainer) return; 
 
   const itensPorPagina = 8;
   const numTotalDePaginas = Math.ceil(dadosPaginas.length / itensPorPagina);
-  // Dados das páginas
+  
   const itensDivididoPorPaginas = [];
 
   for (let i = 1; i <= numTotalDePaginas; i++) {
     const pagina = i;
-    const [IdDoprimeiroDaPagina, idDoUltimoDaPagina] = [
-      itensPorPagina * pagina - itensPorPagina,
-      itensPorPagina * pagina - 1,
-    ];
-    // console.log(IdDoprimeiroDaPagina, idDoUltimoDaPagina);
+    const IdDoprimeiroDaPagina = itensPorPagina * pagina - itensPorPagina;
+    const idDoUltimoDaPagina = itensPorPagina * pagina - 1;
+    
     const itensDessaPagina = dadosPaginas.filter((item) => {
       return item.id >= IdDoprimeiroDaPagina && item.id <= idDoUltimoDaPagina;
     });
     itensDivididoPorPaginas.push(itensDessaPagina);
-    // console.log(itensDessaPagina);
   }
 
-  // Página inicial
   let paginaAtual = 0;
 
-  // Função para renderizar os itens da página atual
+  // Função para renderizar os itens (Pokémons) da página
   function renderizarItens() {
-    // Limpar o conteúdo do catálogo
     catalogoContainer.innerHTML = '';
-
-    // Obter os dados da página atual
     const dadosPaginaAtual = itensDivididoPorPaginas[paginaAtual];
 
-    // Loop através dos dados da página atual
     dadosPaginaAtual.forEach((produto) => {
-      // Criar os elementos HTML
       const itemContainer = document.createElement('div');
       itemContainer.className = 'itemComprar';
 
@@ -46,7 +41,7 @@ export default function initModal() {
       const img = document.createElement('img');
       img.className = 'itemImg';
       img.src = produto.imagem;
-      img.alt = '';
+      img.alt = `Imagem do Pokémon ${produto.nome}`;
 
       const conteudoItem = document.createElement('div');
       conteudoItem.className = 'conteudoItem';
@@ -56,15 +51,16 @@ export default function initModal() {
 
       const precoParagrafo = document.createElement('p');
       precoParagrafo.id = 'precoTexto';
-      precoParagrafo.textContent = produto.preco;
+      precoParagrafo.textContent = `${produto.preco.toFixed(2)} Kwanzas`;
+      precoParagrafo.dataset.valor = produto.preco;
 
       const quantiParagrafo = document.createElement('p');
       quantiParagrafo.id = 'quantidade';
-      quantiParagrafo.textContent = produto.quantidade;
+      quantiParagrafo.textContent = `Qtd: ${produto.quantidade}`;
 
       const totalParagrafo = document.createElement('p');
       totalParagrafo.id = 'total';
-      totalParagrafo.textContent = produto.total;
+      totalParagrafo.textContent = `Total: ${produto.total.toFixed(2)} Kwz`;
 
       const nomeProduto = document.createElement('p');
       nomeProduto.id = 'nome';
@@ -77,8 +73,6 @@ export default function initModal() {
       const botaoCarrinho = document.createElement('button');
       botaoCarrinho.className = 'carrinho';
       botaoCarrinho.textContent = 'Adicionar ao Carrinho';
-      // botaoCarrinho.id = 'carrinho';
-      // Adicionar os elementos à estrutura do DOM
 
       preco.appendChild(nomeProduto);
       preco.appendChild(precoParagrafo);
@@ -94,98 +88,39 @@ export default function initModal() {
     });
   }
 
+  // NOVA FUNÇÃO: Renderizar os botões de página dinamicamente
+  function renderizarBotoesPaginacao() {
+    if (!ulPaginacao) return;
+    ulPaginacao.innerHTML = ''; // Limpa os botões antigos
+
+    for (let i = 1; i <= numTotalDePaginas; i++) {
+      const li = document.createElement('li');
+      li.textContent = i;
+      li.className = 'pagina';
+      
+      // Se for a página atual, adiciona a classe 'active' do seu CSS
+      if (i - 1 === paginaAtual) {
+        li.classList.add('active');
+      }
+
+      // Adiciona o evento de clique direto na criação do botão
+      li.addEventListener('click', trocarPagina);
+      ulPaginacao.appendChild(li);
+    }
+  }
+
   // Função para trocar a página
   function trocarPagina(event) {
     const paginaSelecionada = Number(event.target.textContent) - 1;
 
-    if (paginaSelecionada !== paginaAtual) {
+    if (paginaSelecionada !== paginaAtual && !isNaN(paginaSelecionada)) {
       paginaAtual = paginaSelecionada;
-      renderizarItens();
+      renderizarItens(); // Atualiza os Pokémons
+      renderizarBotoesPaginacao(); // Atualiza a cor do botão ativo
     }
   }
 
-  // Botões de página
-  const paginas = document.querySelectorAll('.paginacaob li');
-
-  // Adicionar event listeners aos botões
-  paginas.forEach((pagina) => {
-    pagina.addEventListener('click', trocarPagina);
-  });
-
-  // Renderizar os itens iniciais
+  // Inicializa a tela pela primeira vez
   renderizarItens();
+  renderizarBotoesPaginacao();
 }
-
-initModal();
-
-const conteudos = document.querySelectorAll('.itemComprar');
-// const botoesPaginacao = document.querySelectorAll(".paginacaob li:not(.paginacao-seta)");
-
-// const itemsPerPage = 4; // quantidade de itens por página
-// let currentPage = 0; // página atual
-// let totalPages = Math.ceil(conteudos.length / itemsPerPage); // total de páginas
-
-// function displayItems(items) {
-//   items.forEach((item) => {
-//     item.style.display = "block";
-//   });
-// }
-
-// function hideItems(items) {
-//   items.forEach((item) => {
-//     item.style.display = "none";
-//   });
-// }
-
-// function listItems(page) {
-//   const startIndex = (page - 1) * itemsPerPage;
-//   const endIndex = startIndex + itemsPerPage;
-//   return Array.from(conteudos).slice(startIndex, endIndex);
-// }
-
-// function updatePagination() {
-//   botoesPaginacao.forEach((botao) => {
-//     if (parseInt(botao.textContent) === currentPage) {
-//       botao.classList.add("pagina-atual");
-//     } else {
-//       botao.classList.remove("pagina-atual");
-//     }
-//   });
-// }
-
-// function goToPage(page) {
-//   currentPage = page;
-//   const paginatedItems = listItems(currentPage);
-//   hideItems(conteudos);
-//   displayItems(paginatedItems);
-//   updatePagination();
-// }
-
-// // exibe os itens da primeira página
-// const paginatedItems = listItems(currentPage);
-// displayItems(paginatedItems);
-// updatePagination();
-
-// // adiciona o evento de click nos botões da paginação
-// botoesPaginacao.forEach((botao) => {
-//   botao.addEventListener("click", () => {
-//     if (botao.classList.contains("pagina-atual")) {
-//       return;
-//     }
-
-//     if (botao.textContent === "«") {
-//       // botão "anterior"
-//       if (currentPage > 1) {
-//         goToPage(currentPage - 1);
-//       }
-//     } else if (botao.textContent === "»") {
-//       // botão "próximo"
-//       if (currentPage < totalPages) {
-//         goToPage(currentPage + 1);
-//       }
-//     } else {
-//       // botão de página
-//       goToPage(parseInt(botao.textContent));
-//     }
-//   });
-// });

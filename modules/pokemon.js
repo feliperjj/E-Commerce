@@ -1,156 +1,116 @@
+// pokemon.js
+
 export default function carrinho() {
-  // Exemplo de produtos (substitua por fetch do backend se quiser)
-  const produtos = [
-    { nome: "Produto 1", preco: 100, imagem: "img/Pokemon1.jpg" },
-    { nome: "Produto 2", preco: 200, imagem: "img/Pokemon2.jpg" },
-    { nome: "Produto 3", preco: 300, imagem: "img/Pokemon3.jpg" }
-  ];
+  // Variável para simular o usuário logado (depois você pode pegar da sessão do PHP)
+  const usuarioAtual = 'usuario1'; 
 
-  const catalogo = document.querySelector('.catalogoPrincipalb');
-  if (catalogo) {
-    catalogo.innerHTML = '';
-    produtos.forEach(produto => {
-      const card = document.createElement('div');
-      card.className = 'produto-card';
-      card.innerHTML = `
-        <img src="${produto.imagem}" alt="${produto.nome}" width="100">
-        <h3 id="nome">${produto.nome}</h3>
-        <span id="precoTexto">${produto.preco}</span>
-        <button class="carrinho">Adicionar ao carrinho</button>
-      `;
-      catalogo.appendChild(card);
-    });
-  }
-
-  // O resto do seu código...
-  const botaoCarrinho = document.querySelectorAll('.carrinho');
-
-  // Adiciona item ao carrinho (backend)
-  function adicionarAoCarrinho(item) {
-    fetch('adicionar_carrinho.php', {
-      method: 'POST',
-      headers: {'Content-Type': 'application/json'},
-      body: JSON.stringify(item)
-    })
-    .then(res => res.json())
-    .then(data => {
+  // Função para adicionar item ao carrinho no backend
+  async function adicionarAoCarrinho(item) {
+    try {
+      const response = await fetch('criar_carrinho.php', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(item)
+      });
+      
+      const data = await response.json();
+      
       if (data.status === 'ok') {
-        alert('Item adicionado ao carrinho!');
+        alert(`${item.nome} foi adicionado ao carrinho!`);
         atualizarTabelaCarrinho();
+      } else {
+        alert('Erro ao adicionar: ' + data.mensagem);
       }
-    });
+    } catch (error) {
+      console.error('Erro na requisição:', error);
+    }
   }
 
-  // Remove item do carrinho (backend)
-  function removerDoCarrinho(nome) {
-    fetch('remover_carrinho.php', {
-      method: 'POST',
-      headers: {'Content-Type': 'application/json'},
-      body: JSON.stringify({ nome })
-    })
-    .then(res => res.json())
-    .then(data => {
+  // Função para remover item do carrinho (backend)
+  async function removerDoCarrinho(idItem) {
+    // Precisamos criar o arquivo remover_carrinho.php depois!
+    try {
+      const response = await fetch('remover_carrinho.php', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id: idItem })
+      });
+      
+      const data = await response.json();
       if (data.status === 'ok') {
         atualizarTabelaCarrinho();
       }
-    });
+    } catch (error) {
+      console.error('Erro ao remover:', error);
+    }
   }
 
   // Atualiza tabela do carrinho (frontend)
-  function atualizarTabelaCarrinho() {
-    fetch('listar_carrinho.php?usuario=usuario1')
-      .then(res => res.json())
-      .then(itens => {
-        const tbody = document.querySelector('tbody');
-        if (tbody) {
-          tbody.innerHTML = '';
-          itens.forEach((item) => {
-            const tr = document.createElement('tr');
-            tr.innerHTML = `
-              <td>${item.nome}</td>
-              <td>${item.preco}</td>
-              <td>${item.quantidade}</td>
-              <td>${item.total}</td>
-              <td><button class="exclui" data-nome="${item.nome}">Excluir</button></td>
-            `;
-            tbody.appendChild(tr);
-          });
+  async function atualizarTabelaCarrinho() {
+    const tbody = document.querySelector('tbody');
+    if (!tbody) return; // Se não estiver na página do carrinho, ignora.
 
-          // Adiciona eventos aos botões de excluir
-          document.querySelectorAll('.exclui').forEach(btn => {
-            btn.addEventListener('click', () => {
-              removerDoCarrinho(btn.dataset.nome);
-            });
-          });
-        }
+    try {
+      const response = await fetch(`listar_carrinho.php?usuario=${usuarioAtual}`);
+      const itens = await response.json();
+      
+      tbody.innerHTML = '';
+      
+      if(itens.erro) {
+          console.error(itens.erro);
+          return;
+      }
+
+      itens.forEach((item) => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td>${item.nome}</td>
+          <td>${parseFloat(item.preco).toFixed(2)} Kwz</td>
+          <td>${item.quantidade}</td>
+          <td>${parseFloat(item.total).toFixed(2)} Kwz</td>
+          <td><button class="exclui" data-id="${item.id}">Excluir</button></td>
+        `;
+        tbody.appendChild(tr);
       });
+
+      // Adiciona eventos aos botões de excluir recém-criados
+      document.querySelectorAll('.exclui').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          removerDoCarrinho(e.target.dataset.id);
+        });
+      });
+    } catch (error) {
+      console.error('Erro ao listar carrinho:', error);
+    }
   }
 
-  // Evento para adicionar ao carrinho
-  // (precisa ser chamado após renderizar os produtos)
-  document.querySelectorAll('.carrinho').forEach((botao) => {
-    botao.addEventListener('click', () => {
-      const nomeProduto = botao.parentElement.querySelector('#nome').textContent;
-      const precoEmTexto = botao.parentElement.querySelector('#precoTexto').textContent;
-      const precoFormat = parseFloat(precoEmTexto);
-      const item = {
-        usuario: 'usuario1', // Troque pelo usuário logado
-        nome: nomeProduto,
-        preco: precoFormat,
-        quantidade: 1,
-        total: precoFormat
-      };
-      adicionarAoCarrinho(item);
-    });
-  });
+  // Delegação de Eventos: 
+  // Em vez de adicionar evento em cada botão (o que falha com a paginação), 
+  // escutamos os cliques no container principal e verificamos se foi no botão.
+  const catalogoContainer = document.querySelector('.catalogoPrincipal');
+  
+  if(catalogoContainer) {
+    catalogoContainer.addEventListener('click', (event) => {
+      // Verifica se o clique foi em um botão com a classe 'carrinho'
+      if (event.target.classList.contains('carrinho')) {
+        const cardProduto = event.target.closest('.conteudoItem').parentElement;
+        const nomeProduto = cardProduto.querySelector('#nome').textContent;
+        // Pega o valor numérico que salvamos no data-attribute lá no paginacao.js
+        const precoNum = parseFloat(cardProduto.querySelector('#precoTexto').dataset.valor);
 
-  // Atualiza carrinho ao carregar a página
+        const itemParaAdicionar = {
+          usuario: usuarioAtual, 
+          nome: nomeProduto,
+          preco: precoNum,
+          quantidade: 1,
+          total: precoNum
+        };
+
+        adicionarAoCarrinho(itemParaAdicionar);
+      }
+    });
+  }
+
+  // Atualiza carrinho ao carregar a página (útil para quando você entra na página do carrinho)
   window.addEventListener('load', atualizarTabelaCarrinho);
 }
-
-
-// * Trecho de codigo que incluia uma div inteira dentro do botao
-// itensNoCarrinho.forEach((nomeItem) => {
-//   const itemCarrinho = document.createElement("div");
-//   itemCarrinho.textContent = nomeItem;
-// carrinhoItens.appendChild();
-// });
-// }
-
-// const itensDoLocalStorage = [
-//   {
-//     "nome": "Pokemon 1",
-//     "descricao": "",
-//     "preco": "100 Bilhões de Kwanzas",
-//     "imagem": "img/Pokemon1.jpg"
-//   },
-//   {
-//     "nome": "Pokemon 2",
-//     "descricao": "",
-//     "preco": "300 Bilhões de Kwanzas",
-//     "imagem": "img/Pokemon2.jpg"
-//   },
-//   {
-//     "nome": "Pokemon 3",
-//     "descricao": "",
-//     "preco": "200 Bilhões de Kwanzas",
-//     "imagem": "img/Pokemon3.jpg"
-//   }
-// ];
-
-// itensDoLocalStorage.forEach(item => {
-// itensDoLocalStorageString += `<li class="item-card">${item.nome} - R$${item.preco}</li>`;
-
-// });
-
-// itensDoLocalStorage.innerHTML = itensDoLocalStorageString;
-// }
-
-// pegaCarrinhos.forEach(carrinho => {
-//   // const cardId =document.getElementById(".carrinhocard");
-
-//   carrinho.addEventListener('click', () => {
-//     arrayConteudo.push;
-//   });
-// });
-// }

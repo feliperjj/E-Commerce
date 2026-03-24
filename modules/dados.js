@@ -1,16 +1,21 @@
+// dados.js
+
 function criarProduto(id, nome, imagem, preco) {
   return {
     id,
     nome,
     imagem,
-    preco: preco + " Kwanzas",
-    quantidade: "",
-    total: "",
+    // Mantemos o preço como um número (float) puro para facilitar no banco de dados e cálculos
+    preco: preco, 
+    // Inicializamos a quantidade como número
+    quantidade: 1, 
+    // O total inicial é igual ao preço numérico
+    total: preco,  
   };
 }
 
 export const dadosPaginas = [
-  criarProduto(0, "Butherfree", "img/Pokemon 1.jpg", 150.0),
+  criarProduto(0, "Butterfree", "img/Pokemon 1.jpg", 150.0),
   criarProduto(1, "Meganium", "img/pokemon3.jpg", 130.0),
   criarProduto(2, "Gengar", "img/pokemon4.jpg", 120.0),
   criarProduto(3, "Bulbasaur", "img/Pokemon2.jpg", 120.0),
@@ -18,7 +23,7 @@ export const dadosPaginas = [
   criarProduto(5, "Bulbasaur", "img/Pokemon2.jpg", 120.0),
   criarProduto(6, "Wiglypuff", "img/pokemon5.jpg", 120.0),
   criarProduto(7, "Verdinho", "img/pokemon6.jpg", 120.0),
-  criarProduto(8, "Butherfree", "img/Pokemon 1.jpg", 120.0),
+  criarProduto(8, "Butterfree", "img/Pokemon 1.jpg", 120.0),
   criarProduto(9, "Meganium", "img/pokemon3.jpg", 120.0),
   criarProduto(10, "Mewtwo", "img/pokemon6.jpg", 120.0),
   criarProduto(11, "Bulbasaur", "img/Pokemon2.jpg", 120.0),
@@ -26,7 +31,7 @@ export const dadosPaginas = [
   criarProduto(13, "Meganium", "img/pokemon3.jpg", 120.0),
   criarProduto(14, "Gengar", "img/pokemon4.jpg", 120.0),
   criarProduto(15, "Bulbasaur", "img/Pokemon2.jpg", 120.0),
-  criarProduto(16, "Butherfree", "img/Pokemon 1.jpg", 120.0),
+  criarProduto(16, "Butterfree", "img/Pokemon 1.jpg", 120.0),
   criarProduto(17, "Meganium", "img/pokemon3.jpg", 120.0),
   criarProduto(18, "Mewtwo", "img/pokemon6.jpg", 120.0),
   criarProduto(19, "Gengar", "img/pokemon4.jpg", 120.0),
@@ -34,7 +39,7 @@ export const dadosPaginas = [
   criarProduto(21, "Bulbasaur", "img/Pokemon2.jpg", 120.0),
   criarProduto(22, "Gengar", "img/pokemon4.jpg", 120.0),
   criarProduto(23, "Wiglypuff", "img/pokemon5.jpg", 120.0),
-  criarProduto(24, "Butherfree", "img/Pokemon 1.jpg", 120.0),
+  criarProduto(24, "Butterfree", "img/Pokemon 1.jpg", 120.0),
   criarProduto(25, "Meganium", "img/pokemon3.jpg", 120.0),
   criarProduto(26, "Gengar", "img/pokemon4.jpg", 120.0),
   criarProduto(27, "Bulbasaur", "img/Pokemon2.jpg", 120.0),
