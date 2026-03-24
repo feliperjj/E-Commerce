@@ -1,5 +1,5 @@
 <?php
-// remover_carrinho.php
+session_start();
 require_once 'db_config.php';
 header('Content-Type: application/json');
 
