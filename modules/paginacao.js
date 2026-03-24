@@ -1,10 +1,7 @@
 // paginacao.js
-
+import { adicionarAoCarrinho } from './pokemon.js';
 import { dadosPaginas } from './dados.js';
 
-// IMPORTANTE: Importe a função de adicionar ao carrinho aqui. 
-// Ajuste o caminho se o arquivo tiver outro nome (ex: ./pokemon.js)
-import { adicionarAoCarrinho } from './pokemon.js'; 
 
 export default function initPagin() {
   const catalogoContainer = document.querySelector('.catalogoPrincipal');

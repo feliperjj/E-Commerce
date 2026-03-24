@@ -1,5 +1,5 @@
 import injetaDadosTabela from './modules/injetaDadosTabela.js';
-import carrinho from './modules/pokemon.js';
+import { adicionarAoCarrinho } from './modules/pokemon.js';
 
 injetaDadosTabela();
-carrinho();
+// carrinho();

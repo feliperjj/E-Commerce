@@ -27,3 +27,21 @@
   
 }
 
+.user-info {
+    color: #ffd700; /* Um dourado para destacar o nome */
+    margin-right: 15px;
+    font-weight: bold;
+}
+
+.btn-logout {
+    color: #ff4d4d !important; /* Vermelho para o Sair */
+    border: 1px solid #ff4d4d;
+    padding: 5px 10px;
+    border-radius: 4px;
+    transition: 0.3s;
+}
+
+.btn-logout:hover {
+    background: #ff4d4d;
+    color: white !important;
+}

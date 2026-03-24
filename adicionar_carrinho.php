@@ -1,32 +1,54 @@
 <?php
-// adicionar_carrinho.php
-header('Content-Type: application/json'); // Garante que o JS receba JSON
+error_reporting(0);
+ini_set('display_errors', 0);
+
+session_start(); // PRECISA SER A PRIMEIRA LINHA PARA LER A SESSÃO DO LOGIN
+
+
+header('Content-Type: application/json');
 require_once 'db_config.php';
-session_start();
 
-// Simulamos um usuário se não houver sessão para não quebrar o teste
-$usuario = isset($_SESSION['username']) ? $_SESSION['username'] : 'visitante';
-
-// Pega os dados enviados pelo JS
 $input = json_decode(file_get_contents('php://input'), true);
 
 if ($input) {
     try {
-        $sql = "INSERT INTO carrinho (nome, preco, quantidade, total, usuario) 
-                VALUES (:nome, :preco, :qtd, :total, :usuario)";
-        $stmt = $pdo->prepare($sql);
-        $stmt->execute([
-            ':nome'    => $input['nome'],
-            ':preco'   => $input['preco'],
-            ':qtd'     => 1,
-            ':total'   => $input['preco'],
-            ':usuario' => $usuario
-        ]);
+        // Tenta pegar o nome da sessão que o processar_login.php criou
+        $usuarioLogado = isset($_SESSION['username']) ? $_SESSION['username'] : 'visitante';
+        
+        $nome = $input['nome'];
+        $preco = $input['preco'];
 
-        echo json_encode(['sucesso' => true, 'mensagem' => 'Item adicionado!']);
+        // Lógica de Agrupamento: Verifica se já existe o item para ESTE usuário
+        $check = $pdo->prepare("SELECT id, quantidade FROM carrinho WHERE nome = :nome AND usuario = :usuario");
+        $check->execute([':nome' => $nome, ':usuario' => $usuarioLogado]);
+        $itemExistente = $check->fetch();
+
+        if ($itemExistente) {
+            // Se já tem, aumenta a quantidade
+            $novaQtd = $itemExistente['quantidade'] + 1;
+            $novoTotal = $novaQtd * $preco;
+
+            $update = $pdo->prepare("UPDATE carrinho SET quantidade = :qtd, total = :total WHERE id = :id");
+            $update->execute([
+                ':qtd' => $novaQtd,
+                ':total' => $novoTotal,
+                ':id' => $itemExistente['id']
+            ]);
+        } else {
+            // Se não tem, insere novo
+            $sql = "INSERT INTO carrinho (nome, preco, quantidade, total, usuario) 
+                    VALUES (:nome, :preco, 1, :total, :usuario)";
+            $stmt = $pdo->prepare($sql);
+            $stmt->execute([
+                ':nome'    => $nome,
+                ':preco'   => $preco,
+                ':total'   => $preco,
+                ':usuario' => $usuarioLogado
+            ]);
+        }
+
+        echo json_encode(['sucesso' => true, 'usuario_que_comprou' => $usuarioLogado]);
     } catch (PDOException $e) {
         echo json_encode(['sucesso' => false, 'erro' => $e->getMessage()]);
     }
-} else {
-    echo json_encode(['sucesso' => false, 'erro' => 'Dados inválidos']);
 }

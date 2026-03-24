@@ -1,31 +1,34 @@
 <?php
-// Não pode haver espaço ou linha em branco antes do <?php
-session_start();
-require_once 'db_config.php';
+error_reporting(0);
+ini_set('display_errors', 0);
 
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $username = trim($_POST["username"]);
-    $password = $_POST["password"];
+require_once 'db_config.php';
+session_start(); 
+
+header('Content-Type: application/json');
+
+$input = json_decode(file_get_contents('php://input'), true);
+
+if (isset($input['username']) && isset($input['password'])) {
+    $user = $input['username'];
+    $pass = $input['password'];
 
     try {
         $stmt = $pdo->prepare("SELECT * FROM usuarios WHERE username = :user");
-        $stmt->execute([':user' => $username]);
-        $user = $stmt->fetch();
+        $stmt->execute([':user' => $user]);
+        $usuario = $stmt->fetch();
 
-        if ($user && password_verify($password, $user['password'])) {
-            $_SESSION['user_id'] = $user['id'];
-            $_SESSION['username'] = $user['username'];
+        // MUDANÇA AQUI: password_verify é obrigatório quando se usa password_hash no registro
+        if ($usuario && password_verify($pass, $usuario['password'])) {
             
-            // Força a limpeza de qualquer buffer e redireciona
-            header("Location: index.html");
-            exit(); 
+            $_SESSION['username'] = $usuario['username']; 
+            echo json_encode(['sucesso' => true]);
+
         } else {
-            // Se falhar, avisa e volta
-            echo "<script>alert('Usuário ou senha incorretos!'); window.location.href='index.html';</script>";
-            exit();
+            echo json_encode(['sucesso' => false, 'erro' => 'Usuário ou senha incorretos']);
         }
     } catch (PDOException $e) {
-        echo "Erro no banco: " . $e->getMessage();
-        exit();
+        echo json_encode(['sucesso' => false, 'erro' => $e->getMessage()]);
     }
 }
+?>
