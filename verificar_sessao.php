@@ -1,9 +1,9 @@
 <?php
 // verificar_sessao.php
-session_start();
+
 error_reporting(0);
 ini_set('display_errors', 0);
-
+session_start();
 header('Content-Type: application/json');
 
 // Verifica se a chave 'username' que criamos no login existe na sessão
