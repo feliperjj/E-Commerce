@@ -1,5 +1,11 @@
 <?php
+error_reporting(0);
+ini_set('display_errors', 0);
+
+// ESSA LINHA É OBRIGATÓRIA EM TODOS
+session_save_path(__DIR__ . '/temp'); 
 session_start();
+
 require_once 'db_config.php';
 header('Content-Type: application/json');
 

@@ -1,30 +1,35 @@
 export default async function initAuth() {
     const menu = document.querySelector('.header-menu'); 
-
-    if (!menu) return;
+    
+    if (!menu) return 'visitante'; // Retorna padrão se o menu não existir
 
     try {
-        const response = await fetch('verificar_sessao.php');
+        const response = await fetch('verificar_sessao.php', {
+            credentials: 'include'
+        });
+        
         const data = await response.json();
 
         if (data.logado) {
-            // Se estiver logado, redesenhamos o menu com o nome e logout
+            // Desenha o menu para usuário logado
             menu.innerHTML = `
                 <li><a href="index.html">Produtos</a></li>
-                <li><a href="carrinho.html">Meus Pedidos</a></li>
-                <li style="color: #fff; font-weight: bold; margin-left: 15px;">Olá, ${data.username}</li>
+                <li style="color: white; font-weight: bold; margin-left: 10px;">Olá, ${data.username}</li> 
                 <li><a href="logout.php" style="color: #ff4d4d; margin-left: 10px;">Sair</a></li>
             `;
+            return data.username; // <--- RETORNA O NOME REAL
         } else {
-            // Se não estiver logado, mantemos o padrão (importante para o Logout funcionar)
+            // Menu padrão para deslogado
             menu.innerHTML = `
                 <li><a href="index.html">Produtos</a></li>
                 <li><a href="carrinho.html">Meus Pedidos</a></li>
                 <li><a data-modal="abrir" href="#">Login →</a></li>
                 <li><a data-modal="abrir1" href="#">Registrar →</a></li>
             `;
+            return 'visitante'; // <--- RETORNA VISITANTE
         }
     } catch (error) {
         console.error("Erro ao verificar autenticação:", error);
+        return 'visitante'; // Em caso de erro, assume visitante para não quebrar o site
     }
 }

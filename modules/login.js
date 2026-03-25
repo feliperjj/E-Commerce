@@ -14,7 +14,8 @@ export default function initLogin() {
             const response = await fetch('processar_login.php', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(dados)
+                body: JSON.stringify(dados),
+                credentials: 'include'
             });
 
             const data = await response.json();

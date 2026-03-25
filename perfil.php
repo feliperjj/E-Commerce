@@ -1,32 +1,48 @@
 <?php
-// perfil.php (Antigo login.php)
+// perfil.php
 
+error_reporting(0);
+ini_set('display_errors', 0);
+
+// 1. OBRIGATÓRIO: Apontar para a mesma pasta de sessões do login
+session_save_path(__DIR__ . '/temp'); 
 session_start();
+
 require_once 'db_config.php';
 
-// Verificar se o usuário está logado
-if (!isset($_SESSION['user_id'])) {
-    header('Location: form_login.php'); // Redirecione para a página de login
+// 2. Verificar se o usuário está logado usando a chave correta ('username')
+if (!isset($_SESSION['username'])) {
+    // Se não estiver logado, envia um JSON de erro ou redireciona
+    header('Content-Type: application/json');
+    echo json_encode(['logado' => false, 'erro' => 'Usuário não autenticado']);
     exit();
 }
 
-$user_id = $_SESSION['user_id'];
+$username = $_SESSION['username'];
 
 try {
-    // Buscar os dados do usuário de forma segura
-    $sql = "SELECT username, email FROM usuarios WHERE id = :id";
+    // 3. Buscar os dados do usuário usando o username (que é o que temos na sessão)
+    $sql = "SELECT id, username, email FROM usuarios WHERE username = :username";
     $stmt = $pdo->prepare($sql);
-    $stmt->bindParam(':id', $user_id);
-    $stmt->execute();
+    $stmt->execute([':username' => $username]);
     
-    $userData = $stmt->fetch();
+    $userData = $stmt->fetch(PDO::FETCH_ASSOC);
 
     if ($userData) {
-        echo 'Usuário logado: ' . htmlspecialchars($userData['username']);
+        // Aqui você pode retornar os dados para o seu front-end exibir
+        header('Content-Type: application/json');
+        echo json_encode([
+            'logado' => true,
+            'user' => [
+                'id' => $userData['id'],
+                'username' => $userData['username'],
+                'email' => $userData['email']
+            ]
+        ]);
     } else {
-        echo 'Usuário não encontrado na base de dados.';
+        echo json_encode(['logado' => false, 'erro' => 'Usuário não encontrado']);
     }
 } catch (PDOException $e) {
-    echo "Erro ao buscar dados: " . $e->getMessage();
+    echo json_encode(['erro' => 'Erro no banco: ' . $e->getMessage()]);
 }
 ?>

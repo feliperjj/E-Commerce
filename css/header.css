@@ -28,7 +28,7 @@
 }
 
 .user-info {
-    color: #ffd700; /* Um dourado para destacar o nome */
+    color: #ff0000; /* Um dourado para destacar o nome */
     margin-right: 15px;
     font-weight: bold;
 }
@@ -43,5 +43,5 @@
 
 .btn-logout:hover {
     background: #ff4d4d;
-    color: white !important;
+    color: red !important;
 }

@@ -13,7 +13,8 @@ export default function initRegistrar() {
                 const response = await fetch('registro.php', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(dados)
+                    body: JSON.stringify(dados),
+                    credentials: 'include'
                 });
 
                 const data = await response.json();

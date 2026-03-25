@@ -2,8 +2,8 @@
 import { adicionarAoCarrinho } from './pokemon.js';
 import { dadosPaginas } from './dados.js';
 
-
-export default function initPagin() {
+// Adicionamos o parâmetro usuarioLogado aqui
+export default function initPagin(usuarioLogado = 'visitante') {
   const catalogoContainer = document.querySelector('.catalogoPrincipal');
   const ulPaginacao = document.querySelector('.paginacaob'); 
   
@@ -70,9 +70,10 @@ export default function initPagin() {
       const botaoComprar = document.createElement('button');
       botaoComprar.className = 'comprar';
       botaoComprar.textContent = 'Comprar';
-      // EVENTO COMPRAR: Adiciona e vai para o carrinho
+      
       botaoComprar.addEventListener('click', () => {
-        adicionarAoCarrinho(produto);
+        // Passamos o usuário logado para a função de adicionar
+        adicionarAoCarrinho(produto, usuarioLogado);
         window.location.href = 'carrinho.html';
       });
 
@@ -80,9 +81,10 @@ export default function initPagin() {
       const botaoCarrinho = document.createElement('button');
       botaoCarrinho.className = 'carrinho';
       botaoCarrinho.textContent = 'Adicionar ao Carrinho';
-      // EVENTO CARRINHO: Apenas adiciona
+      
       botaoCarrinho.addEventListener('click', () => {
-        adicionarAoCarrinho(produto);
+        // Passamos o usuário logado aqui também
+        adicionarAoCarrinho(produto, usuarioLogado);
       });
 
       preco.appendChild(nomeProduto);

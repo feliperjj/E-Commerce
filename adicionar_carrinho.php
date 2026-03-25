@@ -1,10 +1,12 @@
 <?php
+// adicionar_carrinho.php
 
 error_reporting(0);
 ini_set('display_errors', 0);
-session_start();
-// PRECISA SER A PRIMEIRA LINHA PARA LER A SESSÃO DO LOGIN
 
+// ESSA LINHA É A CHAVE: Sem ela, ele não abre a gaveta 'temp' e não te reconhece
+session_save_path(__DIR__ . '/temp'); 
+session_start();
 
 header('Content-Type: application/json');
 require_once 'db_config.php';
@@ -13,7 +15,7 @@ $input = json_decode(file_get_contents('php://input'), true);
 
 if ($input) {
     try {
-        // Tenta pegar o nome da sessão que o processar_login.php criou
+        // Agora o PHP vai encontrar o seu nome real dentro da pasta /temp
         $usuarioLogado = isset($_SESSION['username']) ? $_SESSION['username'] : 'visitante';
         
         $nome = $input['nome'];
@@ -25,7 +27,7 @@ if ($input) {
         $itemExistente = $check->fetch();
 
         if ($itemExistente) {
-            // Se já tem, aumenta a quantidade
+            // Aumenta a quantidade se já existir
             $novaQtd = $itemExistente['quantidade'] + 1;
             $novoTotal = $novaQtd * $preco;
 
@@ -36,7 +38,7 @@ if ($input) {
                 ':id' => $itemExistente['id']
             ]);
         } else {
-            // Se não tem, insere novo
+            // Insere novo se não existir
             $sql = "INSERT INTO carrinho (nome, preco, quantidade, total, usuario) 
                     VALUES (:nome, :preco, 1, :total, :usuario)";
             $stmt = $pdo->prepare($sql);

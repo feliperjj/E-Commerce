@@ -1,16 +1,17 @@
 <?php
-
 error_reporting(0);
 ini_set('display_errors', 0);
+session_save_path(__DIR__ . '/temp'); 
 session_start();
 
-
 require_once 'db_config.php';
-
-
 header('Content-Type: application/json');
 
+// ACEITA TANTO JSON QUANTO FORMULÁRIO COMUM
 $input = json_decode(file_get_contents('php://input'), true);
+if (!$input) {
+    $input = $_POST;
+}
 
 if (isset($input['username']) && isset($input['password'])) {
     $user = $input['username'];

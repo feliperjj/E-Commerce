@@ -47,6 +47,7 @@ th {
 .header-menu li a {
   text-decoration: none;
   font-weight: bold;
+  color: #ff0000
 }
 
 /* Estilo para o link de Sair */

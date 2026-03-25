@@ -1,6 +1,6 @@
 // injetaDadosTabela.js
 
-export default function injetaDadosTabela() {
+export default async function injetaDadosTabela() {
   const tbody = document.querySelector('tbody');
   
   if (!tbody) {
@@ -8,94 +8,79 @@ export default function injetaDadosTabela() {
     return;
   }
 
-  // 1. Buscamos a lista de itens do banco de dados
-  // Usamos 'visitante' ou 'usuario1' conforme o seu teste no navegador
-  fetch('listar_carrinho.php?usuario=visitante')
-    .then(response => {
-      if (!response.ok) throw new Error('Erro ao buscar dados do servidor');
-      return response.json();
-    })
-    .then(itensDoCarrinho => {
-      // Limpamos a tabela antes de preencher para evitar duplicatas visuais
-      tbody.innerHTML = '';
-
-      if (itensDoCarrinho && Array.isArray(itensDoCarrinho)) {
-        
-        itensDoCarrinho.forEach((item) => {
-          // Criamos a linha da tabela
-          const linhaDaTabela = document.createElement('tr');
-
-          // Criamos as células (TDs)
-          const tdNome = document.createElement('td');
-          const tdPreco = document.createElement('td');
-          const tdQtd = document.createElement('td');
-          const tdTotal = document.createElement('td');
-          const tdAcoes = document.createElement('td');
-          
-          const btnExcluir = document.createElement('button');
-
-          // Preenchemos os textos das células
-          tdNome.textContent = item.nome;
-          tdPreco.textContent = `${Number(item.preco).toFixed(2)} Kwz`;
-          tdQtd.textContent = item.quantidade;
-          
-          // Cálculo do total da linha
-          const valorTotal = item.preco * item.quantidade;
-          tdTotal.textContent = `${valorTotal.toFixed(2)} Kwz`;
-
-          // Configuração do Botão Excluir
-          btnExcluir.textContent = 'Excluir';
-          btnExcluir.className = 'exclui';
-
-          // --- EVENTO DE CLIQUE PARA REMOVER ---
-         btnExcluir.addEventListener('click', () => {
-  // Mudamos a pergunta para ficar mais claro
-  if (confirm(`Deseja remover uma unidade de ${item.nome}?`)) {
+  try {
+    // 1. PRIMEIRO: Descobrimos quem é o usuário atual
+    const resSessao = await fetch('verificar_sessao.php', { credentials: 'include' });
+    const sessao = await resSessao.json();
     
-    fetch('remover_carrinho.php', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ id: item.id })
-    })
-    .then(res => res.json())
-    .then(data => {
-      // CASO 1: Era o último item, removemos a linha toda
-      if (data.status === 'removido') {
-        linhaDaTabela.remove();
-        console.log(`${item.nome} totalmente removido.`);
-      } 
-      // CASO 2: Ainda restam itens, apenas atualizamos os números na tela
-      else if (data.status === 'atualizado') {
-        // Supondo que tdQtd e tdTotal sejam as variáveis das suas colunas:
-        tdQtd.textContent = data.novaQtd; 
-        tdTotal.textContent = `${data.novoTotal.toFixed(2)} Kwz`;
+    // Se logado, usa o username, senão usa 'visitante'
+    const usuarioAtivo = sessao.logado ? sessao.username : 'visitante';
+
+    // 2. AGORA: Buscamos os itens DESTE usuário específico
+    const response = await fetch(`listar_carrinho.php?usuario=${encodeURIComponent(usuarioAtivo)}`);
+    if (!response.ok) throw new Error('Erro ao buscar dados do servidor');
+    
+    const itensDoCarrinho = await response.json();
+
+    // Limpamos a tabela
+    tbody.innerHTML = '';
+
+    if (itensDoCarrinho && Array.isArray(itensDoCarrinho)) {
+      itensDoCarrinho.forEach((item) => {
+        const linhaDaTabela = document.createElement('tr');
+
+        // Células
+        const tdNome = document.createElement('td');
+        const tdPreco = document.createElement('td');
+        const tdQtd = document.createElement('td');
+        const tdTotal = document.createElement('td');
+        const tdAcoes = document.createElement('td');
+        const btnExcluir = document.createElement('button');
+
+        tdNome.textContent = item.nome;
+        tdPreco.textContent = `${Number(item.preco).toFixed(2)} Kwz`;
+        tdQtd.textContent = item.quantidade;
         
-        // Importante: Atualizar o objeto local 'item' para o próximo clique
-        item.quantidade = data.novaQtd;
-        console.log(`Uma unidade de ${item.nome} removida.`);
-      } 
-      else {
-        alert("Erro ao remover: " + (data.mensagem || "Erro desconhecido"));
-      }
-    })
-    .catch(err => console.error("Erro na requisição de exclusão:", err));
-  }
-});
+        const valorTotal = item.preco * item.quantidade;
+        tdTotal.textContent = `${valorTotal.toFixed(2)} Kwz`;
 
-          // Montagem final da linha
-          tdAcoes.appendChild(btnExcluir);
-          linhaDaTabela.appendChild(tdNome);
-          linhaDaTabela.appendChild(tdPreco);
-          linhaDaTabela.appendChild(tdQtd);
-          linhaDaTabela.appendChild(tdTotal);
-          linhaDaTabela.appendChild(tdAcoes);
+        btnExcluir.textContent = 'Excluir';
+        btnExcluir.className = 'exclui';
 
-          // Adicionamos a linha completa ao corpo da tabela
-          tbody.appendChild(linhaDaTabela);
+        // EVENTO DE CLIQUE PARA REMOVER
+        btnExcluir.addEventListener('click', () => {
+          if (confirm(`Deseja remover uma unidade de ${item.nome}?`)) {
+            fetch('remover_carrinho.php', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ id: item.id }),
+              credentials: 'include' // IMPORTANTE: Para o PHP saber de quem remover
+            })
+            .then(res => res.json())
+            .then(data => {
+              if (data.status === 'removido') {
+                linhaDaTabela.remove();
+              } else if (data.status === 'atualizado') {
+                tdQtd.textContent = data.novaQtd; 
+                tdTotal.textContent = `${data.novoTotal.toFixed(2)} Kwz`;
+                item.quantidade = data.novaQtd;
+              } else {
+                alert("Erro ao remover: " + (data.mensagem || "Erro"));
+              }
+            });
+          }
         });
-      }
-    })
-    .catch(error => {
-      console.error('Erro ao injetar dados na tabela:', error);
-    });
+
+        tdAcoes.appendChild(btnExcluir);
+        linhaDaTabela.appendChild(tdNome);
+        linhaDaTabela.appendChild(tdPreco);
+        linhaDaTabela.appendChild(tdQtd);
+        linhaDaTabela.appendChild(tdTotal);
+        linhaDaTabela.appendChild(tdAcoes);
+        tbody.appendChild(linhaDaTabela);
+      });
+    }
+  } catch (error) {
+    console.error('Erro ao injetar dados na tabela:', error);
+  }
 }
