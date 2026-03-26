@@ -1,1 +1,6 @@
 node_modules
+ecommerce.db
+temp/
+*.log
+.DS_Store
+.vscode/settings.json
