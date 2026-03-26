@@ -20,6 +20,16 @@ try {
         total REAL NOT NULL
     )");
 
+    $pdo->exec ("CREATE TABLE IF NOT EXISTS pedidos (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    usuario TEXT NOT NULL,
+    nome_produto TEXT NOT NULL,
+    preco REAL NOT NULL,
+    quantidade INTEGER NOT NULL,
+    total REAL NOT NULL,
+    data_compra DATETIME DEFAULT CURRENT_TIMESTAMP
+)");
+
     echo "Banco de dados resetado e criado com sucesso!";
 } catch (PDOException $e) {
     echo "Erro: " . $e->getMessage();

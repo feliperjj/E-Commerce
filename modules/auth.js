@@ -14,16 +14,20 @@ export default async function initAuth() {
             // Desenha o menu para usuário logado
             menu.innerHTML = `
                 <li><a href="index.html">Produtos</a></li>
-                <li style="color: black; font-weight: bold; margin-left: 10px;">Olá, ${data.username}</li> 
+                <li><a href="carrinho.html">Meu Carrinho</a></li> 
+                <li>
+                    <a href="perfil.html" style="color: black; font-weight: bold; margin-left: 10px; text-decoration: none;">
+                        👤 Olá, ${data.username}
+                    </a>
+                </li> 
                 <li><a href="logout.php" style="color: #ff4d4d; margin-left: 10px;">Sair</a></li>
-                <li><a href="carrinho.html">Meus Pedidos</a></li>
             `;
             return data.username; // <--- RETORNA O NOME REAL
         } else {
             // Menu padrão para deslogado
             menu.innerHTML = `
                 <li><a href="index.html">Produtos</a></li>
-                <li><a href="carrinho.html">Meus Pedidos</a></li>
+                <li><a href="carrinho.html">Meu Carrinho</a></li>
                 <li><a data-modal="abrir" href="#">Login →</a></li>
                 <li><a data-modal="abrir1" href="#">Registrar →</a></li>
             `;
