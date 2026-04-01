@@ -1,10 +1,25 @@
 // pokemon.js
 
-// O 'export' agora recebe o produto E o usuarioLogado
-export function adicionarAoCarrinho(produto, usuarioLogado = 'visitante') {
+// 1. Exportamos a função UUID para que outros módulos (como a paginação) possam usá-la
+export function obterOuCriarIdVisitante() {
+  let visitorId = localStorage.getItem('ecommerce_visitor_id');
+  if (!visitorId) {
+    visitorId = 'visitante_' + crypto.randomUUID();
+    localStorage.setItem('ecommerce_visitor_id', visitorId);
+  }
+  return visitorId;
+}
+
+// 2. A função principal ajustada
+export function adicionarAoCarrinho(produto, usuarioLogado) {
   if (!produto) return; 
 
-  console.log(`Tentando adicionar ao carrinho: ${produto.nome} para o usuário: ${usuarioLogado}`);
+  // Trava de Arquitetura: Se vier vazio ou com a string antiga 'visitante', usamos o UUID
+  if (!usuarioLogado || usuarioLogado === 'visitante') {
+    usuarioLogado = obterOuCriarIdVisitante();
+  }
+
+  console.log(`Tentando adicionar ao carrinho: ${produto.nome} para o usuário/visitante: ${usuarioLogado}`);
 
   // Criamos o objeto com os dados que o PHP espera
   const dadosParaEnvio = {
@@ -12,7 +27,7 @@ export function adicionarAoCarrinho(produto, usuarioLogado = 'visitante') {
     preco: produto.preco,
     quantidade: 1,
     total: produto.preco,
-    usuario: usuarioLogado // <--- Enviamos o nome do usuário no corpo do JSON também
+    usuario: usuarioLogado
   };
 
   // Fazemos a requisição para o Back-end
@@ -22,7 +37,7 @@ export function adicionarAoCarrinho(produto, usuarioLogado = 'visitante') {
       'Content-Type': 'application/json'
     },
     body: JSON.stringify(dadosParaEnvio),
-    credentials: 'include' // <--- Mantém o envio do PHPSESSID
+    credentials: 'include' 
   })
   .then(async (response) => {
     if (!response.ok) {
@@ -33,7 +48,6 @@ export function adicionarAoCarrinho(produto, usuarioLogado = 'visitante') {
   })
   .then((data) => {
     if (data.sucesso) {
-      // O PHP agora deve retornar o nome de quem comprou para confirmarmos
       console.log("Resposta do servidor:", data);
       alert(`${produto.nome} adicionado ao carrinho com sucesso!`);
     } else {

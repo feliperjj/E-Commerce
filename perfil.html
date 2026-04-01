@@ -1,163 +1,131 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Área do Cliente - Bento E-commerce</title>
-
-    <link rel="stylesheet" href="./css/style.css"> 
-
-    <style>
-        /* Estilos da Área do Cliente */
-        .perfil-container {
-            max-width: 900px;
-            margin: 40px auto;
-            padding: 30px;
-            background-color: #ffffff;
-            border-radius: 8px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-        }
-        .abas {
-            display: flex;
-            gap: 10px;
-            border-bottom: 2px solid #ddd;
-            margin-bottom: 25px;
-        }
-        .aba-btn {
-            padding: 10px 20px;
-            cursor: pointer;
-            background: none;
-            border: none;
-            font-size: 16px;
-            color: #555;
-            transition: 0.3s;
-        }
-        .aba-btn:hover {
-            color: #000;
-        }
-        .aba-ativa {
-            font-weight: bold;
-            border-bottom: 3px solid #ffcb05; /* Amarelo no estilo Pokémon */
-            color: #000;
-        }
-        .conteudo-aba {
-            display: none;
-        }
-        .conteudo-aba.ativo {
-            display: block;
-            animation: fadeIn 0.4s;
-        }
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(5px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        /* Formulário */
-        .form-grupo {
-            margin-bottom: 15px;
-        }
-        .form-grupo label {
-            display: block;
-            margin-bottom: 5px;
-            font-weight: bold;
-        }
-        .form-grupo input {
-            width: 100%;
-            padding: 10px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            font-size: 16px;
-        }
-        .btn-salvar {
-            padding: 12px 24px;
-            background-color: #3b4cca; /* Azul */
-            color: white;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            font-weight: bold;
-            font-size: 16px;
-            margin-top: 10px;
-        }
-        .btn-salvar:hover {
-            background-color: #2a3a9a;
-        }
-        /* Tabela de Histórico */
-        .tabela-pedidos {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 10px;
-        }
-        .tabela-pedidos th, .tabela-pedidos td {
-            padding: 15px;
-            border-bottom: 1px solid #eee;
-            text-align: left;
-        }
-        .tabela-pedidos th {
-            background-color: #f8f9fa;
-            font-weight: bold;
-        }
-    </style>
+  <meta charset="utf-8">
+  <title>Minha Conta - Bento E-Commerce</title>
+  <link rel="stylesheet" href="./css/style.css">
+  <style>
+    .perfil-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; max-width: 1000px; margin: 40px auto; padding: 20px; }
+    .card { background: white; padding: 25px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+    .full-width { grid-column: span 2; }
+    input { width: 100%; padding: 10px; margin: 10px 0; border: 1px solid #ccc; border-radius: 4px; }
+    button.btn-save { background: #3498db; color: white; border: none; padding: 10px 20px; cursor: pointer; border-radius: 4px; width: 100%; font-weight: bold; }
+    table { width: 100%; border-collapse: collapse; margin-top: 15px; }
+    th, td { padding: 12px; text-align: left; border-bottom: 1px solid #eee; }
+  </style>
 </head>
-<body>
+<body style="background: #f4f6f9;">
+  <header class="header">
+    <nav><ul class="header-menu"><li><a href="index.html">← Voltar à Loja</a></li></ul></nav>
+  </header>
 
-    <header class="header-bg">
-        <div class="header">
-            <ul class="header-menu">
-                </ul>
-        </div>
-    </header>
+  <main class="perfil-grid">
+    
+    <section class="card">
+      <h2>Configurações da Conta</h2>
+      <form id="formAtualizarPerfil">
+        <label>Nome de Usuário</label>
+        <input type="text" id="inputUser" name="username" readonly style="background: #eee;">
+        
+        <label>Novo E-mail</label>
+        <input type="email" id="inputEmail" name="email" required>
+        
+        <label>Nova Senha (deixe em branco para não alterar)</label>
+        <input type="password" name="password" placeholder="********">
+        
+        <button type="submit" class="btn-save">Atualizar Dados</button>
+      </form>
+      <p id="msgPerfil" style="margin-top:10px; text-align:center;"></p>
+    </section>
 
-    <main class="perfil-container">
-        <h1 style="margin-bottom: 25px;">Área do Cliente</h1>
+    <section class="card">
+      <h2>Resumo</h2>
+      <div style="text-align: center; padding: 20px;">
+        <div style="font-size: 50px;">👤</div>
+        <h3 id="displayUser">...</h3>
+        <p id="displayEmail">...</p>
+        <hr>
+        <p>Membro desde: 2026</p>
+      </div>
+    </section>
 
-        <div class="abas">
-            <button id="btn-dados" class="aba-btn aba-ativa">Meus Dados</button>
-            <button id="btn-historico" class="aba-btn">Histórico de Pedidos</button>
-        </div>
+    <section class="card full-width">
+      <h2>Meus Pedidos Realizados</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Data</th>
+            <th>Produto</th>
+            <th>Qtd</th>
+            <th>Total</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody id="tabela-pedidos">
+          <tr><td colspan="5">Carregando histórico...</td></tr>
+        </tbody>
+      </table>
+    </section>
 
-        <div id="aba-dados" class="conteudo-aba ativo">
-            <h2 style="margin-bottom: 20px; color: #333;">Atualizar Cadastro</h2>
-            
-            <form id="form-perfil">
-                <div class="form-grupo">
-                    <label>Usuário:</label>
-                    <input type="text" id="perfil-username" disabled style="background-color: #e9ecef; cursor: not-allowed;">
-                </div>
+  </main>
 
-                <div class="form-grupo">
-                    <label>E-mail:</label>
-                    <input type="email" id="perfil-email" required>
-                </div>
+  <script>
+    async function carregarDados() {
+      const response = await fetch('api_perfil.php', { credentials: 'include' });
+      const dados = await response.json();
 
-                <div class="form-grupo">
-                    <label>Nova Senha (deixe em branco para não alterar):</label>
-                    <input type="password" id="perfil-senha" placeholder="********">
-                </div>
+      if (dados.logado) {
+        // Preenche os campos de edição
+        document.getElementById('inputUser').value = dados.perfil.username;
+        document.getElementById('inputEmail').value = dados.perfil.email;
+        
+        // Preenche o resumo lateral
+        document.getElementById('displayUser').textContent = dados.perfil.username;
+        document.getElementById('displayEmail').textContent = dados.perfil.email;
 
-                <button type="submit" class="btn-salvar">Salvar Alterações</button>
-                <p id="msg-perfil" style="margin-top: 15px; font-weight: bold; font-size: 15px;"></p>
-            </form>
-        </div>
+        // Preenche a tabela de histórico
+        const tbody = document.getElementById('tabela-pedidos');
+        tbody.innerHTML = '';
+        if (dados.pedidos.length === 0) {
+          tbody.innerHTML = '<tr><td colspan="5">Ainda não realizou compras.</td></tr>';
+        } else {
+          dados.pedidos.forEach(p => {
+            tbody.innerHTML += `
+              <tr>
+                <td>${new Date(p.data_compra).toLocaleDateString('pt-BR')}</td>
+                <td><strong>${p.nome_produto}</strong></td>
+                <td>${p.quantidade}</td>
+                <td>${Number(p.total).toFixed(2)} Kwz</td>
+                <td><span style="color:green">✔ Concluído</span></td>
+              </tr>`;
+          });
+        }
+      } else {
+        window.location.href = 'index.html';
+      }
+    }
 
-        <div id="aba-historico" class="conteudo-aba">
-            <h2 style="margin-bottom: 20px; color: #333;">Minhas Compras</h2>
-            
-            <table class="tabela-pedidos">
-                <thead>
-                    <tr>
-                        <th>Data da Compra</th>
-                        <th>Produto</th>
-                        <th>Quantidade</th>
-                        <th>Total Pago</th>
-                    </tr>
-                </thead>
-                <tbody id="tabela-historico">
-                    </tbody>
-            </table>
-        </div>
-    </main>
+    // Lógica original de Atualizar Perfil
+    document.getElementById('formAtualizarPerfil').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const formData = new FormData(e.target);
+      const dados = Object.fromEntries(formData);
 
-    <script type="module" src="./index.js"></script>
+      const res = await fetch('atualizar_perfil.php', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(dados),
+        credentials: 'include'
+      });
+      const result = await res.json();
+      
+      const msg = document.getElementById('msgPerfil');
+      msg.textContent = result.sucesso ? "Dados atualizados com sucesso!" : "Erro: " + result.erro;
+      msg.style.color = result.sucesso ? "green" : "red";
+      if(result.sucesso) carregarDados();
+    });
 
+    carregarDados();
+  </script>
 </body>
 </html>

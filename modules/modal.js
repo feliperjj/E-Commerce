@@ -1,32 +1,34 @@
 export default function initModal() {
-  // Configuração para o Modal de Login
-  const btnAbrirLogin = document.querySelector('[data-modal="abrir"]');
-  const btnFecharLogin = document.querySelector('[data-modal="fechar"]');
-  const containerLogin = document.querySelector('[data-modal="container"]');
-
-  // Configuração para o Modal de Registro
-  const btnAbrirRegistro = document.querySelector('[data-modal="abrir1"]');
-  const btnFecharRegistro = document.querySelector('[data-modal="fechar1"]');
-  const containerRegistro = document.querySelector('[data-modal="container1"]');
-
   function setupModal(btnAbrir, btnFechar, container) {
-    if (btnAbrir && btnFechar && container) {
-      const toggle = (event) => {
-        event.preventDefault();
-        container.classList.toggle('ativo');
-      };
+    // Fail-fast: se um dos elementos não existir na página, cancela a execução para evitar erros no console
+    if (!btnAbrir || !btnFechar || !container) return;
 
-      const cliqueFora = (event) => {
-        if (event.target === container) toggle(event);
-      };
+    const toggle = (event) => {
+      event.preventDefault();
+      container.classList.toggle('ativo');
+    };
 
-      btnAbrir.addEventListener('click', toggle);
-      btnFechar.addEventListener('click', toggle);
-      container.addEventListener('click', cliqueFora);
-    }
+    const cliqueFora = (event) => {
+      if (event.target === container) toggle(event);
+    };
+
+    btnAbrir.addEventListener('click', toggle);
+    btnFechar.addEventListener('click', toggle);
+    container.addEventListener('click', cliqueFora);
   }
 
-  // Ativa os dois modais de forma independente
-  setupModal(btnAbrirLogin, btnFecharLogin, containerLogin);
-  setupModal(btnAbrirRegistro, btnFecharRegistro, containerRegistro);
+  // Dicionário de modais: Muito mais limpo e escalável
+  const modais = [
+    { abrir: '[data-modal="abrir"]', fechar: '[data-modal="fechar"]', container: '[data-modal="container"]' }, // Modal de Login
+    { abrir: '[data-modal="abrir1"]', fechar: '[data-modal="fechar1"]', container: '[data-modal="container1"]' } // Modal de Registro
+  ];
+
+  // O loop forEach aplica a lógica automaticamente para quantos modais existirem no array
+  modais.forEach(seletor => {
+    const btnAbrir = document.querySelector(seletor.abrir);
+    const btnFechar = document.querySelector(seletor.fechar);
+    const container = document.querySelector(seletor.container);
+    
+    setupModal(btnAbrir, btnFechar, container);
+  });
 }

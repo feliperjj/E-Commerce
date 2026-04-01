@@ -1,134 +1,137 @@
 // paginacao.js
-import { adicionarAoCarrinho } from './pokemon.js';
-import { dadosPaginas } from './dados.js';
+import { adicionarAoCarrinho, obterOuCriarIdVisitante } from './pokemon.js';
 
-// Adicionamos o parâmetro usuarioLogado aqui
-export default function initPagin(usuarioLogado = 'visitante') {
+export default async function initPagin(usuarioLogado) {
   const catalogoContainer = document.querySelector('.catalogoPrincipal');
   const ulPaginacao = document.querySelector('.paginacaob'); 
+  const inputBusca = document.querySelector('#inputBusca'); 
+  const botoesFiltro = document.querySelectorAll('.btn-filtro');
   
   if (!catalogoContainer) return; 
 
   const itensPorPagina = 8;
-  const numTotalDePaginas = Math.ceil(dadosPaginas.length / itensPorPagina);
-  
-  const itensDivididoPorPaginas = [];
+  let paginaAtual = 0;
+  let itensDivididoPorPaginas = [];
+  let numTotalDePaginas = 0;
 
-  for (let i = 1; i <= numTotalDePaginas; i++) {
-    const pagina = i;
-    const IdDoprimeiroDaPagina = itensPorPagina * pagina - itensPorPagina;
-    const idDoUltimoDaPagina = itensPorPagina * pagina - 1;
-    
-    const itensDessaPagina = dadosPaginas.filter((item) => {
-      return item.id >= IdDoprimeiroDaPagina && item.id <= idDoUltimoDaPagina;
-    });
-    itensDivididoPorPaginas.push(itensDessaPagina);
+  async function fetchProdutos(termo = '', categoria = 'todos') {
+    try {
+      catalogoContainer.innerHTML = '<div class="loader"></div>';
+      
+      const url = `api_produtos.php?busca=${encodeURIComponent(termo)}&categoria=${encodeURIComponent(categoria)}`;
+      const response = await fetch(url);
+      if (!response.ok) throw new Error('Erro na API');
+      
+      let produtos = await response.json();
+
+      produtos = produtos.map(item => ({
+        ...item,
+        preco: Number(item.preco),
+        quantidade: Number(item.quantidade),
+        total: Number(item.preco)
+      }));
+
+      paginaAtual = 0;
+      calcularPaginacao(produtos);
+      renderizarItens();
+      renderizarBotoesPaginacao();
+    } catch (error) {
+      console.error(error);
+      catalogoContainer.innerHTML = '<p style="text-align:center; color:red; padding: 20px;">Erro ao carregar o catálogo.</p>';
+    }
   }
 
-  let paginaAtual = 0;
+  function calcularPaginacao(lista) {
+    itensDivididoPorPaginas = [];
+    numTotalDePaginas = Math.ceil(lista.length / itensPorPagina);
+    for (let i = 0; i < numTotalDePaginas; i++) {
+      itensDivididoPorPaginas.push(lista.slice(i * itensPorPagina, (i + 1) * itensPorPagina));
+    }
+  }
 
   function renderizarItens() {
     catalogoContainer.innerHTML = '';
+    
+    if (itensDivididoPorPaginas.length === 0) {
+      catalogoContainer.innerHTML = '<p style="text-align:center; width:100%; padding: 40px;">Nenhum item encontrado.</p>';
+      return;
+    }
+
     const dadosPaginaAtual = itensDivididoPorPaginas[paginaAtual];
 
-    dadosPaginaAtual.forEach((produto) => {
-      const itemContainer = document.createElement('div');
-      itemContainer.className = 'itemComprar';
-
-      const imgContainer = document.createElement('div');
-      imgContainer.className = 'imgProduto';
-
-      const img = document.createElement('img');
-      img.className = 'itemImg';
-      img.src = produto.imagem;
-      img.alt = `Imagem do Pokémon ${produto.nome}`;
-
-      const conteudoItem = document.createElement('div');
-      conteudoItem.className = 'conteudoItem';
-
-      const preco = document.createElement('div');
-      preco.className = 'preco';
-
-      const precoParagrafo = document.createElement('p');
-      precoParagrafo.id = 'precoTexto';
-      precoParagrafo.textContent = `${produto.preco.toFixed(2)} Kwanzas`;
-      precoParagrafo.dataset.valor = produto.preco;
-
-      const quantiParagrafo = document.createElement('p');
-      quantiParagrafo.id = 'quantidade';
-      quantiParagrafo.textContent = `Qtd: ${produto.quantidade}`;
-
-      const totalParagrafo = document.createElement('p');
-      totalParagrafo.id = 'total';
-      totalParagrafo.textContent = `Total: ${produto.total.toFixed(2)} Kwz`;
-
-      const nomeProduto = document.createElement('p');
-      nomeProduto.id = 'nome';
-      nomeProduto.textContent = produto.nome;
-
-      // BOTÃO COMPRAR
-      const botaoComprar = document.createElement('button');
-      botaoComprar.className = 'comprar';
-      botaoComprar.textContent = 'Comprar';
+    dadosPaginaAtual.forEach(produto => {
+      const card = document.createElement('div');
+      card.className = 'itemComprar';
       
-      botaoComprar.addEventListener('click', () => {
-        // Passamos o usuário logado para a função de adicionar
-        adicionarAoCarrinho(produto, usuarioLogado);
-        window.location.href = 'carrinho.html';
-      });
+      // O Botão de favoritos (btn-fav) fica dentro da imgProduto para o CSS funcionar
+      card.innerHTML = `
+        <div class="imgProduto">
+          <img src="${produto.imagem}" class="itemImg" alt="${produto.nome}">
+          <button class="btn-fav" title="Favoritar" data-id="${produto.id}">❤</button>
+        </div>
+        <div class="conteudoItem">
+          <p id="nome" style="margin-bottom: 5px;">
+            <strong>${produto.nome}</strong>
+            <span style="display:block; color: #7f8c8d; font-size: 0.7rem; font-weight: normal;">Categoria: ${produto.categoria}</span>
+          </p>
+          <div class="preco">
+            <p id="precoTexto" style="font-size: 1.1rem; color: #2c3e50;">${produto.preco.toFixed(2)} Kwz</p>
+          </div>
+          <p id="quantidade" style="font-size: 0.75rem; color: #95a5a6;">Stock: ${produto.quantidade}</p>
+          <div style="display: flex; gap: 6px; margin-top: 10px;">
+            <button class="comprar" style="flex: 1.2; font-size: 0.85rem; padding: 10px 0;">Comprar</button>
+            <button class="carrinho" style="flex: 0.8; font-size: 0.85rem; padding: 10px 0;">🛒</button>
+          </div>
+        </div>
+      `;
 
-      // BOTÃO ADICIONAR AO CARRINHO
-      const botaoCarrinho = document.createElement('button');
-      botaoCarrinho.className = 'carrinho';
-      botaoCarrinho.textContent = 'Adicionar ao Carrinho';
+      card.querySelector('.comprar').onclick = () => { 
+        adicionarAoCarrinho(produto, usuarioLogado); 
+        window.location.href = 'carrinho.html'; 
+      };
+
+      card.querySelector('.carrinho').onclick = () => {
+        adicionarAoCarrinho(produto, usuarioLogado);
+      };
       
-      botaoCarrinho.addEventListener('click', () => {
-        // Passamos o usuário logado aqui também
-        adicionarAoCarrinho(produto, usuarioLogado);
-      });
+      const btnFav = card.querySelector('.btn-fav');
+      btnFav.onclick = (e) => {
+        e.preventDefault();
+        btnFav.classList.toggle('active');
+      };
 
-      preco.appendChild(nomeProduto);
-      preco.appendChild(precoParagrafo);
-      conteudoItem.appendChild(totalParagrafo);
-      conteudoItem.appendChild(preco);
-      conteudoItem.appendChild(quantiParagrafo);
-      conteudoItem.appendChild(botaoComprar);
-      conteudoItem.appendChild(botaoCarrinho);
-      imgContainer.appendChild(img);
-      itemContainer.appendChild(imgContainer);
-      itemContainer.appendChild(conteudoItem);
-      catalogoContainer.appendChild(itemContainer);
+      catalogoContainer.appendChild(card);
     });
   }
 
   function renderizarBotoesPaginacao() {
     if (!ulPaginacao) return;
-    ulPaginacao.innerHTML = ''; 
-
-    for (let i = 1; i <= numTotalDePaginas; i++) {
+    ulPaginacao.innerHTML = '';
+    for (let i = 0; i < numTotalDePaginas; i++) {
       const li = document.createElement('li');
-      li.textContent = i;
-      li.className = 'pagina';
-      
-      if (i - 1 === paginaAtual) {
-        li.classList.add('active');
-      }
-
-      li.addEventListener('click', trocarPagina);
+      li.textContent = i + 1;
+      li.className = `pagina ${i === paginaAtual ? 'active' : ''}`;
+      li.onclick = () => { paginaAtual = i; renderizarItens(); renderizarBotoesPaginacao(); };
       ulPaginacao.appendChild(li);
     }
   }
 
-  function trocarPagina(event) {
-    const paginaSelecionada = Number(event.target.textContent) - 1;
-
-    if (paginaSelecionada !== paginaAtual && !isNaN(paginaSelecionada)) {
-      paginaAtual = paginaSelecionada;
-      renderizarItens(); 
-      renderizarBotoesPaginacao(); 
-    }
+  if (inputBusca) {
+    let timerBusca;
+    inputBusca.addEventListener('input', (e) => {
+      clearTimeout(timerBusca);
+      const catAtiva = document.querySelector('.btn-filtro.active')?.dataset.categoria || 'todos';
+      timerBusca = setTimeout(() => fetchProdutos(e.target.value, catAtiva), 400);
+    });
   }
 
-  renderizarItens();
-  renderizarBotoesPaginacao();
+  botoesFiltro.forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      botoesFiltro.forEach(b => b.classList.remove('active'));
+      e.target.classList.add('active');
+      fetchProdutos(inputBusca?.value || '', e.target.dataset.categoria);
+    });
+  });
+
+  fetchProdutos();
 }

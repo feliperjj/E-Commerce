@@ -15,13 +15,18 @@ $input = json_decode(file_get_contents('php://input'), true);
 
 if ($input) {
     try {
-        // Agora o PHP vai encontrar o seu nome real dentro da pasta /temp
-        $usuarioLogado = isset($_SESSION['username']) ? $_SESSION['username'] : 'visitante';
+        // A CORREÇÃO ESTÁ AQUI:
+        // 1. Lemos o utilizador que o JavaScript enviou no JSON (o UUID ou username)
+        $usuarioDoFrontend = isset($input['usuario']) ? $input['usuario'] : 'visitante';
+        
+        // 2. Por segurança, se houver uma sessão PHP ativa, ela tem prioridade. 
+        // Se não houver, confiamos no UUID gerado pelo frontend.
+        $usuarioLogado = isset($_SESSION['username']) ? $_SESSION['username'] : $usuarioDoFrontend;
         
         $nome = $input['nome'];
         $preco = $input['preco'];
 
-        // Lógica de Agrupamento: Verifica se já existe o item para ESTE usuário
+        // Lógica de Agrupamento: Verifica se já existe o item para ESTE utilizador específico
         $check = $pdo->prepare("SELECT id, quantidade FROM carrinho WHERE nome = :nome AND usuario = :usuario");
         $check->execute([':nome' => $nome, ':usuario' => $usuarioLogado]);
         $itemExistente = $check->fetch();
@@ -50,6 +55,7 @@ if ($input) {
             ]);
         }
 
+        // Devolvemos o nome de quem comprou para debug no console do JS
         echo json_encode(['sucesso' => true, 'usuario_que_comprou' => $usuarioLogado]);
     } catch (PDOException $e) {
         echo json_encode(['sucesso' => false, 'erro' => $e->getMessage()]);
