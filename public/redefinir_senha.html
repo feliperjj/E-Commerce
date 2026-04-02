@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <title>Redefinir Senha - Bento E-Commerce</title>
+  <link rel="stylesheet" href="./css/style.css">
+  <style>
+    .recovery-box { max-width: 400px; margin: 100px auto; padding: 20px; background: white; border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+    input { width: 100%; padding: 10px; margin: 10px 0; box-sizing: border-box; }
+    button { width: 100%; padding: 10px; background: #3498db; color: white; border: none; cursor: pointer; border-radius: 4px; }
+  </style>
+</head>
+<body style="background: #f4f4f4;">
+  <div class="recovery-box">
+    <h2 id="titulo">Nova Senha</h2>
+    <p id="instrucao">Digite sua nova senha abaixo.</p>
+    
+    <form id="formRedefinir">
+      <input type="password" id="novaSenha" placeholder="Digite a nova senha" required minlength="6">
+      <button type="submit">Atualizar Senha</button>
+    </form>
+    <p id="mensagem" style="text-align: center; margin-top: 15px;"></p>
+  </div>
+
+  <script>
+    // Pega o token da URL (?token=xxxx)
+    const urlParams = new URLSearchParams(window.location.search);
+    const token = urlParams.get('token');
+
+    if (!token) {
+        document.body.innerHTML = "<h1 style='text-align:center; margin-top:100px;'>Token inválido ou ausente.</h1>";
+    }
+
+    document.getElementById('formRedefinir').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const senha = document.getElementById('novaSenha').value;
+      const msg = document.getElementById('mensagem');
+
+      try {
+        const res = await fetch('../backend/processar_redefinicao.php', {
+          method: 'POST',
+          headers: {'Content-Type': 'application/json'},
+          body: JSON.stringify({ token, senha })
+        });
+        const result = await res.json();
+
+        if (result.sucesso) {
+          msg.style.color = "green";
+          msg.textContent = "Senha alterada! Redirecionando...";
+          setTimeout(() => window.location.href = 'index.html', 3000);
+        } else {
+          msg.style.color = "red";
+          msg.textContent = "Erro: " + result.erro;
+        }
+      } catch (err) { msg.textContent = "Erro de conexão."; }
+    });
+  </script>
+</body>
+</html>

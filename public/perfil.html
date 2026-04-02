@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <title>Minha Conta - Bento E-Commerce</title>
+  <link rel="stylesheet" href="./css/style.css">
+  <style>
+    .perfil-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; max-width: 1000px; margin: 40px auto; padding: 20px; }
+    .card { background: white; padding: 25px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+    .full-width { grid-column: span 2; }
+    input { width: 100%; padding: 10px; margin: 10px 0; border: 1px solid #ccc; border-radius: 4px; }
+    button.btn-save { background: #3498db; color: white; border: none; padding: 10px 20px; cursor: pointer; border-radius: 4px; width: 100%; font-weight: bold; }
+    table { width: 100%; border-collapse: collapse; margin-top: 15px; }
+    th, td { padding: 12px; text-align: left; border-bottom: 1px solid #eee; }
+  </style>
+</head>
+<body style="background: #f4f6f9;">
+  <header class="header">
+    <nav><ul class="header-menu"><li><a href="index.html">← Voltar à Loja</a></li></ul></nav>
+  </header>
+
+  <main class="perfil-grid">
+    
+    <section class="card">
+      <h2>Configurações da Conta</h2>
+      <form id="formAtualizarPerfil">
+        <label>Nome de Usuário</label>
+        <input type="text" id="inputUser" name="username" readonly style="background: #eee;">
+        
+        <label>Novo E-mail</label>
+        <input type="email" id="inputEmail" name="email" required>
+        
+        <label>Nova Senha (deixe em branco para não alterar)</label>
+        <input type="password" name="password" placeholder="********">
+        
+        <button type="submit" class="btn-save">Atualizar Dados</button>
+      </form>
+      <p id="msgPerfil" style="margin-top:10px; text-align:center;"></p>
+    </section>
+
+    <section class="card">
+      <h2>Resumo</h2>
+      <div style="text-align: center; padding: 20px;">
+        <div style="font-size: 50px;">👤</div>
+        <h3 id="displayUser">...</h3>
+        <p id="displayEmail">...</p>
+        <hr>
+        <p>Membro desde: 2026</p>
+      </div>
+    </section>
+
+    <section class="card full-width">
+      <h2>Meus Pedidos Realizados</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Data</th>
+            <th>Produto</th>
+            <th>Qtd</th>
+            <th>Total</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody id="tabela-pedidos">
+          <tr><td colspan="5">Carregando histórico...</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+  </main>
+
+  <script>
+    async function carregarDados() {
+      const response = await fetch('../backend/api_perfil.php', { credentials: 'include' });
+      const dados = await response.json();
+
+      if (dados.logado) {
+        // Preenche os campos de edição
+        document.getElementById('inputUser').value = dados.perfil.username;
+        document.getElementById('inputEmail').value = dados.perfil.email;
+        
+        // Preenche o resumo lateral
+        document.getElementById('displayUser').textContent = dados.perfil.username;
+        document.getElementById('displayEmail').textContent = dados.perfil.email;
+
+        // Preenche a tabela de histórico
+        const tbody = document.getElementById('tabela-pedidos');
+        tbody.innerHTML = '';
+        if (dados.pedidos.length === 0) {
+          tbody.innerHTML = '<tr><td colspan="5">Ainda não realizou compras.</td></tr>';
+        } else {
+          dados.pedidos.forEach(p => {
+            tbody.innerHTML += `
+              <tr>
+                <td>${new Date(p.data_compra).toLocaleDateString('pt-BR')}</td>
+                <td><strong>${p.nome_produto}</strong></td>
+                <td>${p.quantidade}</td>
+                <td>${Number(p.total).toFixed(2)} Kwz</td>
+                <td><span style="color:green">✔ Concluído</span></td>
+              </tr>`;
+          });
+        }
+      } else {
+        window.location.href = 'index.html';
+      }
+    }
+
+    // Lógica original de Atualizar Perfil
+    document.getElementById('formAtualizarPerfil').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const formData = new FormData(e.target);
+      const dados = Object.fromEntries(formData);
+
+      const res = await fetch('../backend/atualizar_perfil.php', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(dados),
+        credentials: 'include'
+      });
+      const result = await res.json();
+      
+      const msg = document.getElementById('msgPerfil');
+      msg.textContent = result.sucesso ? "Dados atualizados com sucesso!" : "Erro: " + result.erro;
+      msg.style.color = result.sucesso ? "green" : "red";
+      if(result.sucesso) carregarDados();
+    });
+
+    carregarDados();
+  </script>
+</body>
+</html>
