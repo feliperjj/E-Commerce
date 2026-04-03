@@ -79,4 +79,19 @@
   font-family: 'IBM Plex Mono', monospace;
   margin-top: 1rem;
   font-weight: bold;
+  cursor: pointer;
+  transition: background .15s, transform .1s, box-shadow .1s;
+  box-shadow: 0 4px 6px rgba(0,0,0,.2);
+  width: 100%;
+}
+
+.modal button[type="submit"]:hover {
+  background: #c0392b;
+  box-shadow: 0 6px 12px rgba(0,0,0,.25);
+}
+
+.modal button[type="submit"]:active {
+  transform: scale(0.97) translateY(1px);
+  box-shadow: 0 2px 4px rgba(0,0,0,.2);
+  background: #a93226;
 }
