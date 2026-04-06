@@ -2,12 +2,13 @@
 error_reporting(0);
 ini_set('display_errors', 0);
 
-session_save_path(__DIR__ . '/temp'); 
+// Sem session_save_path! Apenas inicia a sessão nativa do InfinityFree
 session_start();
 
 require_once __DIR__ . '/db_config.php';
 header('Content-Type: application/json');
 
+// Recebendo os dados via POST JSON
 $data = json_decode(file_get_contents('php://input'), true);
 
 if (!isset($data['id'])) {
@@ -16,7 +17,8 @@ if (!isset($data['id'])) {
 }
 
 $idItem = $data['id'];
-// Identifica quem está pedindo a remoção
+
+// Identifica quem está pedindo a remoção (prioriza a sessão, senão usa o que veio do JS)
 $usuarioDoFrontend = isset($data['usuario']) ? $data['usuario'] : 'visitante';
 $usuarioLogado = isset($_SESSION['username']) ? $_SESSION['username'] : $usuarioDoFrontend;
 
@@ -28,6 +30,7 @@ try {
 
     if ($item) {
         if ($item['quantidade'] > 1) {
+            // Se tem mais de 1, diminui a quantidade
             $novaQtd = $item['quantidade'] - 1;
             $novoTotal = $novaQtd * $item['preco'];
 
@@ -40,6 +43,7 @@ try {
             ]);
             echo json_encode(['status' => 'atualizado', 'novaQtd' => $novaQtd, 'novoTotal' => $novoTotal]);
         } else {
+            // Se só tem 1, deleta a linha
             $delete = $pdo->prepare("DELETE FROM carrinho WHERE id = :id AND usuario = :usuario");
             $delete->execute([':id' => $idItem, ':usuario' => $usuarioLogado]);
             echo json_encode(['status' => 'removido']);

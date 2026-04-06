@@ -4,8 +4,7 @@
 error_reporting(0);
 ini_set('display_errors', 0);
 
-// ESSA LINHA É A CHAVE: Sem ela, ele não abre a gaveta 'temp' e não te reconhece
-session_save_path(__DIR__ . '/temp'); 
+// ❌ A "CHAVE" FOI JOGADA FORA: O InfinityFree gerencia a sessão nativamente agora.
 session_start();
 
 header('Content-Type: application/json');
@@ -15,7 +14,6 @@ $input = json_decode(file_get_contents('php://input'), true);
 
 if ($input) {
     try {
-        // A CORREÇÃO ESTÁ AQUI:
         // 1. Lemos o utilizador que o JavaScript enviou no JSON (o UUID ou username)
         $usuarioDoFrontend = isset($input['usuario']) ? $input['usuario'] : 'visitante';
         

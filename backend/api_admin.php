@@ -3,16 +3,17 @@
 error_reporting(0);
 ini_set('display_errors', 0);
 
-session_save_path(__DIR__ . '/temp');
+// ❌ REMOVIDO: session_save_path(__DIR__ . '/temp'); -> O InfinityFree bloqueia isso!
 session_start();
+
 header('Content-Type: application/json');
 require_once __DIR__ . '/db_config.php';
 
-// BARREIRA DE SEGURANÇA
-if (!isset($_SESSION['username']) || $_SESSION['is_admin'] != 1) {
+// 🛡️ BARREIRA DE SEGURANÇA ADMIN ABSOLUTA
+if (!isset($_SESSION['username']) || (int)$_SESSION['is_admin'] !== 1) {
     http_response_code(403);
-    echo json_encode(['erro' => 'Acesso negado.']);
-    exit;
+    echo json_encode(['sucesso' => false, 'erro' => 'Acesso Negado: Apenas administradores.']);
+    exit; // O script morre aqui se não for admin de verdade
 }
 
 try {

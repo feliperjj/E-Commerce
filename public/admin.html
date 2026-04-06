@@ -5,131 +5,235 @@
   <title>Dashboard Admin - Bento E-Commerce</title>
   <link rel="stylesheet" href="css/style.css">
   <style>
-    body { background-color: #f4f6f9; }
-    .admin-container { max-width: 1100px; margin: 40px auto; background: #1e1e24; padding: 40px; border-radius: 16px; box-shadow: 0 15px 35px rgba(0,0,0,0.2); color: #fff; }
-    .kpi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; margin-bottom: 40px; }
-    .kpi-card { background: #111116; border: 1px solid #2a2a40; border-radius: 12px; padding: 20px; display: flex; align-items: center; gap: 15px; }
-    .kpi-info p { margin: 5px 0; font-size: 1.5rem; font-weight: bold; }
+    /* AJUSTE DE CORES PARA CONTRASTE MÁXIMO */
+    :root {
+      --bg-puro: #111116;
+      --card-puro: #1a1a20;
+      --texto-branco: #ffffff; 
+      --verde-neon: #2ecc71;
+      --azul-claro: #3498db;
+      --borda: #444455;
+    }
+
+    body { background-color: #f4f6f9; font-family: sans-serif; }
     
-    /* Estilo das Tabelas no Admin */
-    .section-vendas { background: #111116; border-radius: 12px; padding: 20px; margin-bottom: 30px; border: 1px solid #2ecc71; }
-    .tabela-vendas { width: 100%; border-collapse: collapse; margin-top: 15px; }
-    .tabela-vendas th, .tabela-vendas td { padding: 12px; text-align: left; border-bottom: 1px solid #2a2a40; font-size: 0.9rem; }
-    .tabela-vendas th { color: #a0a0b2; text-transform: uppercase; font-size: 0.75rem; }
+    .admin-container { 
+      max-width: 1100px; 
+      margin: 40px auto; 
+      background: var(--bg-puro); 
+      padding: 40px; 
+      border-radius: 12px; 
+      color: var(--texto-branco); 
+    }
+
+    /* KPIs */
+    .kpi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; margin-bottom: 30px; }
+    .kpi-card { 
+      background: var(--card-puro); 
+      border: 2px solid var(--borda); 
+      padding: 20px; 
+      border-radius: 8px;
+    }
+    .kpi-info h3 { color: #ffffff; font-size: 0.9rem; margin: 0; text-transform: uppercase; opacity: 0.8; }
+    .kpi-info p { color: var(--verde-neon); font-size: 2.2rem; margin: 5px 0 0 0; font-weight: bold; }
+
+    /* Tabela de Vendas */
+    .section-vendas { 
+      background: var(--card-puro); 
+      padding: 20px; 
+      border-radius: 8px; 
+      border: 2px solid var(--borda); 
+      margin-bottom: 30px;
+    }
+    .section-vendas h3 { color: var(--verde-neon); margin-top: 0; border-bottom: 1px solid var(--borda); padding-bottom: 10px; }
+
+    .tabela-vendas { width: 100%; border-collapse: collapse; background-color: #ffffff; } 
     
-    .form-group input, .form-group select { width: 100%; padding: 12px; border-radius: 8px; background: #111116; color: #fff; border: 1px solid #3a3a50; margin-top: 5px; }
-    .btn-submit { background: #3498db; color: white; border: none; padding: 15px; border-radius: 8px; width: 100%; font-weight: bold; cursor: pointer; margin-top: 20px; }
+    .tabela-vendas th { 
+        text-align: left; 
+        padding: 12px; 
+        background: #252530; 
+        color: #ffffff; 
+        border: 1px solid var(--borda);
+        font-weight: bold;
+    }
+    
+    .tabela-vendas td { 
+        padding: 12px; 
+        border: 1px solid #ccc; 
+        color: #000000 !important; 
+        font-size: 1rem;
+        font-weight: 500;
+    }
+
+    .td-user { color: #3498db !important; font-weight: bold; }
+    .td-total { color: #27ae60 !important; font-weight: bold; text-align: right; }
+
+    /* Formulário */
+    .form-box { background: var(--card-puro); padding: 25px; border-radius: 8px; border: 2px solid var(--borda); }
+    .form-group label { display: block; color: #ffffff; margin-bottom: 5px; font-weight: bold; }
+    .form-group input, .form-group select { 
+      width: 100%; padding: 12px; background: #000; color: #fff; border: 1px solid var(--azul-claro); margin-bottom: 15px; 
+    }
+    .btn-submit { 
+      background: var(--azul-claro); color: #fff; border: none; padding: 15px; cursor: pointer; width: 100%; font-weight: bold; font-size: 1.1rem;
+    }
+    
+    /* Tela de carregamento do Admin */
+    #tela-bloqueio {
+        position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+        background: #111116; z-index: 9999; display: flex; 
+        justify-content: center; align-items: center; color: white; font-size: 1.5rem;
+    }
   </style>
 </head>
 <body>
 
-  <header class="header">
-    <nav><ul class="header-menu"><li><a href="index.html">← Voltar à Loja</a></li></ul></nav>
+  <div id="tela-bloqueio">🔐 Verificando credenciais de administrador...</div>
+
+  <header style="background: #000; padding: 15px; text-align: center; border-bottom: 3px solid var(--azul-claro);">
+    <a href="index.html" style="color: #fff; text-decoration: none; margin-right: 20px; font-weight: bold;">← VOLTAR À LOJA</a>
+    <span style="color: var(--verde-neon); font-weight: bold; font-size: 1.2rem;">PAINEL ADMIN</span>
   </header>
 
-  <main class="admin-container">
-    <h2>📊 Dashboard de Negócios</h2>
-
+  <main class="admin-container" id="conteudo-admin" style="display: none;">
     <div class="kpi-grid">
       <div class="kpi-card">
-        <div style="font-size: 2rem;">💰</div>
-        <div class="kpi-info"><h3>Faturamento Total</h3><p id="kpi-faturamento">R$ 0,00</p></div>
+        <div class="kpi-info"><h3>RECEITA TOTAL</h3><p id="kpi-faturamento">R$ 0,00</p></div>
       </div>
       <div class="kpi-card">
-        <div style="font-size: 2rem;">📦</div>
-        <div class="kpi-info"><h3>Itens em Estoque</h3><p id="kpi-produtos">0</p></div>
+        <div class="kpi-info"><h3>PRODUTOS EM LINHA</h3><p id="kpi-produtos" style="color: var(--azul-claro);">0</p></div>
       </div>
     </div>
 
     <section class="section-vendas">
-      <h3 style="color: #2ecc71;">🛒 Últimas Vendas Realizadas</h3>
+      <h3>📈 RELATÓRIO DE VENDAS RECENTES</h3>
       <table class="tabela-vendas">
         <thead>
           <tr>
-            <th>Cliente</th>
-            <th>Produto</th>
-            <th>Qtd</th>
-            <th>Total</th>
+            <th>USUÁRIO</th>
+            <th>PRODUTO</th>
+            <th style="text-align:center;">QTD</th>
+            <th style="text-align:right;">TOTAL</th>
           </tr>
         </thead>
         <tbody id="lista-vendas-geral">
-          <tr><td colspan="4">Carregando vendas...</td></tr>
+          <tr><td colspan="4" style="text-align:center; color: #000 !important;">Buscando dados no servidor...</td></tr>
         </tbody>
       </table>
     </section>
 
-    <section style="background: #111116; padding: 25px; border-radius: 12px;">
-      <h3>📦 Cadastrar Novo Pokémon</h3>
+    <div class="form-box">
+      <h3 style="color: var(--azul-claro);">📦 CADASTRAR NOVO PRODUTO</h3>
       <form id="formAdmin">
-        <div style="display:grid; grid-template-columns: 1fr 1fr; gap: 20px;">
-          <div class="form-group"><label>Nome</label><input type="text" name="nome" required></div>
+        <div style="display:grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+          <div class="form-group"><label>Nome do Item</label><input type="text" name="nome" placeholder="Nome do Pokémon" required></div>
           <div class="form-group"><label>Categoria</label>
             <select name="categoria">
               <option value="Fogo">Fogo</option><option value="Água">Água</option>
               <option value="Grama">Grama</option><option value="Elétrico">Elétrico</option>
             </select>
           </div>
-          <div class="form-group"><label>Preço (R$)</label><input type="number" step="0.01" name="preco" required></div>
-          <div class="form-group"><label>Estoque Inicial</label><input type="number" name="quantidade" required></div>
+          <div class="form-group"><label>Preço Unitário (R$)</label><input type="number" step="0.01" name="preco" required></div>
+          <div class="form-group"><label>Quantidade Estoque</label><input type="number" name="quantidade" required></div>
         </div>
-        <div class="form-group" style="margin-top:15px;"><label>Foto do Produto</label><input type="file" name="foto" accept="image/*" required></div>
-        <button type="submit" class="btn-submit">Gravar no Catálogo</button>
+        <div class="form-group"><label>Imagem do Produto</label><input type="file" name="foto" accept="image/*" required></div>
+        <button type="submit" class="btn-submit">GRAVAR NO BANCO DE DADOS</button>
       </form>
-      <p id="status" style="text-align:center; margin-top:15px;"></p>
-    </section>
+      <p id="status" style="text-align:center; font-weight:bold; margin-top: 10px;"></p>
+    </div>
   </main>
 
   <script>
+    // 🛡️ 1. CATRACA DE SEGURANÇA: Verifica se é admin antes de mostrar a tela
+    async function iniciarPainelAdmin() {
+        try {
+            // Vai no backend (Caminho corrigido para /backend/)
+            const resSessao = await fetch('/backend/verificar_sessao.php', { credentials: 'include' });
+            const sessao = await resSessao.json();
+            
+            // Se não for admin, chuta pra fora!
+            if (!sessao.logado || Number(sessao.is_admin) !== 1) {
+                window.location.replace('index.html'); // Teletransporte pra Home
+                return; // Mata a execução aqui
+            }
+
+            // Se for admin, esconde a tela de bloqueio e mostra o painel
+            document.getElementById('tela-bloqueio').style.display = 'none';
+            document.getElementById('conteudo-admin').style.display = 'block';
+            
+            // Agora sim carrega os dados
+            carregarDados();
+
+        } catch (error) {
+            window.location.replace('index.html');
+        }
+    }
+
+    // 2. Função que carrega os gráficos (Caminhos corrigidos para /backend/)
     async function carregarDados() {
       try {
-        // 1. Carrega Produtos para o KPI
-        const resProd = await fetch('./api/api_produtos.php');
+        const resProd = await fetch('/backend/api_produtos.php');
         const produtos = await resProd.json();
-        document.getElementById('kpi-produtos').innerText = produtos.length;
+        document.getElementById('kpi-produtos').innerText = produtos.length || 0;
 
-        // 2. Carrega Vendas para a Tabela e Faturamento (Fix: credentials para admin)
-        const resVendas = await fetch('./api/api_todos_pedidos.php', { credentials: 'include' });
+        const resVendas = await fetch('/backend/api_todos_pedidos.php', { credentials: 'include' });
         const vendas = await resVendas.json();
 
         const tbody = document.getElementById('lista-vendas-geral');
         let faturamento = 0;
 
-        if (vendas.length > 0) {
+        if (Array.isArray(vendas) && vendas.length > 0) {
           tbody.innerHTML = vendas.map(v => {
             faturamento += Number(v.total);
             return `<tr>
-              <td>${v.usuario}</td>
-              <td><strong>${v.nome_produto}</strong></td>
-              <td>${v.quantidade}</td>
-              <td style="color:#2ecc71;">R$ ${Number(v.total).toFixed(2)}</td>
+              <td class="td-user">@${v.usuario}</td>
+              <td style="color: #000000 !important;">${v.nome_produto}</td>
+              <td style="color: #000000 !important; text-align:center;">${v.quantidade}x</td>
+              <td class="td-total">R$ ${Number(v.total).toFixed(2)}</td>
             </tr>`;
           }).join('');
         } else {
-          tbody.innerHTML = '<tr><td colspan="4">Nenhuma venda registrada.</td></tr>';
+          tbody.innerHTML = '<tr><td colspan="4" style="text-align:center; color: #000 !important;">Nenhuma venda encontrada.</td></tr>';
         }
 
         document.getElementById('kpi-faturamento').innerText = faturamento.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
 
-      } catch (e) { console.error("Erro no Dashboard", e); }
+      } catch (e) { console.error("Erro ao carregar dados:", e); }
     }
 
-    // Cadastro de produto
+    // 3. Cadastrar Produto (Caminho corrigido para /backend/)
     document.getElementById('formAdmin').onsubmit = async (e) => {
       e.preventDefault();
       const status = document.getElementById('status');
-      status.innerText = "Enviando...";
+      status.style.color = "var(--azul-claro)";
+      status.innerText = "⏳ Gravando dados...";
       
-      const res = await fetch('./api/cadastrar_produto.php', { 
-        method: 'POST', 
-        body: new FormData(e.target), 
-        credentials: 'include' 
-      });
-      const r = await res.json();
-      status.innerText = r.sucesso ? "✅ Sucesso!" : "❌ Erro: " + r.erro;
-      if(r.sucesso) { e.target.reset(); carregarDados(); }
+      try {
+          const res = await fetch('/backend/cadastrar_produto.php', { 
+            method: 'POST', 
+            body: new FormData(e.target), 
+            credentials: 'include' 
+          });
+          
+          if (res.status === 403) {
+             status.innerText = "❌ ERRO: Acesso negado pelo servidor!";
+             status.style.color = "#ff4d4d";
+             return;
+          }
+
+          const r = await res.json();
+          status.innerText = r.sucesso ? "✅ SUCESSO AO CADASTRAR!" : "❌ ERRO: " + r.erro;
+          status.style.color = r.sucesso ? "var(--verde-neon)" : "#ff4d4d";
+          if(r.sucesso) { e.target.reset(); carregarDados(); }
+      } catch (e) {
+          status.innerText = "❌ ERRO: Falha na comunicação.";
+          status.style.color = "#ff4d4d";
+      }
     };
 
-    carregarDados();
+    // Dá o play em tudo quando a página carregar
+    iniciarPainelAdmin();
   </script>
 </body>
 </html>

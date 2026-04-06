@@ -24,7 +24,8 @@ export function adicionarAoCarrinho(produto, usuarioLogado) {
     usuario: usuarioLogado
   };
 
-  fetch('./api/adicionar_carrinho.php', {
+  // 🟢 CORRIGIDO: Agora o Front-end bate na pasta certa do servidor (/backend/)
+  fetch('/backend/adicionar_carrinho.php', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'
