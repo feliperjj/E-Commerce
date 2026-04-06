@@ -60,7 +60,7 @@ Você pode visualizar e testar a aplicação em produção aqui: **[bentocommerc
 | **Front-end** | `HTML5` + `CSS3` | Layout dinâmico da loja, flexbox, grid e interações responsivas. |
 | **Front-end** | `JS (ES6)` | Roteamento condicional no index, tratamento de API, carrinho na tela em tempo real. |
 | **Back-end** | `PHP 8+` | Intersecção lógica, endpoints robustos e verificação severa de estado. |
-| **Banco de Dados** | `SQLite (PDO)` | Persistência local segura via queries parametrizadas (anti-SQL Injection). |
+| **Banco de Dados** | `MYSQL` | Persistência local segura via queries parametrizadas (anti-SQL Injection). |
 | **Deploy** | `InfinityFree` | Hospedagem para portfólio live, rotulando os protocolos CORS. |
 
 <details>
@@ -79,7 +79,7 @@ E-Commerce/
 │   ├── paginacao.js        # Filtros, debounce e listagem
 │   └── pokemon.js          # Cartão com injeção UUID
 ├── css/                    # Estilo nativo do sistema
-├── db_config.php           # Setup do PDO com SQLite
+├── db_config.php           # Setup do MYSQL
 ├── criar_banco.php         # Script inicial de criação de tabelas/seed
 ├── index.html              # Alojamento Single-Page
 └── ...
