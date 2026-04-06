@@ -6,7 +6,7 @@ export default async function initAuth() {
 
     try {
         // Faz uma verificação se o usuário está conectado puxando com fetch [cite: 4]
-        const response = await fetch('../backend/verificar_sessao.php', { credentials: 'include' });
+        const response = await fetch('./api/verificar_sessao.php', { credentials: 'include' });
         const sessao = await response.json(); // Utilizando o resultado em JSON [cite: 4]
 
         if (sessao.logado) {
@@ -33,7 +33,7 @@ export default async function initAuth() {
             document.getElementById('btnLogout').addEventListener('click', async (e) => {
                 e.preventDefault();
                 // Chama o ficheiro de logout
-                await fetch('../backend/logout.php', { credentials: 'include' });
+                await fetch('./api/logout.php', { credentials: 'include' });
                 // Limpa o UUID por segurança
                 localStorage.removeItem('ecommerce_visitor_id'); 
                 // Recarrega a página para atualizar o cabeçalho

@@ -1,6 +1,5 @@
 // pokemon.js
 
-// 1. Exportamos a função UUID para que outros módulos (como a paginação) possam usá-la
 export function obterOuCriarIdVisitante() {
   let visitorId = localStorage.getItem('ecommerce_visitor_id');
   if (!visitorId) {
@@ -10,18 +9,13 @@ export function obterOuCriarIdVisitante() {
   return visitorId;
 }
 
-// 2. A função principal ajustada
 export function adicionarAoCarrinho(produto, usuarioLogado) {
   if (!produto) return; 
 
-  // Trava de Arquitetura: Se vier vazio ou com a string antiga 'visitante', usamos o UUID
   if (!usuarioLogado || usuarioLogado === 'visitante') {
     usuarioLogado = obterOuCriarIdVisitante();
   }
 
-  console.log(`Tentando adicionar ao carrinho: ${produto.nome} para o usuário/visitante: ${usuarioLogado}`);
-
-  // Criamos o objeto com os dados que o PHP espera
   const dadosParaEnvio = {
     nome: produto.nome,
     preco: produto.preco,
@@ -30,8 +24,7 @@ export function adicionarAoCarrinho(produto, usuarioLogado) {
     usuario: usuarioLogado
   };
 
-  // Fazemos a requisição para o Back-end
-  fetch('../backend/adicionar_carrinho.php', {
+  fetch('./api/adicionar_carrinho.php', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'
@@ -48,17 +41,13 @@ export function adicionarAoCarrinho(produto, usuarioLogado) {
   })
   .then((data) => {
     if (data.sucesso) {
-      console.log("Resposta do servidor:", data);
+      // UX: Substitua esse alert futuro por um Toast Notification para ficar mais elegante
       alert(`${produto.nome} adicionado ao carrinho com sucesso!`);
     } else {
-      console.error("Erro retornado pelo PHP:", data.erro);
       alert("Erro ao adicionar: " + data.erro);
     }
   })
   .catch((error) => {
-    console.error('Erro na requisição:', error);
-    alert("Erro de comunicação com o servidor. Verifique o console.");
+    alert("Erro de comunicação com o servidor.");
   });
 }
-
-console.log("Módulo pokemon.js carregado com sucesso.");

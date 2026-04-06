@@ -18,7 +18,7 @@ export default function initLogin() {
             }
 
             try {
-                const response = await fetch('../backend/processar_login.php', {
+                const response = await fetch('./api/processar_login.php', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(dados),

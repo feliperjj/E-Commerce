@@ -4,12 +4,16 @@ import { obterOuCriarIdVisitante } from './pokemon.js';
 function criarLinhaProduto(item, tbody) {
   const linhaDaTabela = document.createElement('tr');
   
+  // Formata os valores do item específico
+  const precoUnitario = Number(item.preco).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+  const totalItem = (Number(item.preco) * Number(item.quantidade)).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+  
   // Criamos o conteúdo da linha com os dados do item
   linhaDaTabela.innerHTML = `
     <td>${item.nome}</td>
-    <td>${Number(item.preco).toFixed(2)} Kwz</td>
+    <td>${precoUnitario}</td>
     <td>${item.quantidade}</td>
-    <td>${(item.preco * item.quantidade).toFixed(2)} Kwz</td>
+    <td>${totalItem}</td>
     <td><button class="exclui" style="background:#e74c3c; color:white; border:none; padding:5px 10px; cursor:pointer; border-radius:4px;">Excluir</button></td>
   `;
 
@@ -30,12 +34,12 @@ export default async function injetaDadosTabela() {
 
   try {
     // 1. Verifica quem é o utilizador (Logado ou Visitante)
-    const resSessao = await fetch('../backend/verificar_sessao.php', { credentials: 'include' });
+    const resSessao = await fetch('./api/verificar_sessao.php', { credentials: 'include' });
     const sessao = await resSessao.json();
     const usuarioAtivo = sessao.logado ? sessao.username : obterOuCriarIdVisitante();
 
     // 2. Procura os itens no carrinho
-    const response = await fetch(`../backend/listar_carrinho.php?usuario=${encodeURIComponent(usuarioAtivo)}`);
+    const response = await fetch(`./api/listar_carrinho.php?usuario=${encodeURIComponent(usuarioAtivo)}`);
     const itensDoCarrinho = await response.json();
     
     tbody.innerHTML = ''; // Limpa o "Carregando..."
@@ -49,13 +53,16 @@ export default async function injetaDadosTabela() {
         totalGeral += (Number(item.preco) * Number(item.quantidade));
       });
 
+      // Formata o Total Geral da compra
+      const totalGeralFormatado = totalGeral.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+
       // ============================================================
-      // AQUI ESTÁ O BOTÃO QUE FALTOU: Linha de Total e Checkout
+      // AQUI ESTÁ O BOTÃO: Linha de Total e Checkout
       // ============================================================
       const linhaFinal = document.createElement('tr');
       linhaFinal.innerHTML = `
         <td colspan="3" style="text-align:right; font-weight:bold; font-size: 1.2rem; padding: 20px;">TOTAL:</td>
-        <td style="font-weight:bold; color: #27ae60; font-size: 1.2rem;">${totalGeral.toFixed(2)} Kwz</td>
+        <td style="font-weight:bold; color: #27ae60; font-size: 1.2rem;">${totalGeralFormatado}</td>
         <td>
           <button id="btnCheckout" style="background:#27ae60; color:white; border:none; padding:12px; cursor:pointer; width:100%; border-radius:4px; font-weight:bold; font-size: 1rem;">
             FINALIZAR COMPRA ✔️
@@ -75,9 +82,9 @@ export default async function injetaDadosTabela() {
           return;
         }
 
-        if (confirm(`Deseja confirmar o pagamento de ${totalGeral.toFixed(2)} Kwz?`)) {
+        if (confirm(`Deseja confirmar o pagamento de ${totalGeralFormatado}?`)) {
           try {
-            const res = await fetch('../backend/finalizar_compra.php', { credentials: 'include' });
+            const res = await fetch('./api/finalizar_compra.php', { credentials: 'include' });
             const result = await res.json();
             
             if (result.sucesso) {

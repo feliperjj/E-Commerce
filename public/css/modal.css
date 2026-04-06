@@ -1,97 +1,114 @@
+/* modal.css */
 .modal-container {
-  height: 100vh;
-  width: 100%;
-  background: rgba(0,0,0,.5);
   position: fixed;
   top: 0;
   left: 0;
-  z-index: 2000;
-  display: none;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(8px); /* Efeito de vidro desfocado no fundo */
+  display: none; /* Ativado via JS com a classe .ativo */
   justify-content: center;
   align-items: center;
+  z-index: 1000;
 }
 
 .modal-container.ativo {
   display: flex;
+  animation: fadeIn 0.3s ease forwards;
 }
 
 .modal {
-  background: white;
-  min-width: 300px;
+  background: #1e1e24; /* Fundo escuro combinando com os cards */
+  border: 1px solid #2a2a40;
   padding: 40px;
-  border: 10px solid #007bff;
-  box-shadow: 0 0 0 10px white;
+  border-radius: 16px;
+  width: 100%;
+  max-width: 400px;
   position: relative;
+  box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+  transform: translateY(-30px);
+  animation: slideDown 0.4s ease forwards;
 }
 
-@keyframes modal {
-  from {
-    opacity: 0;
-    transform: translate3d(0, -30px, 0);
-  }
-  to {
-    opacity: 1;
-    transform: translate3d(0, 0, 0);
-  }
-}
-
-.ativo .modal {
-  animation: modal .3s forwards;
-}
-
-.fechar {
-  width: 50px;
-  height: 50px;
-  border-radius: 50%;
-  border: 4px solid white;
-  top: -30px;
-  right: -30px;
+.modal .fechar {
   position: absolute;
-  background: #E54;
-  box-shadow: 0 4px 4px 0 rgba(0,0,0,.3);
+  top: 15px;
+  right: 15px;
+  background: rgba(255, 255, 255, 0.1);
+  border: none;
+  color: #a0a0b2;
   font-size: 1.2rem;
-  color: white;
-  font-family: 'IBM Plex Mono', monospace;
+  width: 35px;
+  height: 35px;
+  border-radius: 50%;
   cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.modal .fechar:hover {
+  background: #e84118;
+  color: #fff;
+  transform: rotate(90deg); /* Animação elegante ao fechar */
+}
+
+.modal form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
 }
 
 .modal label {
-  font-family: 'IBM Plex Mono', monospace;
-  display: block;
-  font-weight: bold;
-  margin: 1rem 0 .5rem 0;
+  color: #ffffff;
+  font-weight: 600;
+  font-size: 0.95rem;
+  margin-bottom: -5px;
 }
 
 .modal input {
-  width: 100%;
-  padding: .7rem .5rem;
-  box-sizing: border-box;
+  padding: 14px 15px;
+  border-radius: 8px;
+  border: 1px solid #3a3a50;
+  background: #111116; /* Campo mais escuro para contraste */
+  color: #fff;
+  font-size: 1rem;
+  outline: none;
+  transition: all 0.3s ease;
+}
+
+.modal input:focus {
+  border-color: #3498db;
+  box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.25);
 }
 
 .modal button[type="submit"] {
-  display: block;
-  background: #E54;
-  border: none;
-  border-radius: 4px;
-  padding: .7rem 2rem;
-  font-size: 1rem;
+  margin-top: 15px;
+  padding: 14px;
+  background: #3498db;
   color: white;
-  font-family: 'IBM Plex Mono', monospace;
-  margin-top: 1rem;
+  border: none;
+  border-radius: 8px;
+  font-size: 1.1rem;
   font-weight: bold;
   cursor: pointer;
-  transition: background .15s, transform .1s, box-shadow .1s;
-  box-shadow: 0 4px 6px rgba(0,0,0,.2);
-  width: 100%;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 10px rgba(52, 152, 219, 0.3);
 }
 
 .modal button[type="submit"]:hover {
-  background: #c0392b;
-  box-shadow: 0 6px 12px rgba(0,0,0,.25);
+  background: #2980b9;
+  transform: translateY(-2px);
 }
 
-.modal button[type="submit"]:active {
-  transform: scale(0.97) translateY(1px);
-  box-shadow: 0 2px 4px rgba(0,0,0,.2);
-  background: #a93226;
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideDown {
+  from { transform: translateY(-30px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
 }

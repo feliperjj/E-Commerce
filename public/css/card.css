@@ -1,98 +1,141 @@
 /* card.css */
 
 .catalogoPrincipal {
-  background: black; /* Trazendo o seu fundo preto de volta! */
+  background: #1e1e24; /* Fundo escuro elegante em vez de preto puro */
   text-align: center;
-  padding-top: 40px;
-  padding-bottom: 40px;
+  padding: 50px 20px;
   display: flex;
   flex-wrap: wrap;
   justify-content: center; 
-  gap: 25px; /* Espaço entre os cards */
+  gap: 30px; 
 }
 
 .itemComprar {
-  position: relative; /* Permite que o texto fique por cima da imagem */
-  width: 280px;
-  height: 380px; /* Altura fixa baseada na proporção das suas imagens originais */
-  border-radius: 0.5rem;
-  overflow: hidden; /* Faz a imagem respeitar a borda arredondada */
-  box-shadow: 0 4px 8px rgba(255, 255, 255, 0.1);
-  transition: transform 0.3s ease;
+  position: relative; 
+  width: 260px; /* Levemente mais fino e elegante */
+  height: 360px; 
+  border-radius: 12px; /* Bordas mais redondas */
+  overflow: hidden; 
+  background: #fff;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+  transition: all 0.3s ease;
 }
 
 .itemComprar:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 8px 16px rgba(255, 255, 255, 0.2);
+  transform: translateY(-8px);
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.3);
 }
 
 .imgProduto {
   width: 100%;
   height: 100%;
+  position: relative;
 }
 
 .itemImg {
   width: 100%;
   height: 100%;
-  object-fit: cover; /* A imagem volta a preencher todo o card sem distorcer! */
+  object-fit: cover; 
 }
 
+/* O Segredo Mágico: Um degradê escuro no fundo da imagem para a letra branca brilhar */
+.imgProduto::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 50%;
+  background: linear-gradient(to top, rgba(0,0,0,0.85) 0%, transparent 100%);
+  pointer-events: none; /* Para não bloquear cliques nos botões */
+}
+
+/* Coração Favorito */
+.btn-fav {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  background: rgba(255, 255, 255, 0.95);
+  border: none;
+  font-size: 1.2rem;
+  cursor: pointer;
+  color: #ccc;
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  z-index: 5;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+
+.btn-fav:hover, .btn-fav.active {
+  transform: scale(1.1);
+  color: #e84118;
+}
+
+/* Texto do Produto */
 .conteudoItem {
   position: absolute;
-  bottom: 15px; /* Fixamos o texto na parte de baixo, muito mais seguro que top: 250px */
+  bottom: 15px; 
   left: 15px;
   right: 15px;
   text-align: left;
-  color: #000;
-  font-family: sans-serif;
+  color: #ffffff; /* Texto branco agora é 100% legível por causa do gradiente */
+  z-index: 2; /* Fica acima do gradiente */
 }
 
 #nome {
-  font-size: 1.2rem;
-  font-weight: bold;
-  margin-bottom: 0.2rem;
+  font-size: 1.15rem;
+  font-weight: 600;
+  margin-bottom: 0.3rem;
+  text-shadow: 0 1px 2px rgba(0,0,0,0.5); /* Sombra extra de leitura */
 }
 
 #precoTexto {
-  font-size: 1.3rem;
+  font-size: 1.25rem;
   font-weight: bold;
   margin-bottom: 0.8rem;
+  color: #2ecc71; /* Um verde moderno para o preço */
 }
 
-/* Escondendo a "Qtd" e o "Total" que eu coloquei sem querer na vitrine */
 #quantidade, #total {
   display: none;
 }
 
-/* --- Ajuste fino dos Botões --- */
+/* Botões Modernizados */
 .comprar, .carrinho {
-  display: inline-block; /* Garante que fiquem na mesma linha organizados */
+  display: inline-block; 
   vertical-align: middle;
-  padding: 0.5rem 0.6rem;
+  padding: 8px 12px;
   border: none;
-  border-radius: 0.3rem;
-  font-weight: bold;
-  font-size: 0.85rem; /* Um pouquinho menor para os dois caberem com folga */
+  border-radius: 6px;
+  font-weight: 600;
+  font-size: 0.85rem; 
   cursor: pointer;
-  white-space: nowrap; /* O segredo de ouro: impede que o texto quebre em duas linhas! */
-  transition: background-color 0.3s ease;
+  white-space: nowrap; 
+  transition: all 0.2s ease;
 }
 
 .comprar {
-  background-color: #007bff;
+  background-color: #3498db;
   color: white;
-  margin-right: 8px; /* O respiro exato entre os botões */
+  margin-right: 6px; 
+  box-shadow: 0 2px 4px rgba(52, 152, 219, 0.4);
 }
 
 .comprar:hover {
-  background-color: #0056b3;
+  background-color: #2980b9;
+  transform: translateY(-1px);
 }
 
 .carrinho {
-  background-color: #4CAF50;
-  color: white;
+  background-color: #fff;
+  color: #333;
 }
 
 .carrinho:hover {
-  background-color: #45a049;
+  background-color: #f1f2f6;
 }

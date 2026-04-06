@@ -38,7 +38,7 @@ export default async function initPerfil() {
 
     // --- CARREGAMENTO INICIAL DOS DADOS ---
     try {
-        const response = await fetch('../backend/api_perfil.php', { credentials: 'include' });
+        const response = await fetch('./api/api_perfil.php', { credentials: 'include' });
         const data = await response.json();
 
         if (data.sucesso) {
@@ -76,7 +76,7 @@ export default async function initPerfil() {
         const msg = document.getElementById('msg-perfil');
 
         try {
-            const res = await fetch('../backend/atualizar_perfil.php', {
+            const res = await fetch('./api/atualizar_perfil.php', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ email: emailAtualizado, senha: senhaNova }),

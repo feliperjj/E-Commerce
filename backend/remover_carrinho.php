@@ -2,7 +2,6 @@
 error_reporting(0);
 ini_set('display_errors', 0);
 
-// ESSA LINHA É OBRIGATÓRIA EM TODOS
 session_save_path(__DIR__ . '/temp'); 
 session_start();
 
@@ -17,33 +16,38 @@ if (!isset($data['id'])) {
 }
 
 $idItem = $data['id'];
+// Identifica quem está pedindo a remoção
+$usuarioDoFrontend = isset($data['usuario']) ? $data['usuario'] : 'visitante';
+$usuarioLogado = isset($_SESSION['username']) ? $_SESSION['username'] : $usuarioDoFrontend;
 
 try {
-    // 1. Primeiro, verificamos a quantidade atual desse item
-    $stmt = $pdo->prepare("SELECT quantidade, preco FROM carrinho WHERE id = :id");
-    $stmt->execute([':id' => $idItem]);
+    // TRAVA: Só busca e altera se o item pertencer a quem fez a requisição
+    $stmt = $pdo->prepare("SELECT quantidade, preco FROM carrinho WHERE id = :id AND usuario = :usuario");
+    $stmt->execute([':id' => $idItem, ':usuario' => $usuarioLogado]);
     $item = $stmt->fetch();
 
     if ($item) {
         if ($item['quantidade'] > 1) {
-            // 2. Se tiver mais de 1, apenas SUBTRAÍMOS uma unidade
             $novaQtd = $item['quantidade'] - 1;
             $novoTotal = $novaQtd * $item['preco'];
 
-            $update = $pdo->prepare("UPDATE carrinho SET quantidade = :qtd, total = :total WHERE id = :id");
+            $update = $pdo->prepare("UPDATE carrinho SET quantidade = :qtd, total = :total WHERE id = :id AND usuario = :usuario");
             $update->execute([
                 ':qtd' => $novaQtd,
                 ':total' => $novoTotal,
-                ':id' => $idItem
+                ':id' => $idItem,
+                ':usuario' => $usuarioLogado
             ]);
             echo json_encode(['status' => 'atualizado', 'novaQtd' => $novaQtd, 'novoTotal' => $novoTotal]);
         } else {
-            // 3. Se só tiver 1, aí sim DELETAMOS a linha
-            $delete = $pdo->prepare("DELETE FROM carrinho WHERE id = :id");
-            $delete->execute([':id' => $idItem]);
+            $delete = $pdo->prepare("DELETE FROM carrinho WHERE id = :id AND usuario = :usuario");
+            $delete->execute([':id' => $idItem, ':usuario' => $usuarioLogado]);
             echo json_encode(['status' => 'removido']);
         }
+    } else {
+        echo json_encode(['status' => 'erro', 'mensagem' => 'Item não encontrado ou acesso negado.']);
     }
 } catch (PDOException $e) {
     echo json_encode(['status' => 'erro', 'mensagem' => $e->getMessage()]);
 }
+?>

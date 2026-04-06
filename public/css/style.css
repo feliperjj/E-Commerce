@@ -4,130 +4,284 @@
 @import './modal.css';
 @import './pagination.css';
 @import './carrinho.css';
+
+/* =========================================
+   TIPOGRAFIA E FUNDO GERAL
+   ========================================= */
+body {
+  font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  background-color: #f4f6f9; /* Fundo levemente acinzentado e moderno */
+  margin: 0;
+  padding: 0;
+  color: #333;
+}
+
+/* =========================================
+   TABELAS (Carrinho e Admin)
+   ========================================= */
 table {
   border-collapse: collapse;
   width: 100%;
+  background: #fff;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.05);
 }
 
 th, td {
-  border: 1px solid #ddd;
-  padding: 8px;
+  border-bottom: 1px solid #eee;
+  padding: 12px 15px;
   text-align: left;
 }
 
 th {
-  background-color: #f2f2f2;
+  background-color: #f8f9fa;
+  color: #555;
+  font-weight: 600;
 }
 
-/* Correção do Footer sem Bootstrap */
-.footer-container {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-around;
-  max-width: 1200px;
-  margin: 0 auto;
-}
-.footer-coluna {
-  margin-bottom: 20px;
-  min-width: 250px;
-}
-.footer-rodape {
-  text-align: center;
-  margin-top: 20px;
-  width: 100%;
-}
-
-.header-menu {
-  display: flex;
-  align-items: center;
-  list-style: none;
-  gap: 20px;
-}
-
-.header-menu li a {
-  text-decoration: none;
-  font-weight: bold;
-  color: #ff0000
-}
-
-/* Estilo para o link de Sair */
-.header-menu li a[href="logout.php"]:hover {
-  text-decoration: underline;
-  color: #ff0000 !important;
-}
-/* --- Estilos da Super Atualização (Categorias, Loader e Favoritos) --- */
-
-/* Container de Categorias */
+/* =========================================
+   FILTROS E LOADER
+   ========================================= */
 .filtros-container {
-    text-align: center;
-    margin: 20px 0;
+  text-align: center;
+  margin: 30px 0;
 }
 
 .btn-filtro {
-    padding: 10px 20px;
-    margin: 5px;
-    border-radius: 25px;
-    border: 2px solid #3498db;
-    background: white;
-    color: #3498db;
-    cursor: pointer;
-    font-weight: bold;
-    transition: 0.3s;
+  padding: 8px 20px;
+  margin: 5px;
+  border-radius: 20px;
+  border: 1px solid #d1d8e0;
+  background: white;
+  color: #4b6584;
+  cursor: pointer;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.02);
 }
 
 .btn-filtro.active, .btn-filtro:hover {
-    background: #3498db;
-    color: white;
+  background: #3498db;
+  color: white;
+  border-color: #3498db;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(52, 152, 219, 0.3);
 }
 
-/* Loader de Carregamento */
 .loader {
-    border: 5px solid #f3f3f3;
-    border-top: 5px solid #3498db;
-    border-radius: 50%;
-    width: 50px;
-    height: 50px;
-    animation: spin 1s linear infinite;
-    margin: 50px auto;
+  border: 4px solid rgba(0,0,0,0.05);
+  border-top: 4px solid #3498db;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  animation: spin 1s linear infinite;
+  margin: 50px auto;
 }
 
 @keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
 }
 
-/* Botão de Favoritos (Coração) */
-.imgProduto {
-    position: relative; /* Necessário para o coração "grudar" na imagem */
+/* Efeito de Foco na Barra de Pesquisa */
+#inputBusca:focus {
+  border-color: #3498db !important;
+  box-shadow: 0 0 8px rgba(52, 152, 219, 0.3) !important;
 }
 
-.btn-fav {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    background: rgba(255, 255, 255, 0.9);
-    border: 1px solid #ddd;
-    font-size: 1.1rem;
-    cursor: pointer;
-    color: #888;
-    width: 35px;
-    height: 35px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
+/* =========================================
+   BANNER PROMOCIONAL PREMIUM
+   ========================================= */
+.promo-banner {
+  max-width: 1200px;
+  margin: 80px auto 40px auto; 
+  background: linear-gradient(135deg, #1e1e24 0%, #111116 100%);
+  border-radius: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 50px 60px;
+  box-shadow: 0 15px 30px rgba(0,0,0,0.2);
+  border: 1px solid #2a2a40;
+  overflow: hidden;
+}
+
+.promo-content {
+  flex: 1;
+  max-width: 500px;
+}
+
+.promo-content h2 {
+  color: #ffffff;
+  font-size: 2.5rem;
+  margin-top: 0;
+  margin-bottom: 15px;
+  font-family: system-ui, -apple-system, sans-serif;
+  text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+}
+
+.promo-content p {
+  color: #a0a0b2;
+  font-size: 1.1rem;
+  line-height: 1.6;
+  margin-bottom: 30px;
+}
+
+.btn-primary {
+  display: inline-block;
+  background: #3498db;
+  color: white;
+  padding: 14px 30px;
+  border-radius: 8px;
+  text-decoration: none;
+  font-weight: bold;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 10px rgba(52, 152, 219, 0.3);
+}
+
+.btn-primary:hover {
+  background: #2980b9;
+  transform: translateY(-3px);
+  box-shadow: 0 6px 15px rgba(52, 152, 219, 0.5);
+}
+
+.promo-image {
+  flex: 1;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.promo-image img {
+  max-width: 100%;
+  height: auto;
+  max-height: 250px; 
+  filter: drop-shadow(0 15px 20px rgba(0,0,0,0.4));
+  transition: transform 0.5s ease;
+}
+
+.promo-banner:hover .promo-image img {
+  transform: scale(1.05) rotate(-3deg) translateY(-10px);
+}
+
+@media (max-width: 850px) {
+  .promo-banner {
+    flex-direction: column;
+    text-align: center;
+    padding: 40px 20px;
+    margin: 40px 20px; 
+  }
+  
+  .promo-content {
+    margin-bottom: 40px;
+  }
+  
+  .promo-image {
     justify-content: center;
-    transition: 0.2s ease-in-out;
-    z-index: 5;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  }
 }
 
-.btn-fav:hover {
-    transform: scale(1.1);
-    color: #e74c3c;
+/* =========================================
+   FOOTER PREMIUM
+   ========================================= */
+.footer {
+  background-color: #111116; 
+  color: #a0a0b2;
+  padding: 70px 20px 20px; 
+  margin-top: 80px; 
+  border-top: 1px solid #2a2a40;
 }
 
-.btn-fav.active {
-    color: #e74c3c;
-    background: #fff;
-    border-color: #e74c3c;
+.footer-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between; 
+  gap: 40px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.footer-coluna {
+  flex: 1;
+  min-width: 250px;
+}
+
+.brand-info h2 {
+  color: #ffffff;
+  font-size: 1.8rem;
+  margin-top: 0;
+  margin-bottom: 15px;
+  font-family: system-ui, -apple-system, sans-serif;
+}
+
+.brand-info h2 span {
+  color: #3498db; 
+}
+
+.brand-info p {
+  line-height: 1.6;
+  font-size: 0.95rem;
+  max-width: 300px; 
+}
+
+.footer-coluna h3 {
+  color: #ffffff;
+  font-size: 1.2rem;
+  margin-top: 0;
+  margin-bottom: 20px;
+  position: relative;
+  padding-bottom: 10px;
+}
+
+.footer-coluna h3::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 40px;
+  height: 3px;
+  background: #3498db;
+  border-radius: 2px;
+}
+
+.links-uteis ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.links-uteis li {
+  margin-bottom: 12px;
+}
+
+.links-uteis a, .social-icons a {
+  color: #a0a0b2;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  display: inline-block;
+}
+
+.links-uteis a:hover {
+  color: #3498db;
+  transform: translateX(8px); 
+}
+
+.social-icons {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.social-icons a:hover {
+  color: #3498db;
+}
+
+.footer-rodape {
+  text-align: center;
+  margin-top: 50px;
+  padding-top: 20px;
+  border-top: 1px solid #2a2a40;
+  font-size: 0.9rem;
+  color: #7a7a8c;
 }

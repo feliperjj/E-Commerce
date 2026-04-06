@@ -18,7 +18,7 @@ export default async function initPagin(usuarioLogado) {
     try {
       catalogoContainer.innerHTML = '<div class="loader"></div>';
       
-      const url = `../backend/api_produtos.php?busca=${encodeURIComponent(termo)}&categoria=${encodeURIComponent(categoria)}`;
+      const url = `./api/api_produtos.php?busca=${encodeURIComponent(termo)}&categoria=${encodeURIComponent(categoria)}`;
       const response = await fetch(url);
       if (!response.ok) throw new Error('Erro na API');
       
@@ -63,6 +63,9 @@ export default async function initPagin(usuarioLogado) {
       const card = document.createElement('div');
       card.className = 'itemComprar';
       
+      // Formatação do preço em Reais (BRL)
+      const precoFormatado = produto.preco.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+      
       // O Botão de favoritos (btn-fav) fica dentro da imgProduto para o CSS funcionar
       card.innerHTML = `
         <div class="imgProduto">
@@ -75,7 +78,7 @@ export default async function initPagin(usuarioLogado) {
             <span style="display:block; color: #7f8c8d; font-size: 0.7rem; font-weight: normal;">Categoria: ${produto.categoria}</span>
           </p>
           <div class="preco">
-            <p id="precoTexto" style="font-size: 1.1rem; color: #2c3e50;">${produto.preco.toFixed(2)} Kwz</p>
+            <p id="precoTexto" style="font-size: 1.1rem; color: #2c3e50;">${precoFormatado}</p>
           </div>
           <p id="quantidade" style="font-size: 0.75rem; color: #95a5a6;">Stock: ${produto.quantidade}</p>
           <div style="display: flex; gap: 6px; margin-top: 10px;">
