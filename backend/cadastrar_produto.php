@@ -1,53 +1,43 @@
 <?php
-// cadastrar_produto.php
-session_save_path(__DIR__ . '/temp');
-session_start();
-header('Content-Type: application/json');
 require_once __DIR__ . '/db_config.php';
+header('Content-Type: application/json');
 
-// Segurança rigorosa
-if (!isset($_SESSION['is_admin']) || $_SESSION['is_admin'] != 1) {
-    echo json_encode(['sucesso' => false, 'erro' => 'Não autorizado.']);
+$nome       = $_POST['nome'] ?? '';
+$preco      = $_POST['preco'] ?? 0;
+$quantidade = $_POST['quantidade'] ?? 0;
+$categoria  = $_POST['categoria'] ?? 'Geral';
+
+// Lógica de Upload do Arquivo
+if (isset($_FILES['foto']) && $_FILES['foto']['error'] === 0) {
+    $extensao = pathinfo($_FILES['foto']['name'], PATHINFO_EXTENSION);
+    $novoNome = uniqid() . "." . $extensao;
+    
+    // Caminho físico onde a imagem será gravada
+    $destino = __DIR__ . '/../public/uploads/' . $novoNome;
+
+    if (move_uploaded_file($_FILES['foto']['tmp_name'], $destino)) {
+        $caminhoImagem = 'uploads/' . $novoNome;
+    } else {
+        echo json_encode(["sucesso" => false, "erro" => "Permissão negada ao salvar arquivo. Verifique a pasta uploads."]);
+        exit;
+    }
+} else {
+    echo json_encode(["sucesso" => false, "erro" => "Selecione uma imagem válida."]);
     exit;
 }
 
-// Verifica se os campos de texto E o ficheiro chegaram
-if (isset($_POST['nome']) && isset($_FILES['foto'])) {
-    $nome = $_POST['nome'];
-    $preco = $_POST['preco'];
-    $qtd = $_POST['quantidade'];
-    $cat = $_POST['categoria'];
-    $foto = $_FILES['foto'];
-
-    // 1. Validar e Processar a Imagem
-    $extensao = strtolower(pathinfo($foto['name'], PATHINFO_EXTENSION));
-    $nomeUnico = uniqid("pkt_") . "." . $extensao;
-    $pastaDestino = __DIR__ . "/../public/img/";
-    $caminhoCompleto = $pastaDestino . $nomeUnico;
-    $caminhoNoBanco  = "img/" . $nomeUnico; // URL relativa armazenada no BD
-
-    // Criar pasta se não existir
-    if (!is_dir($pastaDestino)) mkdir($pastaDestino, 0777, true);
-
-    if (move_uploaded_file($foto['tmp_name'], $caminhoCompleto)) {
-        try {
-            // 2. Gravar no Banco de Dados
-            $stmt = $pdo->prepare("INSERT INTO produtos (nome, preco, quantidade, imagem, categoria) VALUES (:n, :p, :q, :i, :c)");
-            $stmt->execute([
-                ':n' => $nome,
-                ':p' => $preco,
-                ':q' => $qtd,
-                ':i' => $caminhoNoBanco,
-                ':c' => $cat
-            ]);
-            echo json_encode(['sucesso' => true]);
-        } catch (PDOException $e) {
-            echo json_encode(['sucesso' => false, 'erro' => 'Erro SQL: ' . $e->getMessage()]);
-        }
-    } else {
-        echo json_encode(['sucesso' => false, 'erro' => 'Erro ao mover ficheiro para a pasta img/']);
-    }
-} else {
-    echo json_encode(['sucesso' => false, 'erro' => 'Dados do formulário incompletos.']);
+try {
+    $sql = "INSERT INTO `produtos` (`nome`, `preco`, `quantidade`, `imagem`, `categoria`) 
+            VALUES (:n, :p, :q, :i, :c)";
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute([
+        ':n' => $nome,
+        ':p' => $preco,
+        ':q' => $quantidade,
+        ':i' => $caminhoImagem,
+        ':c' => $categoria
+    ]);
+    echo json_encode(["sucesso" => true]);
+} catch (PDOException $e) {
+    echo json_encode(["sucesso" => false, "erro" => "Erro no banco: " . $e->getMessage()]);
 }
-?>

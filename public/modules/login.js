@@ -6,33 +6,49 @@ export default function initLogin() {
 
     if (formLogin) {
         formLogin.addEventListener('submit', async (event) => {
-            event.preventDefault(); // Impede o ecrã branco
+            event.preventDefault(); 
 
             const formData = new FormData(formLogin);
             const dados = Object.fromEntries(formData);
 
-            // A MÁGICA COMEÇA AQUI: Pegamos o UUID anónimo para mandar para o PHP
+            // Pegamos o UUID anónimo para mandar para o PHP (Desafio Ouro)
             const visitorId = localStorage.getItem('ecommerce_visitor_id');
             if (visitorId) {
                 dados.visitorId = visitorId;
             }
 
             try {
-                const response = await fetch('./api/processar_login.php', {
+                // AJUSTE DE CAMINHO: 
+                // Se o seu index.html está na pasta /public e o PHP na /backend, 
+                // o caminho deve ser '../backend/processar_login.php'
+                const response = await fetch('../backend/processar_login.php', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(dados),
-                    credentials: 'include' // Essencial para criar a sessão no PHP
+                    credentials: 'include' // Essencial para manter a sessão ativa
                 });
 
-                const data = await response.json();
+                // Verifica se a resposta é um JSON válido antes de converter
+                const textoResposta = await response.text();
+                let data;
+                try {
+                    data = JSON.parse(textoResposta);
+                } catch (e) {
+                    console.error("O servidor não retornou um JSON válido:", textoResposta);
+                    alert("Erro interno no servidor. Verifique o console.");
+                    return;
+                }
 
                 if (data.sucesso) {
-                    // Opcional, mas recomendado: Limpamos o UUID antigo já que agora ele tem conta
+                    // Limpamos o UUID antigo já que os itens foram migrados no PHP
                     localStorage.removeItem('ecommerce_visitor_id');
                     
                     alert("Login efetuado com sucesso!");
-                    window.location.href = 'index.html'; // ou perfil.html, como preferir
+                    
+                    // FORÇAR RECARREGAMENTO:
+                    // Usamos o href para a index.html. Ao carregar a página do zero, 
+                    // o seu script de Header vai rodar o verificar_sessao.php e ver que você logou.
+                    window.location.href = 'index.html'; 
                 } else {
                     alert("Erro: " + (data.erro || "Credenciais inválidas."));
                 }

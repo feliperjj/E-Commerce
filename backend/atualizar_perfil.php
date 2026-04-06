@@ -1,54 +1,36 @@
 <?php
-// atualizar_perfil.php
+// api/atualizar_perfil.php
 error_reporting(0);
 ini_set('display_errors', 0);
 
-session_save_path(__DIR__ . '/temp');
 session_start();
-
 header('Content-Type: application/json');
 require_once __DIR__ . '/db_config.php';
 
-// Lê o JSON enviado pelo JS
-$input = json_decode(file_get_contents('php://input'), true);
-
-if (!isset($_SESSION['username']) || !$input) {
-    echo json_encode(['sucesso' => false, 'erro' => 'Acesso negado ou dados inválidos.']);
+if (!isset($_SESSION['username'])) {
+    http_response_code(401);
+    echo json_encode(['sucesso' => false, 'erro' => 'Não autorizado.']);
     exit;
 }
 
-$user = $_SESSION['username'];
-$novoEmail = trim($input['email']);
-$novaSenha = trim($input['senha']);
+$input = json_decode(file_get_contents('php://input'), true);
+$usuario = $_SESSION['username'];
+$novoEmail = $input['email'];
+$novaSenha = $input['password'];
 
 try {
     if (!empty($novaSenha)) {
-        // Cenário A: O usuário quer mudar a senha
-        // Fazemos o hash da nova senha antes de salvar!
+        // Se o usuário digitou uma senha, atualiza email e senha
         $hash = password_hash($novaSenha, PASSWORD_DEFAULT);
-        
-        $stmt = $pdo->prepare("UPDATE usuarios SET email = :email, password = :senha WHERE username = :user");
-        $stmt->execute([
-            ':email' => $novoEmail, 
-            ':senha' => $hash, 
-            ':user' => $user
-        ]);
-        
-        $mensagem = 'E-mail e senha atualizados com sucesso!';
+        $stmt = $pdo->prepare("UPDATE usuarios SET email = ?, senha = ? WHERE username = ?");
+        $stmt->execute([$novoEmail, $hash, $usuario]);
     } else {
-        // Cenário B: A senha veio vazia, então o usuário só quer mudar o e-mail
-        $stmt = $pdo->prepare("UPDATE usuarios SET email = :email WHERE username = :user");
-        $stmt->execute([
-            ':email' => $novoEmail, 
-            ':user' => $user
-        ]);
-        
-        $mensagem = 'E-mail atualizado com sucesso!';
+        // Se deixou a senha em branco, atualiza apenas o email
+        $stmt = $pdo->prepare("UPDATE usuarios SET email = ? WHERE username = ?");
+        $stmt->execute([$novoEmail, $usuario]);
     }
 
-    echo json_encode(['sucesso' => true, 'mensagem' => $mensagem]);
-
+    echo json_encode(['sucesso' => true]);
 } catch (PDOException $e) {
-    echo json_encode(['sucesso' => false, 'erro' => 'Erro ao atualizar dados: ' . $e->getMessage()]);
+    echo json_encode(['sucesso' => false, 'erro' => 'Erro ao atualizar: ' . $e->getMessage()]);
 }
-?>

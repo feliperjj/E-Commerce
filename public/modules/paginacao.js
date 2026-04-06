@@ -63,27 +63,39 @@ export default async function initPagin(usuarioLogado) {
       const card = document.createElement('div');
       card.className = 'itemComprar';
       
-      // Formatação do preço em Reais (BRL)
       const precoFormatado = produto.preco.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
       
-      // O Botão de favoritos (btn-fav) fica dentro da imgProduto para o CSS funcionar
+      // AJUSTE DE CORES: Branco Puro (#ffffff) e Verde Neon (#2ecc71) com sombra (text-shadow)
       card.innerHTML = `
-        <div class="imgProduto">
+        <div class="imgProduto" style="position: relative;">
           <img src="${produto.imagem}" class="itemImg" alt="${produto.nome}">
-          <button class="btn-fav" title="Favoritar" data-id="${produto.id}">❤</button>
         </div>
-        <div class="conteudoItem">
-          <p id="nome" style="margin-bottom: 5px;">
-            <strong>${produto.nome}</strong>
-            <span style="display:block; color: #7f8c8d; font-size: 0.7rem; font-weight: normal;">Categoria: ${produto.categoria}</span>
+        <div class="conteudoItem" style="padding: 15px; text-align: left;">
+          
+          <p id="nome" style="margin-bottom: 5px; color: #ffffff; text-shadow: 2px 2px 4px rgba(0,0,0,0.9);">
+            <strong style="font-size: 1.1rem; display: block;">${produto.nome}</strong>
+            <span style="display:block; color: #f0f0f0; font-size: 0.75rem; font-weight: normal; text-shadow: 1px 1px 2px #000;">
+                Categoria: ${produto.categoria}
+            </span>
           </p>
+
           <div class="preco">
-            <p id="precoTexto" style="font-size: 1.1rem; color: #2c3e50;">${precoFormatado}</p>
+            <p id="precoTexto" style="font-size: 1.3rem; color: #2ecc71; font-weight: 800; text-shadow: 1px 1px 3px rgba(0,0,0,0.8); margin: 5px 0;">
+                ${precoFormatado}
+            </p>
           </div>
-          <p id="quantidade" style="font-size: 0.75rem; color: #95a5a6;">Stock: ${produto.quantidade}</p>
+
+          <p id="quantidade" style="font-size: 0.8rem; color: #ffffff; opacity: 0.9; text-shadow: 1px 1px 2px #000;">
+            Stock: ${produto.quantidade}
+          </p>
+
           <div style="display: flex; gap: 6px; margin-top: 10px;">
-            <button class="comprar" style="flex: 1.2; font-size: 0.85rem; padding: 10px 0;">Comprar</button>
-            <button class="carrinho" style="flex: 0.8; font-size: 0.85rem; padding: 10px 0;">🛒</button>
+            <button class="comprar" style="flex: 1.2; font-size: 0.85rem; padding: 10px 0; background: #3498db; color: #fff; border: none; border-radius: 5px; cursor: pointer; font-weight: bold;">
+                Comprar
+            </button>
+            <button class="carrinho" style="flex: 0.8; font-size: 0.85rem; padding: 10px 0; background: #ffffff; color: #1e1e24; border: none; border-radius: 5px; cursor: pointer;">
+                🛒
+            </button>
           </div>
         </div>
       `;
@@ -95,12 +107,6 @@ export default async function initPagin(usuarioLogado) {
 
       card.querySelector('.carrinho').onclick = () => {
         adicionarAoCarrinho(produto, usuarioLogado);
-      };
-      
-      const btnFav = card.querySelector('.btn-fav');
-      btnFav.onclick = (e) => {
-        e.preventDefault();
-        btnFav.classList.toggle('active');
       };
 
       catalogoContainer.appendChild(card);

@@ -3,7 +3,7 @@
 error_reporting(0);
 ini_set('display_errors', 0);
 
-session_save_path(__DIR__ . '/temp');
+// Removido o save_path para a sessão funcionar no InfinityFree
 session_start();
 
 header('Content-Type: application/json');
@@ -20,8 +20,8 @@ if (isset($input['username']) && isset($input['password'])) {
     $visitorId = isset($input['visitorId']) ? $input['visitorId'] : null;
 
     try {
-        // 1. Verifica as credenciais
-        $stmt = $pdo->prepare("SELECT * FROM usuarios WHERE username = :username");
+        // 1. Verifica as credenciais usando crases para o MySQL
+        $stmt = $pdo->prepare("SELECT * FROM `usuarios` WHERE `username` = :username");
         $stmt->execute([':username' => $user]);
         $usuario = $stmt->fetch();
 
@@ -34,26 +34,28 @@ if (isset($input['username']) && isset($input['password'])) {
             // ==========================================
             // GUARDA O PODER DE ADMIN NA SESSÃO
             // ==========================================
-            $_SESSION['is_admin'] = $usuario['is_admin']; 
+            $_SESSION['is_admin'] = (int)$usuario['is_admin']; 
             
             // ==========================================
             // A MÁGICA DA MIGRAÇÃO (DESAFIO OURO)
             // ==========================================
             if ($visitorId && strpos($visitorId, 'visitante_') === 0) {
                 // Transfere todos os itens do carrinho anónimo para o utilizador oficial
-                $migracao = $pdo->prepare("UPDATE carrinho SET usuario = :usuario_oficial WHERE usuario = :visitor_id");
+                // MySQL exige crases em nomes de tabelas/colunas
+                $migracao = $pdo->prepare("UPDATE `carrinho` SET `usuario` = :usuario_oficial WHERE `usuario` = :visitor_id");
                 $migracao->execute([
                     ':usuario_oficial' => $usuario['username'],
                     ':visitor_id'      => $visitorId
                 ]);
             }
 
-            echo json_encode(['sucesso' => true, 'mensagem' => 'Login e sincronização concluídos.']);
+            echo json_encode(['sucesso' => true, 'mensagem' => 'Login e sincronização concluídos.', 'is_admin' => $_SESSION['is_admin']]);
         } else {
             echo json_encode(['sucesso' => false, 'erro' => 'Utilizador ou senha incorretos.']);
         }
     } catch (PDOException $e) {
-        echo json_encode(['sucesso' => false, 'erro' => 'Erro na base de dados.']);
+        // Em produção, não mostramos o erro real por segurança, mas devolvemos JSON válido
+        echo json_encode(['sucesso' => false, 'erro' => 'Erro na base de dados: ' . $e->getMessage()]);
     }
 } else {
     echo json_encode(['sucesso' => false, 'erro' => 'Dados incompletos.']);

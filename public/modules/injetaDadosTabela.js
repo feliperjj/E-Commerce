@@ -1,26 +1,28 @@
-// injetaDadosTabela.js
+// public/modules/injetaDadosTabela.js
 import { obterOuCriarIdVisitante } from './pokemon.js';
 
 function criarLinhaProduto(item, tbody) {
   const linhaDaTabela = document.createElement('tr');
   
-  // Formata os valores do item específico
-  const precoUnitario = Number(item.preco).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
-  const totalItem = (Number(item.preco) * Number(item.quantidade)).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+  // Formata os valores (Garante que são números antes de formatar)
+  const precoNum = Number(item.preco);
+  const qtdNum = Number(item.quantidade);
   
-  // Criamos o conteúdo da linha com os dados do item
+  const precoUnitario = precoNum.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+  const totalItem = (precoNum * qtdNum).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+  
   linhaDaTabela.innerHTML = `
     <td>${item.nome}</td>
     <td>${precoUnitario}</td>
-    <td>${item.quantidade}</td>
+    <td>${qtdNum}</td>
     <td>${totalItem}</td>
-    <td><button class="exclui" style="background:#e74c3c; color:white; border:none; padding:5px 10px; cursor:pointer; border-radius:4px;">Excluir</button></td>
+    <td><button class="exclui" data-id="${item.id}" style="background:#e74c3c; color:white; border:none; padding:5px 10px; cursor:pointer; border-radius:4px;">Excluir</button></td>
   `;
 
-  // Evento para o botão excluir (opcional, mas bom para UX)
+  // Evento para excluir (Ajustado para o seu banco MySQL)
   linhaDaTabela.querySelector('.exclui').addEventListener('click', async () => {
     if (confirm(`Remover ${item.nome} do carrinho?`)) {
-        // Aqui chamarias o teu remover_carrinho.php
+        await fetch(`./api/remover_carrinho.php?id=${item.id}`, { credentials: 'include' });
         window.location.reload(); 
     }
   });
@@ -33,13 +35,17 @@ export default async function injetaDadosTabela() {
   if (!tbody) return;
 
   try {
-    // 1. Verifica quem é o utilizador (Logado ou Visitante)
+    // 1. Verifica quem é o utilizador (ESSENCIAL: credentials 'include')
     const resSessao = await fetch('./api/verificar_sessao.php', { credentials: 'include' });
     const sessao = await resSessao.json();
+    
+    // Se logado, usa o username. Se não, usa o UUID do localStorage.
     const usuarioAtivo = sessao.logado ? sessao.username : obterOuCriarIdVisitante();
 
-    // 2. Procura os itens no carrinho
-    const response = await fetch(`./api/listar_carrinho.php?usuario=${encodeURIComponent(usuarioAtivo)}`);
+    // 2. Procura os itens no carrinho (ADICIONADO: credentials para o PHP ver a sessão)
+    const response = await fetch(`./api/listar_carrinho.php?usuario=${encodeURIComponent(usuarioAtivo)}`, { 
+        credentials: 'include' 
+    });
     const itensDoCarrinho = await response.json();
     
     tbody.innerHTML = ''; // Limpa o "Carregando..."
@@ -53,12 +59,9 @@ export default async function injetaDadosTabela() {
         totalGeral += (Number(item.preco) * Number(item.quantidade));
       });
 
-      // Formata o Total Geral da compra
       const totalGeralFormatado = totalGeral.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
 
-      // ============================================================
-      // AQUI ESTÁ O BOTÃO: Linha de Total e Checkout
-      // ============================================================
+      // Linha de Total e Checkout
       const linhaFinal = document.createElement('tr');
       linhaFinal.innerHTML = `
         <td colspan="3" style="text-align:right; font-weight:bold; font-size: 1.2rem; padding: 20px;">TOTAL:</td>
@@ -73,10 +76,8 @@ export default async function injetaDadosTabela() {
 
       // 4. Lógica de clique do botão de Checkout
       document.getElementById('btnCheckout').addEventListener('click', async () => {
-        // Se não estiver logado, não deixa finalizar (Segurança)
         if (!sessao.logado) {
-          alert("Atenção: Precisa de entrar na sua conta para finalizar a compra e gerar o histórico.");
-          // Abre o teu modal de login automaticamente
+          alert("Atenção: Precisa entrar na sua conta para finalizar a compra.");
           const modalLogin = document.querySelector('[data-modal="container"]');
           if (modalLogin) modalLogin.classList.add('ativo');
           return;
@@ -88,8 +89,8 @@ export default async function injetaDadosTabela() {
             const result = await res.json();
             
             if (result.sucesso) {
-              alert("🎉 Sucesso! A sua compra foi processada e o stock atualizado.");
-              window.location.href = 'perfil.html'; // Vai para o histórico
+              alert("🎉 Sucesso! A sua compra foi processada.");
+              window.location.href = 'perfil.html';
             } else {
               alert("Erro ao finalizar: " + result.erro);
             }
@@ -100,7 +101,6 @@ export default async function injetaDadosTabela() {
       });
 
     } else {
-      // Se o carrinho estiver vazio
       tbody.innerHTML = '<tr><td colspan="5" style="text-align:center; padding: 40px; font-size: 1.2rem; color: #7f8c8d;">O seu carrinho está vazio.</td></tr>';
     }
   } catch (e) { 

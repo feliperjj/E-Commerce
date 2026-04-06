@@ -1,49 +1,48 @@
 <?php
+// backend/criar_banco.php
 require_once __DIR__ . '/db_config.php';
 
 try {
-    
     $pdo->exec("CREATE TABLE IF NOT EXISTS usuarios (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        username TEXT UNIQUE NOT NULL,
-        email TEXT UNIQUE NOT NULL,
-        password TEXT NOT NULL
+        id INT AUTO_INCREMENT PRIMARY KEY,
+        username VARCHAR(100) UNIQUE NOT NULL,
+        email VARCHAR(150) UNIQUE NOT NULL,
+        password VARCHAR(255) NOT NULL,
+        is_admin TINYINT(1) DEFAULT 0
     )");
 
     $pdo->exec("CREATE TABLE IF NOT EXISTS carrinho (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        usuario TEXT NOT NULL,
-        nome TEXT NOT NULL,
-        preco REAL NOT NULL,
-        quantidade INTEGER NOT NULL,
-        total REAL NOT NULL
+        id INT AUTO_INCREMENT PRIMARY KEY,
+        usuario VARCHAR(100) NOT NULL,
+        nome VARCHAR(100) NOT NULL,
+        preco DECIMAL(10,2) NOT NULL,
+        quantidade INT NOT NULL,
+        total DECIMAL(10,2) NOT NULL
     )");
 
     $pdo->exec ("CREATE TABLE IF NOT EXISTS pedidos (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        usuario TEXT NOT NULL,
-        nome_produto TEXT NOT NULL,
-        preco REAL NOT NULL,
-        quantidade INTEGER NOT NULL,
-        total REAL NOT NULL,
+        id INT AUTO_INCREMENT PRIMARY KEY,
+        usuario VARCHAR(100) NOT NULL,
+        nome_produto VARCHAR(100) NOT NULL,
+        preco DECIMAL(10,2) NOT NULL,
+        quantidade INT NOT NULL,
+        total DECIMAL(10,2) NOT NULL,
         data_compra DATETIME DEFAULT CURRENT_TIMESTAMP
     )");
 
- 
     $pdo->exec("CREATE TABLE IF NOT EXISTS produtos (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        nome TEXT NOT NULL,
-        preco REAL NOT NULL,
-        quantidade INTEGER NOT NULL,
-        imagem TEXT NOT NULL,
-        categoria TEXT DEFAULT 'Todos'
+        id INT AUTO_INCREMENT PRIMARY KEY,
+        nome VARCHAR(100) NOT NULL,
+        preco DECIMAL(10,2) NOT NULL,
+        quantidade INT NOT NULL,
+        imagem VARCHAR(255) NOT NULL,
+        categoria VARCHAR(50) DEFAULT 'Todos'
     )");
 
-    // SEEDER: Insere produtos de teste se a tabela estiver vazia
+    // SEEDER: Insere os Pokémons
     $qtdProdutos = $pdo->query("SELECT COUNT(*) FROM produtos")->fetchColumn();
     
     if ($qtdProdutos == 0) {
-       
         $produtosIniciais = [
             ['Pokemon 1', 150.00, 10, 'img/Pokemon 1.jpg', 'Fogo'],
             ['Pokemon 2', 200.00, 5,  'img/Pokemon2.jpg', 'Água'],
@@ -54,16 +53,15 @@ try {
             ['Pokemon 7', 80.00,  20, 'img/pokemon7.jpg', 'Grama']
         ];
 
-      
         $stmt = $pdo->prepare("INSERT INTO produtos (nome, preco, quantidade, imagem, categoria) VALUES (?, ?, ?, ?, ?)");
         foreach ($produtosIniciais as $produto) {
             $stmt->execute($produto);
         }
-        echo "Tabela de produtos criada e populada com sucesso!<br>";
+        echo "✅ Banco MySQL criado e populado com sucesso!<br>";
+    } else {
+        echo "✅ O Banco já existe e está populado.<br>";
     }
-
-    echo "Banco de dados atualizado com sucesso!";
 } catch (PDOException $e) {
-    echo "Erro: " . $e->getMessage();
+    echo "❌ Erro no MySQL: " . $e->getMessage();
 }
 ?>
