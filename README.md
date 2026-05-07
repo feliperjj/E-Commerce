@@ -1,6 +1,6 @@
 <div align="center">
 
-# 🛒 E-Commerce Pokémon
+#  E-Commerce Pokémon
 
 **Uma loja virtual fullstack responsiva, desenvolvida do zero para consolidar boas práticas de desenvolvimento web moderno.**
 
@@ -19,41 +19,41 @@
 
 ---
 
-## 🚀 Sobre o Projeto
+##  Sobre o Projeto
 
 O E-Commerce Pokémon é uma aplicação web fullstack com arquitetura baseada em API (SPA-like). O front-end em JavaScript puro e Vanilla CSS comunica-se com o back-end em PHP exclusivamente via `fetch` e JSON, garantindo uma navegação fluida, segura e sem recarregamentos de página. 
 
 Este projeto atua como portfólio para demonstrar habilidades tangíveis de desenvolvimento backend (segurança, modelagem de banco de dados e transações) e frontend (manipulação do DOM, performance e responsividade).
 
-### 🌐 Acesso Online
+###  Acesso Online
 Você pode visualizar e testar a aplicação em produção aqui: **[bentocommerce.infinityfreeapp.com](https://bentocommerce.infinityfreeapp.com/)**
 
 ---
 
-## ✨ Destaques de Arquitetura e Engenharia
+##  Destaques de Arquitetura e Engenharia
 
-### 🛍️ Carrinho de Compras Inteligente e Híbrido
+###  Carrinho de Compras Inteligente e Híbrido
 - **Carrinho de Visitante (Guest Cart):** Geração de UUID no frontend (`crypto.randomUUID()`) associado ao `localStorage` para rastrear itens de usuários ainda não autenticados.
 - **Migração Dinâmica (Merge):** No momento do login, os produtos adicionados como visitante recebem um `UPDATE` e são integrados de forma transparente à conta definitiva do usuário no banco.
 - **Persistência Total:** Carrinhos não são perdidos ao fechar a aba; tudo trafega e é salvo via banco de dados.
 
-### 📦 Gestão de Pedidos e Transações ACID
+###  Gestão de Pedidos e Transações ACID
 - O processo de finalização de compra utiliza SQL Transacional direto do `PDO` (`beginTransaction()`, `commit()`, `rollback()`). 
 - Isso garante de forma blindada que o **desconto de estoque**, a **limpeza do carrinho** e a **geração do pedido** operem isoladamente e com 100% de integridade – em caso de qualquer falha no fluxo, toda a operação é revertida.
 
-### 🔐 Segurança e Autenticação (Auth Flow)
+###  Segurança e Autenticação (Auth Flow)
 - **Criptografia Forte:** Senhas não trafegam transparentes e são criptografadas com BCRYPT usando `password_hash()`.
 - **Sessões Isoladas:** O acesso à área de usuário (pedidos, dados) é estritamente protegido pela superglobal `$_SESSION`.
 - **Recuperação de Senha:** Funcionalidade que gera tokens seguros, atrelados ao usuário, permitindo o reuso único e controlando tempo máximo para expiração do token.
 - **Painel Administrativo VIP:** Rotas protegidas por checagem dupla de tipo do usuário (`is_admin === verdadeiro`).
 
-### ⚡ Performance no Front-end (Vanilla JS)
+### Performance no Front-end (Vanilla JS)
 - Lógica focada em responsabilidades restritas utilizando **ES6 Modules**.
 - Implementação de um manipulador de tempo **(Debounce)** atrelado à barra de busca do catálogo. Ele engole e previne dezenas de `fetch` indesejados caso o usuário esteja rapidamente teclando o nome de um Pokémon – excelente para poupar carga de servidor.
 
 ---
 
-## 🛠️ Stack Tecnológica
+##  Stack Tecnológica
 
 | Camada | Tecnologia | Aplicação |
 |---|---|---|
