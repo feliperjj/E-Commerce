@@ -86,7 +86,7 @@ export default async function injetaDadosTabela() {
       `;
       tbody.appendChild(linhaFinal);
 
-      // 4. Lógica de clique do botão de Checkout com MOCK de Pagamento
+      // 4. Lógica de clique do botão de Checkout
       document.getElementById('btnCheckout').addEventListener('click', async () => {
         if (!sessao.logado) {
           alert("Atenção: Precisa entrar na sua conta para finalizar a compra.");
@@ -95,69 +95,8 @@ export default async function injetaDadosTabela() {
           return;
         }
 
-        if (confirm(`Deseja confirmar o pagamento de ${totalGeralFormatado}?`)) {
-          const btn = document.getElementById('btnCheckout');
-          const textoOriginal = btn.innerHTML; // Guarda o texto original
-
-          try {
-            // --- INÍCIO DA SIMULAÇÃO (MOCK) ---
-            btn.disabled = true; // Impede duplo clique
-            btn.style.cursor = 'wait';
-            
-            // Passo 1: Conectando...
-            btn.style.background = '#f39c12'; // Laranja
-            btn.innerHTML = '⏳ Conectando ao gateway de pagamento...';
-            
-            await new Promise(resolve => setTimeout(resolve, 1500)); // Espera 1.5s
-
-            // Passo 2: Processando...
-            btn.style.background = '#e67e22'; // Laranja mais escuro
-            btn.innerHTML = '💳 Processando cartão de crédito...';
-
-            await new Promise(resolve => setTimeout(resolve, 2000)); // Espera 2.0s
-            // --- FIM DA SIMULAÇÃO ---
-
-            // Caminho corrigido para /backend/
-            const res = await fetch('/backend/finalizar_compra.php', { credentials: 'include' });
-            const result = await res.json();
-            
-            if (result.sucesso) {
-              // Passo 3: Sucesso!
-              btn.style.background = '#27ae60'; // Verde
-              btn.innerHTML = '✅ Pagamento Aprovado!';
-              
-              // Dá um tempinho para o usuário ler antes de redirecionar
-              setTimeout(() => {
-                  window.location.href = 'perfil.html';
-              }, 800);
-            } else {
-              // Em caso de erro no PHP (ex: sem estoque)
-              btn.disabled = false;
-              btn.style.cursor = 'pointer';
-              btn.style.background = '#e74c3c'; // Vermelho
-              btn.innerHTML = '❌ Pedido Recusado';
-              alert("Erro ao finalizar: " + result.erro);
-              
-              // Restaura o botão depois de um tempo
-              setTimeout(() => {
-                  btn.style.background = '#27ae60';
-                  btn.innerHTML = textoOriginal;
-              }, 3000);
-            }
-          } catch (e) {
-            // Em caso de erro de rede
-            btn.disabled = false;
-            btn.style.cursor = 'pointer';
-            btn.style.background = '#e74c3c'; // Vermelho
-            btn.innerHTML = '⚠️ Erro de Conexão';
-            alert("Erro na comunicação com o servidor.");
-            
-            setTimeout(() => {
-                btn.style.background = '#27ae60';
-                btn.innerHTML = textoOriginal;
-            }, 3000);
-          }
-        }
+        // Redireciona para a página de checkout
+        window.location.href = 'checkout.html';
       });
 
     } else {

@@ -7,12 +7,17 @@ try {
     $sql = "SELECT * FROM produtos";
     $params = [];
     
-    // Se houver busca, filtra por nome
+    // Se houver busca, filtra por nome ou id
+    $id = isset($_GET['id']) && is_numeric($_GET['id']) ? (int)$_GET['id'] : null;
     $busca = isset($_GET['busca']) && trim($_GET['busca']) !== '' ? trim($_GET['busca']) : null;
     $categoria = isset($_GET['categoria']) && trim($_GET['categoria']) !== 'todos' ? trim($_GET['categoria']) : null;
     
-    if ($busca || $categoria) {
+    if ($id || $busca || $categoria) {
         $conditions = [];
+        if ($id) {
+            $conditions[] = "id = :id";
+            $params[':id'] = $id;
+        }
         if ($busca) {
             $conditions[] = "nome LIKE :busca";
             $params[':busca'] = '%' . $busca . '%';

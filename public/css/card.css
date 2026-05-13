@@ -12,18 +12,21 @@
 
 .itemComprar {
   position: relative; 
-  width: 260px; /* Levemente mais fino e elegante */
+  width: 260px;
   height: 360px; 
-  border-radius: 12px; /* Bordas mais redondas */
+  border-radius: 16px; /* Bordas mais redondas e modernas */
   overflow: hidden; 
-  background: #fff;
-  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
-  transition: all 0.3s ease;
+  background: #111116; /* Fundo mais dark ao invés de branco */
+  border: 1px solid rgba(255, 255, 255, 0.05); /* Borda de vidro sutil */
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255,255,255,0.1);
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); /* Efeito bounce suave */
 }
 
 .itemComprar:hover {
-  transform: translateY(-8px);
-  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.3);
+  transform: translateY(-10px) scale(1.02);
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.5), 0 0 20px rgba(52, 152, 219, 0.4); /* Neon glow dinâmico azul */
+  border-color: rgba(52, 152, 219, 0.5); /* Borda acende no hover */
+  z-index: 10;
 }
 
 .imgProduto {

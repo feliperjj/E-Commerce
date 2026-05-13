@@ -6,6 +6,8 @@ import initLogin from './modules/login.js';
 import { adicionarAoCarrinho } from './modules/pokemon.js';
 import initRegistrar from './modules/registrar.js';
 import initPerfil from './modules/perfil.js'; // <-- 1. Adicionamos o import do Perfil aqui!
+import initProduto from './modules/produto_detalhe.js';
+import initCheckout from './modules/checkout.js';
 
 async function iniciarApp() {
     // 1. CAPTURA o retorno do auth (feliperjj ou visitante)
@@ -24,6 +26,16 @@ async function iniciarApp() {
         // Se a URL tiver 'perfil.html', carrega a Área do Cliente
         initPerfil(usuarioLogado); 
         
+    } else if (paginaAtual.includes('produto.html')) {
+        
+        // Carrega a página de detalhes do produto
+        initProduto(usuarioLogado);
+        
+    } else if (paginaAtual.includes('checkout.html')) {
+        
+        // Carrega a lógica de finalização de compra
+        initCheckout();
+
     } else if (paginaAtual.includes('carrinho.html')) {
         
         // Espaço reservado: Se você tiver um JS só pro carrinho no futuro, entra aqui!

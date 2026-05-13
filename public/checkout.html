@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>Checkout - Bento E-Commerce</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="./css/style.css">
+  <style>
+    .checkout-container {
+      max-width: 900px;
+      margin: 40px auto;
+      padding: 30px;
+      background: rgba(30, 30, 36, 0.95);
+      border-radius: 16px;
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      box-shadow: 0 15px 30px rgba(0,0,0,0.5);
+      color: #fff;
+    }
+    
+    .checkout-header {
+      text-align: center;
+      margin-bottom: 30px;
+      padding-bottom: 20px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    
+    .checkout-header h1 {
+      font-size: 2.2rem;
+      color: #3498db;
+      margin: 0;
+    }
+
+    .checkout-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 30px;
+    }
+
+    @media (max-width: 768px) {
+      .checkout-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .form-section {
+      background: #111116;
+      padding: 25px;
+      border-radius: 12px;
+      border: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .form-section h3 {
+      color: #2ecc71;
+      margin-top: 0;
+      margin-bottom: 20px;
+      font-size: 1.3rem;
+      border-bottom: 1px solid rgba(46, 204, 113, 0.3);
+      padding-bottom: 10px;
+    }
+
+    .form-group {
+      margin-bottom: 15px;
+    }
+
+    .form-group label {
+      display: block;
+      color: #a0a0b2;
+      margin-bottom: 8px;
+      font-size: 0.9rem;
+      font-weight: 600;
+    }
+
+    .form-group input {
+      width: 100%;
+      padding: 12px 15px;
+      background: rgba(0, 0, 0, 0.4);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 8px;
+      color: #fff;
+      font-size: 1rem;
+      outline: none;
+      transition: all 0.3s;
+      box-sizing: border-box;
+    }
+
+    .form-group input:focus {
+      border-color: #3498db;
+      box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.2);
+    }
+    
+    .row-2 {
+      display: flex;
+      gap: 15px;
+    }
+    .row-2 > div {
+      flex: 1;
+    }
+
+    .checkout-footer {
+      margin-top: 30px;
+      text-align: center;
+    }
+
+    .btn-pagar {
+      background: #27ae60;
+      color: white;
+      border: none;
+      padding: 18px 40px;
+      font-size: 1.3rem;
+      font-weight: bold;
+      border-radius: 8px;
+      cursor: pointer;
+      width: 100%;
+      max-width: 400px;
+      transition: all 0.3s;
+      box-shadow: 0 4px 15px rgba(39, 174, 96, 0.4);
+    }
+
+    .btn-pagar:hover {
+      background: #219653;
+      transform: translateY(-2px);
+    }
+    
+    .btn-pagar:disabled {
+      opacity: 0.8;
+      cursor: not-allowed;
+      transform: none;
+    }
+  </style>
+</head>
+<body>
+ 
+  <header class="header">
+    <nav>
+      <ul class="header-menu">
+        <li><a href="index.html">Produtos</a></li>
+        <li><a href="carrinho.html">Meus Pedidos</a></li>
+        <li><a data-modal="abrir" href="#">Login →</a></li>
+        <li><a data-modal="abrir1" href="#">Registrar →</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main>
+    <div class="checkout-container">
+      <div class="checkout-header">
+        <h1>Finalizar Pedido</h1>
+        <p style="color: #a0a0b2; margin-top: 10px;">Quase lá! Insira os dados de entrega e pagamento.</p>
+      </div>
+
+      <form id="formCheckout">
+        <div class="checkout-grid">
+          <!-- Endereço -->
+          <div class="form-section">
+            <h3>🚚 Endereço de Entrega</h3>
+            
+            <div class="form-group">
+              <label>Nome Completo</label>
+              <input type="text" placeholder="Ash Ketchum" required>
+            </div>
+            
+            <div class="form-group">
+              <label>Rua e Número</label>
+              <input type="text" placeholder="Rua Pallet, 123" required>
+            </div>
+
+            <div class="row-2">
+              <div class="form-group">
+                <label>Cidade</label>
+                <input type="text" placeholder="Pallet Town" required>
+              </div>
+              <div class="form-group">
+                <label>CEP</label>
+                <input type="text" placeholder="00000-000" required>
+              </div>
+            </div>
+          </div>
+
+          <!-- Pagamento -->
+          <div class="form-section">
+            <h3>💳 Dados de Pagamento</h3>
+            
+            <div class="form-group">
+              <label>Número do Cartão</label>
+              <input type="text" placeholder="0000 0000 0000 0000" required maxlength="19">
+            </div>
+            
+            <div class="form-group">
+              <label>Nome impresso no Cartão</label>
+              <input type="text" placeholder="ASH KETCHUM" required>
+            </div>
+
+            <div class="row-2">
+              <div class="form-group">
+                <label>Validade (MM/AA)</label>
+                <input type="text" placeholder="12/30" required maxlength="5">
+              </div>
+              <div class="form-group">
+                <label>CVV</label>
+                <input type="text" placeholder="123" required maxlength="4">
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="checkout-footer">
+          <button type="submit" class="btn-pagar" id="btnPagar">CONFIRMAR PAGAMENTO ✔️</button>
+          <div style="margin-top: 15px;">
+            <a href="carrinho.html" style="color: #3498db; text-decoration: none;">← Voltar para o carrinho</a>
+          </div>
+        </div>
+      </form>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-container">
+      
+      <div class="footer-coluna brand-info">
+        <h2>Bento <span>E-Commerce</span></h2>
+        <p>Sua jornada começa aqui. Modelos 3D exclusivos de Pokémon para mestres e colecionadores.</p>
+      </div>
+
+      <div class="footer-coluna links-uteis">
+        <h3>Navegação</h3>
+        <ul>
+          <li><a href="index.html">Catálogo Principal</a></li>
+          <li><a href="carrinho.html">Meu Carrinho</a></li>
+          <li><a data-modal="abrir" href="#">Área do Cliente</a></li>
+          <li><a href="swagger.html" target="_blank" style="color: #2ecc71;">Documentação API</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-coluna social-links">
+        <h3>Conecte-se</h3>
+        <div class="social-icons">
+          <a href="#">▶ Discord</a>
+          <a href="#">▶ Instagram</a>
+          <a href="#">▶ LinkedIn</a>
+        </div>
+      </div>
+
+    </div>
+    
+    <div class="footer-rodape">
+      <p>&copy; 2026 Bento E-commerce. Desenvolvido com ☕ e código limpo.</p>
+    </div>
+  </footer>
+
+  <!-- Modais -->
+  <section class="modal-container" data-modal="container">
+    <div class="modal">
+      <button data-modal="fechar" class="fechar">X</button>
+      <form action="../backend/processar_login.php" method="POST">
+        <label for="usernameLogin">Usuário</label>
+        <input type="text" name="username" id="usernameLogin" required>
+        <label for="passwordLogin">Senha</label>
+        <input type="password" name="password" id="passwordLogin" required>
+        <button type="submit">Entrar</button>
+      </form>
+    </div>
+  </section>
+
+  <section class="modal-container" data-modal="container1">
+    <div class="modal">
+      <button data-modal="fechar1" class="fechar">X</button>
+      <form action="../backend/registro.php" method="POST">
+        <label for="usernameReg">Username</label>
+        <input type="text" name="username" id="usernameReg" required>
+        <label for="emailReg">Email</label>
+        <input type="email" name="email" id="emailReg" required>
+        <label for="passwordReg">Senha</label>
+        <input type="password" name="password" id="passwordReg" required>
+        <button type="submit">Registrar</button>
+      </form>
+    </div>
+  </section>
+
+  <script type="module" src="./index.js" async defer></script>
+</body>
+</html>

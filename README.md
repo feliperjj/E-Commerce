@@ -2,167 +2,132 @@
 
 # 🛒 E-Commerce Pokémon
 
-![PHP](https://img.shields.io/badge/PHP-777BB4?style=for-the-badge&logo=php&logoColor=white)
-![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black)
-![SQLite](https://img.shields.io/badge/SQLite-003B57?style=for-the-badge&logo=sqlite&logoColor=white)
-![HTML5](https://img.shields.io/badge/HTML5-E34F26?style=for-the-badge&logo=html5&logoColor=white)
-![CSS3](https://img.shields.io/badge/CSS3-1572B6?style=for-the-badge&logo=css3&logoColor=white)
+**Uma loja virtual fullstack responsiva, desenvolvida do zero para consolidar boas práticas de desenvolvimento web moderno.**
 
-**Loja virtual fullstack construída do zero com PHP puro, JavaScript ES6 e SQLite.**
+[![Deploy](https://img.shields.io/badge/Acessar%20Projeto%20Online-00A98F?style=for-the-badge&logoColor=white)](https://bentocommerce.infinityfreeapp.com/)
+[![GitHub repo](https://img.shields.io/badge/Ver%20Repositório-181717?style=for-the-badge&logo=github&logoColor=white)](https://github.com/feliperjj/E-Commerce)
 
-[Ver Repositório](https://github.com/feliperjj/E-Commerce) · [Reportar Bug](https://github.com/feliperjj/E-Commerce/issues)
+<br/>
+
+![PHP](https://img.shields.io/badge/PHP_8+-777BB4?style=flat-square&logo=php&logoColor=white)
+![JavaScript ES6](https://img.shields.io/badge/JavaScript_ES6-F7DF1E?style=flat-square&logo=javascript&logoColor=black)
+![SQLite](https://img.shields.io/badge/SQLite-003B57?style=flat-square&logo=sqlite&logoColor=white)
+![HTML5](https://img.shields.io/badge/HTML5-E34F26?style=flat-square&logo=html5&logoColor=white)
+![CSS3](https://img.shields.io/badge/CSS3-1572B6?style=flat-square&logo=css3&logoColor=white)
 
 </div>
 
 ---
 
-## 📋 Sobre o Projeto
+## 🚀 Sobre o Projeto
 
-O E-Commerce Pokémon é uma aplicação web fullstack funcional, desenvolvida para demonstrar domínio de conceitos fundamentais do desenvolvimento web moderno: autenticação segura, persistência de dados, integração front-back via API JSON e controle de acesso por perfil de usuário.
+O E-Commerce Pokémon é uma aplicação web fullstack com arquitetura baseada em API (SPA-like). O front-end em JavaScript puro e Vanilla CSS comunica-se com o back-end em PHP exclusivamente via `fetch` e JSON, garantindo uma navegação fluida, segura e sem recarregamentos de página. 
 
-O projeto segue uma arquitetura **SPA-like** onde o front-end em JavaScript puro se comunica com o back-end PHP exclusivamente via `fetch` e JSON, sem recarregamentos de página.
+Este projeto atua como portfólio para demonstrar habilidades tangíveis de desenvolvimento backend (segurança, modelagem de banco de dados e transações) e frontend (manipulação do DOM, performance e responsividade).
+
+### 🌐 Acesso Online
+Você pode visualizar e testar a aplicação em produção aqui: **[bentocommerce.infinityfreeapp.com](https://bentocommerce.infinityfreeapp.com/)**
 
 ---
 
-## ✅ Funcionalidades
+## ✨ Destaques de Arquitetura e Engenharia
 
-### 🔐 Autenticação & Segurança
-- Cadastro de usuários com senha armazenada via `password_hash` (bcrypt)
-- Login seguro com `password_verify` e criação de sessão PHP
-- Logout com destruição de sessão e limpeza do localStorage
-- **Recuperação de senha** com geração de token único com expiração de 1 hora
-- Proteção de rotas por sessão (redirecionamento de visitantes não autenticados)
-- Painel administrativo protegido por verificação de `is_admin` no servidor
+### 🛍️ Carrinho de Compras Inteligente e Híbrido
+- **Carrinho de Visitante (Guest Cart):** Geração de UUID no frontend (`crypto.randomUUID()`) associado ao `localStorage` para rastrear itens de usuários ainda não autenticados.
+- **Migração Dinâmica (Merge):** No momento do login, os produtos adicionados como visitante recebem um `UPDATE` e são integrados de forma transparente à conta definitiva do usuário no banco.
+- **Persistência Total:** Carrinhos não são perdidos ao fechar a aba; tudo trafega e é salvo via banco de dados.
 
-### 🛒 Carrinho de Compras Inteligente
-- Carrinho **persistente no banco de dados** — não se perde ao fechar o navegador
-- **Carrinho de visitante com UUID** — o usuário pode adicionar produtos antes de fazer login
-- **Migração automática** do carrinho anônimo para a conta do usuário no momento do login
-- Controle de quantidade: incremento, decremento e remoção de itens
+### 📦 Gestão de Pedidos e Transações ACID
+- O processo de finalização de compra utiliza SQL Transacional direto do `PDO` (`beginTransaction()`, `commit()`, `rollback()`). 
+- Isso garante de forma blindada que o **desconto de estoque**, a **limpeza do carrinho** e a **geração do pedido** operem isoladamente e com 100% de integridade – em caso de qualquer falha no fluxo, toda a operação é revertida.
 
-### 📦 Gestão de Pedidos
-- Finalização de compra com **transação SQL** (`beginTransaction` / `commit` / `rollback`)
-- Atualização automática do estoque ao finalizar pedido
-- Histórico completo de compras acessível na área do cliente
+### 🔐 Segurança e Autenticação (Auth Flow)
+- **Criptografia Forte:** Senhas não trafegam transparentes e são criptografadas com BCRYPT usando `password_hash()`.
+- **Sessões Isoladas:** O acesso à área de usuário (pedidos, dados) é estritamente protegido pela superglobal `$_SESSION`.
+- **Recuperação de Senha:** Funcionalidade que gera tokens seguros, atrelados ao usuário, permitindo o reuso único e controlando tempo máximo para expiração do token.
+- **Painel Administrativo VIP:** Rotas protegidas por checagem dupla de tipo do usuário (`is_admin === verdadeiro`).
 
-### 👤 Área do Cliente
-- Visualização e edição de e-mail e senha
-- Histórico de pedidos com data, produto, quantidade e valor
-
-### ⚙️ Painel Administrativo
-- KPIs em tempo real: total de usuários, faturamento e alertas de estoque
-- Alertas automáticos para produtos com estoque abaixo de 5 unidades
-- Tabela de gerenciamento de produtos (adicionar, editar, excluir)
-- Últimos 10 pedidos realizados na plataforma
-
-### 🔍 Catálogo de Produtos
-- Busca em tempo real com **debounce** (evita requisições desnecessárias)
-- Filtro por categoria
-- Paginação dinâmica
-- Cards com botão "Adicionar ao Carrinho" e "Comprar agora"
+### ⚡ Performance no Front-end (Vanilla JS)
+- Lógica focada em responsabilidades restritas utilizando **ES6 Modules**.
+- Implementação de um manipulador de tempo **(Debounce)** atrelado à barra de busca do catálogo. Ele engole e previne dezenas de `fetch` indesejados caso o usuário esteja rapidamente teclando o nome de um Pokémon – excelente para poupar carga de servidor.
 
 ---
 
 ## 🛠️ Stack Tecnológica
 
-| Camada | Tecnologia | Uso |
+| Camada | Tecnologia | Aplicação |
 |---|---|---|
-| **Front-end** | HTML5 + CSS3 | Estrutura e estilo das páginas |
-| **Front-end** | JavaScript ES6 Modules | Lógica de interface, fetch, roteamento |
-| **Back-end** | PHP 8+ | APIs REST-like, sessões, lógica de negócio |
-| **Banco de dados** | SQLite (via PDO) | Persistência de usuários, carrinho, pedidos |
-| **Servidor local** | XAMPP (Apache) | Ambiente de desenvolvimento |
-| **Versionamento** | Git + GitHub | Controle de versão |
+| **Front-end** | `HTML5` + `CSS3` | Layout dinâmico da loja, flexbox, grid e interações responsivas. |
+| **Front-end** | `JS (ES6)` | Roteamento condicional no index, tratamento de API, carrinho na tela em tempo real. |
+| **Back-end** | `PHP 8+` | Intersecção lógica, endpoints robustos e verificação severa de estado. |
+| **Banco de Dados** | `SQLite (PDO)` | Persistência local segura via queries parametrizadas (anti-SQL Injection). |
+| **Deploy** | `InfinityFree` | Hospedagem para portfólio live, rotulando os protocolos CORS. |
 
----
+<details>
+<summary>📂 <b>Clique aqui para visualizar a estrutura de pastas</b></summary>
+<br>
 
-## 🏗️ Arquitetura
-
-```
+```text
 E-Commerce/
-├── index.html              # Página principal (catálogo)
-├── carrinho.html           # Página do carrinho
-├── perfil.html             # Área do cliente
-├── admin.html              # Painel administrativo
-├── index.js                # Entry point — carrega módulos por rota
-│
-├── modules/                # JavaScript modularizado (ES6)
-│   ├── auth.js             # Verificação de sessão e montagem do header
-│   ├── login.js            # Lógica do formulário de login
-│   ├── registrar.js        # Lógica do formulário de registro
-│   ├── paginacao.js        # Catálogo com busca, filtro e paginação
-│   ├── pokemon.js          # Função de adicionar ao carrinho + UUID visitante
-│   └── perfil.js           # Área do cliente (dados + histórico)
-│
-├── processar_login.php     # Autenticação + migração do carrinho anônimo
-├── registro.php            # Cadastro de novos usuários
-├── verificar_sessao.php    # Endpoint de verificação de sessão (usado pelo JS)
-├── adicionar_carrinho.php  # Adiciona/atualiza item no carrinho
-├── remover_carrinho.php    # Decrementa/remove item do carrinho
-├── finalizar_compra.php    # Transação SQL: pedido + estoque + limpeza
-├── api_admin.php           # Dados do painel admin (protegido por is_admin)
-├── api_perfil.php          # Dados do perfil + histórico do usuário
-├── atualizar_perfil.php    # Atualização de e-mail e senha
-├── solicitar_recuperacao.php # Gera token de recuperação de senha
-├── processar_redefinicao.php # Valida token e redefine senha
-│
-├── db_config.php           # Conexão PDO com SQLite
-├── criar_banco.php         # Criação de tabelas e seed inicial
-├── ecommerce.db            # Banco de dados SQLite
-│
-└── css/                    # Estilos da aplicação
+├── api/ ou root/           # Endpoints consumidos
+│   ├── adicionar_carrinho.php
+│   ├── finalizar_compra.php 
+│   ├── registro.php
+│   └── api_admin.php
+├── modules/                # JavaScript modular
+│   ├── auth.js             # Montagem dinâmica do header
+│   ├── paginacao.js        # Filtros, debounce e listagem
+│   └── pokemon.js          # Cartão com injeção UUID
+├── css/                    # Estilo nativo do sistema
+├── db_config.php           # Setup do PDO com SQLite
+├── criar_banco.php         # Script inicial de criação de tabelas/seed
+├── index.html              # Alojamento Single-Page
+└── ...
 ```
+</details>
 
 ---
 
-## 🔑 Destaques Técnicos
+## 💻 Como Rodar o Projeto Localmente
 
-- **Transação SQL real:** O processo de finalização de compra usa `beginTransaction()`, `commit()` e `rollback()` para garantir que pedido, desconto de estoque e limpeza do carrinho aconteçam de forma atômica — ou tudo funciona, ou nada é alterado.
+Se desejar testar a aplicação no seu próprio ambiente, siga o passo a passo:
 
-- **Carrinho anônimo com UUID:** Visitantes não logados recebem um identificador único (`crypto.randomUUID()`) armazenado no `localStorage`. No momento do login, todos os itens desse carrinho são migrados automaticamente para a conta do usuário via `UPDATE ... WHERE usuario = :visitor_id`.
+### Pré-Requisitos
+Você precisará ter instalado:
+* **[XAMPP](https://www.apachefriends.org/pt_br/index.html)**
+* **[Git](https://git-scm.com/)**
 
-- **Arquitetura modular no front-end:** Todo o JavaScript é dividido em módulos ES6 com responsabilidades únicas (auth, login, paginação, perfil...), carregados via `import/export` e roteados pelo `index.js` conforme a URL atual.
-
-- **Senhas com hashing seguro:** O cadastro utiliza `password_hash($password, PASSWORD_DEFAULT)` para armazenar bcrypt, e o login usa `password_verify()` — nunca senha em texto puro.
-
----
-
-## 🏁 Como Rodar Localmente
-
-### Pré-requisitos
-- [XAMPP](https://www.apachefriends.org/) (Apache + PHP)
-- [Git](https://git-scm.com/)
-
-### Passo a passo
-
-**1. Clone o repositório dentro do htdocs do XAMPP:**
+### Configuração
+**1.** Abra o seu terminal na pasta do servidor do XAMPP (`htdocs`):
 ```bash
+cd C:\xampp\htdocs
 git clone https://github.com/feliperjj/E-Commerce.git
-cd E-Commerce
 ```
 
-**2. Inicie o Apache** no painel de controle do XAMPP.
+**2.** Ligue o servidor web Apache através do painel de controle do XAMPP.
 
-**3. Crie o banco de dados:**
-
-Acesse no navegador:
-```
+**3.** Suba a base de dados em seu navegador:
+```text
 http://localhost/E-Commerce/criar_banco.php
 ```
-Isso criará as tabelas e inserirá produtos de exemplo automaticamente.
 
-**4. Acesse a aplicação:**
-```
+**4.** Feito isso, navegue no ambiente acessando o index. Nunca use aberturas diretas (como duplo-clique abrindo `file:///`) para não quebrar a arquitetura de Módulos ES6. Use sempre o servidor local:
+```text
 http://localhost/E-Commerce/index.html
 ```
 
-> **Observação:** Use sempre `http://localhost/...` e não `file://...`, pois o JavaScript usa ES6 Modules que exigem um servidor HTTP.
-
 ---
 
-## 👤 Autor
+## 👨‍💻 Autor
 
-**Felipe Bento**
+Criado e mantido por **Felipe Bento** 🚀
 
-[![LinkedIn](https://img.shields.io/badge/LinkedIn-0077B5?style=flat-square&logo=linkedin&logoColor=white)](https://linkedin.com/in/felipe-bento-000984108)
-[![GitHub](https://img.shields.io/badge/GitHub-181717?style=flat-square&logo=github&logoColor=white)](https://github.com/feliperjj)
+<p align="left">
+  <a href="https://linkedin.com/in/felipe-bento-000984108" target="_blank">
+    <img src="https://img.shields.io/badge/-LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white" target="_blank">
+  </a>
+  <a href="https://github.com/feliperjj" target="_blank">
+    <img src="https://img.shields.io/badge/-GitHub-181717?style=for-the-badge&logo=github&logoColor=white" target="_blank">
+  </a>
+</p>
+

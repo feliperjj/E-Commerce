@@ -5,8 +5,9 @@
   left: 0;
   width: 100vw;
   height: 100vh;
-  background: rgba(0, 0, 0, 0.7);
-  backdrop-filter: blur(8px); /* Efeito de vidro desfocado no fundo */
+  background: rgba(0, 0, 0, 0.8);
+  backdrop-filter: blur(12px); /* Efeito de vidro desfocado no fundo */
+  -webkit-backdrop-filter: blur(12px);
   display: none; /* Ativado via JS com a classe .ativo */
   justify-content: center;
   align-items: center;
@@ -19,16 +20,17 @@
 }
 
 .modal {
-  background: #1e1e24; /* Fundo escuro combinando com os cards */
-  border: 1px solid #2a2a40;
+  background: rgba(30, 30, 36, 0.95); /* Fundo escuro transparente */
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
   padding: 40px;
-  border-radius: 16px;
+  border-radius: 20px;
   width: 100%;
   max-width: 400px;
   position: relative;
-  box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+  box-shadow: 0 30px 60px rgba(0,0,0,0.8), inset 0 1px 0 rgba(255,255,255,0.1);
   transform: translateY(-30px);
-  animation: slideDown 0.4s ease forwards;
+  animation: slideDown 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
 }
 
 .modal .fechar {

@@ -3,9 +3,11 @@
   position: sticky;
   top: 0;
   z-index: 100;
-  background: rgba(255, 255, 255, 0.95);
-  backdrop-filter: blur(10px); /* Efeito de vidro */
-  box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+  background: rgba(17, 17, 22, 0.85); /* Escuro com transparência */
+  backdrop-filter: blur(15px); /* Efeito de vidro mais forte */
+  -webkit-backdrop-filter: blur(15px);
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5); /* Sombra mais profunda */
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05); /* Borda de vidro */
   padding: 15px 5%;
   display: flex;
   justify-content: center;
@@ -23,7 +25,7 @@
 }
 
 .header-menu a {
-  color: #2f3640;
+  color: #e0e0e0;
   text-decoration: none;
   font-weight: 600;
   font-size: 1rem;
@@ -33,7 +35,7 @@
 }
 
 .header-menu a:hover {
-  background-color: #f1f2f6;
+  background-color: rgba(255, 255, 255, 0.1);
   color: #3498db;
 }
 

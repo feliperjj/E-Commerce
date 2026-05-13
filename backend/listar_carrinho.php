@@ -3,7 +3,7 @@
 error_reporting(0);
 ini_set('display_errors', 0);
 
-session_start();
+require_once __DIR__ . '/session.php';
 require_once __DIR__ . '/db_config.php';
 header('Content-Type: application/json');
 

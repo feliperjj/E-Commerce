@@ -6,7 +6,7 @@ ini_set('display_errors', 0);
 
 // 1. OBRIGATÓRIO: Apontar para a mesma pasta de sessões do login
 session_save_path(__DIR__ . '/temp'); 
-session_start();
+require_once __DIR__ . '/session.php';
 
 require_once __DIR__ . '/db_config.php';
 

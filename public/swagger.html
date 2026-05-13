@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Bento E-Commerce - API Docs</title>
+  <link rel="stylesheet" href="https://unpkg.com/swagger-ui-dist@5.11.0/swagger-ui.css" />
+  <style>
+    body {
+      margin: 0;
+      background: #111116; /* Fundo condizente com o resto do sistema */
+    }
+    /* Estilizando o Swagger UI para Dark Mode */
+    .swagger-ui {
+      background: #f4f6f9;
+      border-radius: 8px;
+      padding: 20px;
+      margin: 20px auto;
+      max-width: 1200px;
+    }
+    .topbar {
+      background: #1a1a20;
+      padding: 10px 20px;
+      color: white;
+      font-weight: bold;
+      font-size: 1.5rem;
+      border-bottom: 2px solid #3498db;
+    }
+    .topbar a {
+      color: #3498db;
+      text-decoration: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="topbar">
+    <a href="index.html">← Voltar para a Loja</a> | <span>Documentação da API</span>
+  </div>
+  <div id="swagger-ui"></div>
+  <script src="https://unpkg.com/swagger-ui-dist@5.11.0/swagger-ui-bundle.js" crossorigin></script>
+  <script>
+    window.onload = () => {
+      window.ui = SwaggerUIBundle({
+        url: './openapi.yaml',
+        dom_id: '#swagger-ui',
+        deepLinking: true,
+        presets: [
+          SwaggerUIBundle.presets.apis,
+          SwaggerUIBundle.SwaggerUIStandalonePreset
+        ],
+        layout: "BaseLayout"
+      });
+    };
+  </script>
+</body>
+</html>

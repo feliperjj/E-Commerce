@@ -1,0 +1,349 @@
+openapi: 3.0.0
+info:
+  title: Bento E-Commerce API
+  description: Documentação da API do Bento E-Commerce
+  version: 1.0.0
+servers:
+  - url: /public/api
+    description: Frontend API Wrappers
+  - url: /backend
+    description: Core Backend Endpoints
+paths:
+  /api_produtos.php:
+    get:
+      summary: Retorna a lista de produtos
+      tags:
+        - Produtos
+      description: Obtém produtos do catálogo. Pode ser filtrado por id, nome ou categoria.
+      parameters:
+        - name: id
+          in: query
+          description: ID do produto
+          required: false
+          schema:
+            type: integer
+        - name: busca
+          in: query
+          description: Termo de busca pelo nome do produto
+          required: false
+          schema:
+            type: string
+        - name: categoria
+          in: query
+          description: Categoria do produto (Ex. Fogo, Água, Grama)
+          required: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Lista de produtos
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Produto'
+
+  /adicionar_carrinho.php:
+    post:
+      summary: Adiciona um produto ao carrinho
+      tags:
+        - Carrinho
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                nome:
+                  type: string
+                preco:
+                  type: number
+                quantidade:
+                  type: integer
+                total:
+                  type: number
+                usuario:
+                  type: string
+      responses:
+        '200':
+          description: Sucesso ou erro
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SucessoResposta'
+
+  /listar_carrinho.php:
+    get:
+      summary: Retorna os itens do carrinho do usuário
+      tags:
+        - Carrinho
+      parameters:
+        - name: usuario
+          in: query
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Itens do carrinho
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/CarrinhoItem'
+
+  /remover_carrinho.php:
+    post:
+      summary: Remove um item do carrinho
+      tags:
+        - Carrinho
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                id:
+                  type: integer
+                usuario:
+                  type: string
+      responses:
+        '200':
+          description: Removido com sucesso
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SucessoResposta'
+
+  /finalizar_compra.php:
+    get:
+      summary: Finaliza a compra do carrinho
+      tags:
+        - Carrinho
+      description: Converte os itens do carrinho do usuário atual em pedidos definitivos. Exige sessão logada.
+      responses:
+        '200':
+          description: Compra finalizada
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SucessoResposta'
+
+  /processar_login.php:
+    post:
+      summary: Autenticação de usuário
+      tags:
+        - Autenticação
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+                password:
+                  type: string
+              required:
+                - username
+                - password
+      responses:
+        '200':
+          description: Redirecionamento após login
+          
+  /registro.php:
+    post:
+      summary: Cadastro de usuário
+      tags:
+        - Autenticação
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+                email:
+                  type: string
+                password:
+                  type: string
+              required:
+                - username
+                - email
+                - password
+      responses:
+        '200':
+          description: Redirecionamento após registro
+          
+  /verificar_sessao.php:
+    get:
+      summary: Verifica a sessão atual
+      tags:
+        - Autenticação
+      responses:
+        '200':
+          description: Estado da sessão
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  logado:
+                    type: boolean
+                  username:
+                    type: string
+                  is_admin:
+                    type: integer
+
+  /api_perfil.php:
+    get:
+      summary: Retorna os dados do perfil logado (pedidos)
+      tags:
+        - Usuário
+      responses:
+        '200':
+          description: Lista de pedidos do usuário
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/PedidoItem'
+
+  /atualizar_perfil.php:
+    post:
+      summary: Atualiza a senha do perfil logado
+      tags:
+        - Usuário
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                novaSenha:
+                  type: string
+      responses:
+        '200':
+          description: Sucesso ao atualizar senha
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SucessoResposta'
+                
+  /api_todos_pedidos.php:
+    get:
+      summary: Lista todos os pedidos gerais (Admin)
+      tags:
+        - Administração
+      responses:
+        '200':
+          description: Lista de todos os pedidos
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/PedidoItem'
+
+  /cadastrar_produto.php:
+    post:
+      summary: Cadastra um novo produto (Admin)
+      tags:
+        - Administração
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                nome:
+                  type: string
+                preco:
+                  type: number
+                quantidade:
+                  type: integer
+                categoria:
+                  type: string
+                foto:
+                  type: string
+                  format: binary
+      responses:
+        '200':
+          description: Sucesso ao cadastrar
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SucessoResposta'
+
+components:
+  schemas:
+    Produto:
+      type: object
+      properties:
+        id:
+          type: integer
+        nome:
+          type: string
+        preco:
+          type: string
+        quantidade:
+          type: string
+        imagem:
+          type: string
+        categoria:
+          type: string
+          
+    CarrinhoItem:
+      type: object
+      properties:
+        id:
+          type: integer
+        usuario:
+          type: string
+        nome:
+          type: string
+        preco:
+          type: string
+        quantidade:
+          type: string
+        total:
+          type: string
+
+    PedidoItem:
+      type: object
+      properties:
+        id:
+          type: integer
+        usuario:
+          type: string
+        nome_produto:
+          type: string
+        preco:
+          type: string
+        quantidade:
+          type: string
+        total:
+          type: string
+        data_compra:
+          type: string
+          format: date-time
+
+    SucessoResposta:
+      type: object
+      properties:
+        sucesso:
+          type: boolean
+        mensagem:
+          type: string
+        erro:
+          type: string

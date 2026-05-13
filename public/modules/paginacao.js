@@ -101,8 +101,7 @@ export default async function initPagin(usuarioLogado) {
       `;
 
       card.querySelector('.comprar').onclick = () => { 
-        adicionarAoCarrinho(produto, usuarioLogado); 
-        window.location.href = 'carrinho.html'; 
+        window.location.href = `produto.html?id=${produto.id}`; 
       };
 
       card.querySelector('.carrinho').onclick = () => {

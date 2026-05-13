@@ -4,7 +4,7 @@ error_reporting(0);
 ini_set('display_errors', 0);
 
 // REMOVIDO: session_save_path que causava o erro 401 no InfinityFree
-session_start();
+require_once __DIR__ . '/session.php';
 
 header('Content-Type: application/json');
 require_once __DIR__ . '/db_config.php';

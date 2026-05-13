@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>Detalhes do Produto - Bento E-Commerce</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="./css/style.css">
+  <style>
+    /* Estilos específicos para a página do produto */
+    .produto-detalhe-container {
+      max-width: 1000px;
+      margin: 40px auto;
+      padding: 30px;
+      display: flex;
+      gap: 50px;
+      background: #1a1a20; /* Card puro */
+      border-radius: 12px;
+      color: #fff;
+      border: 2px solid #444455;
+    }
+    .produto-imagem {
+      flex: 1;
+      text-align: center;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .produto-imagem img {
+      max-width: 100%;
+      border-radius: 12px;
+      box-shadow: 0 10px 20px rgba(0,0,0,0.5);
+    }
+    .produto-info {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+    .produto-info h1 {
+      font-size: 3rem;
+      margin-bottom: 10px;
+      color: #fff;
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.9);
+    }
+    .produto-info .categoria {
+      color: #3498db;
+      font-weight: bold;
+      margin-bottom: 25px;
+      font-size: 1.2rem;
+      text-transform: uppercase;
+    }
+    .produto-info .preco {
+      font-size: 3rem;
+      color: #2ecc71;
+      font-weight: 800;
+      margin-bottom: 20px;
+      text-shadow: 1px 1px 3px rgba(0,0,0,0.8);
+    }
+    .produto-info .estoque {
+      margin-bottom: 40px;
+      color: #ccc;
+      font-size: 1.2rem;
+    }
+    .acoes-produto {
+      display: flex;
+      gap: 15px;
+    }
+    .btn-comprar-agora {
+      flex: 2;
+      padding: 15px;
+      font-size: 1.2rem;
+      font-weight: bold;
+      background: #3498db;
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background 0.3s;
+      text-transform: uppercase;
+    }
+    .btn-comprar-agora:hover {
+      background: #2980b9;
+    }
+    .btn-add-carrinho {
+      flex: 1;
+      padding: 15px;
+      font-size: 1.5rem;
+      background: #fff;
+      color: #1e1e24;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background 0.3s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .btn-add-carrinho:hover {
+      background: #f0f0f0;
+    }
+    .voltar-link {
+      display: inline-block;
+      margin-top: 30px;
+      color: #3498db;
+      text-decoration: none;
+      font-weight: bold;
+      font-size: 1.1rem;
+    }
+    .voltar-link:hover {
+      text-decoration: underline;
+    }
+    @media (max-width: 768px) {
+      .produto-detalhe-container {
+        flex-direction: column;
+        padding: 20px;
+      }
+    }
+  </style>
+</head>
+<body>
+ 
+  <header class="header">
+    <nav>
+      <ul class="header-menu">
+        <li><a href="index.html">Produtos</a></li>
+        <li><a href="carrinho.html">Meus Pedidos</a></li>
+        <li><a data-modal="abrir" href="#">Login →</a></li>
+        <li><a data-modal="abrir1" href="#">Registrar →</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main id="produto-conteudo">
+    <div style="text-align: center; padding: 100px; color: #fff;">
+        <h2>Carregando detalhes do produto...</h2>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-container">
+      
+      <div class="footer-coluna brand-info">
+        <h2>Bento <span>E-Commerce</span></h2>
+        <p>Sua jornada começa aqui. Modelos 3D exclusivos de Pokémon para mestres e colecionadores.</p>
+      </div>
+
+      <div class="footer-coluna links-uteis">
+        <h3>Navegação</h3>
+        <ul>
+          <li><a href="index.html">Catálogo Principal</a></li>
+          <li><a href="carrinho.html">Meu Carrinho</a></li>
+          <li><a data-modal="abrir" href="#">Área do Cliente</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-coluna social-links">
+        <h3>Conecte-se</h3>
+        <div class="social-icons">
+          <a href="#">▶ Discord</a>
+          <a href="#">▶ Instagram</a>
+          <a href="#">▶ LinkedIn</a>
+        </div>
+      </div>
+
+    </div>
+    
+    <div class="footer-rodape">
+      <p>&copy; 2026 Bento E-commerce. Desenvolvido com ☕ e código limpo.</p>
+    </div>
+  </footer>
+
+  <!-- Modais -->
+  <section class="modal-container" data-modal="container">
+    <div class="modal">
+      <button data-modal="fechar" class="fechar">X</button>
+      <form action="../backend/processar_login.php" method="POST">
+        <label for="usernameLogin">Usuário</label>
+        <input type="text" name="username" id="usernameLogin" required>
+        <label for="passwordLogin">Senha</label>
+        <input type="password" name="password" id="passwordLogin" required>
+        <button type="submit">Entrar</button>
+      </form>
+    </div>
+  </section>
+
+  <section class="modal-container" data-modal="container1">
+    <div class="modal">
+      <button data-modal="fechar1" class="fechar">X</button>
+      <form action="../backend/registro.php" method="POST">
+        <label for="usernameReg">Username</label>
+        <input type="text" name="username" id="usernameReg" required>
+        <label for="emailReg">Email</label>
+        <input type="email" name="email" id="emailReg" required>
+        <label for="passwordReg">Senha</label>
+        <input type="password" name="password" id="passwordReg" required>
+        <button type="submit">Registrar</button>
+      </form>
+    </div>
+  </section>
+
+  <script type="module" src="./index.js" async defer></script>
+</body>
+</html>

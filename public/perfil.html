@@ -5,103 +5,262 @@
   <title>Minha Conta - Bento E-Commerce</title>
   <link rel="stylesheet" href="./css/style.css">
   <style>
-    .perfil-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; max-width: 1000px; margin: 40px auto; padding: 20px; }
-    .card { background: white; padding: 25px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+    .perfil-container {
+      max-width: 1000px;
+      margin: 40px auto;
+      padding: 20px;
+    }
+
+    .perfil-header {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+
+    .perfil-header h1 {
+      font-size: 2.2rem;
+      color: #3498db;
+      margin: 0;
+    }
+
+    .perfil-grid { 
+      display: grid; 
+      grid-template-columns: 1fr 1fr; 
+      gap: 30px; 
+    }
+
+    .card { 
+      background: rgba(30, 30, 36, 0.95); 
+      padding: 25px; 
+      border-radius: 16px; 
+      box-shadow: 0 15px 30px rgba(0,0,0,0.5); 
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      color: #fff;
+    }
+
+    .card h2 {
+      color: #2ecc71;
+      margin-top: 0;
+      border-bottom: 1px solid rgba(46, 204, 113, 0.3);
+      padding-bottom: 10px;
+      font-size: 1.4rem;
+    }
+
     .full-width { grid-column: span 2; }
-    input { width: 100%; padding: 10px; margin: 10px 0; border: 1px solid #ccc; border-radius: 4px; }
-    button.btn-save { background: #3498db; color: white; border: none; padding: 10px 20px; cursor: pointer; border-radius: 4px; width: 100%; font-weight: bold; }
-    table { width: 100%; border-collapse: collapse; margin-top: 15px; }
-    th, td { padding: 12px; text-align: left; border-bottom: 1px solid #eee; }
+    
+    @media (max-width: 768px) {
+      .perfil-grid { grid-template-columns: 1fr; }
+      .full-width { grid-column: span 1; }
+    }
+
+    label {
+      display: block;
+      color: #a0a0b2;
+      margin-bottom: 8px;
+      margin-top: 15px;
+      font-size: 0.9rem;
+      font-weight: 600;
+    }
+
+    input { 
+      width: 100%; 
+      padding: 12px 15px; 
+      margin-bottom: 10px; 
+      background: rgba(0, 0, 0, 0.4);
+      border: 1px solid rgba(255, 255, 255, 0.1); 
+      border-radius: 8px; 
+      color: #fff;
+      font-size: 1rem;
+      outline: none;
+      box-sizing: border-box;
+      transition: all 0.3s;
+    }
+
+    input:focus {
+      border-color: #3498db;
+      box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.2);
+    }
+
+    input[readonly] {
+      background: rgba(255, 255, 255, 0.05);
+      color: #7f8c8d;
+      cursor: not-allowed;
+    }
+
+    button.btn-save { 
+      background: #3498db; 
+      color: white; 
+      border: none; 
+      padding: 15px 20px; 
+      cursor: pointer; 
+      border-radius: 8px; 
+      width: 100%; 
+      font-weight: bold; 
+      font-size: 1.1rem;
+      margin-top: 15px;
+      transition: all 0.3s;
+      box-shadow: 0 4px 10px rgba(52, 152, 219, 0.3);
+    }
+
+    button.btn-save:hover {
+      background: #2980b9;
+      transform: translateY(-2px);
+    }
+
+    table { 
+      width: 100%; 
+      border-collapse: collapse; 
+      margin-top: 15px; 
+      background: transparent;
+      box-shadow: none;
+    }
+    
+    th {
+      background: rgba(0, 0, 0, 0.4);
+      color: #a0a0b2;
+      padding: 12px;
+      text-align: left;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    td { 
+      padding: 15px 12px; 
+      text-align: left; 
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05); 
+      color: #e0e0e0;
+    }
+
+    tr:hover td {
+      background: rgba(255, 255, 255, 0.02);
+    }
+
+    .status-badge {
+      background: rgba(39, 174, 96, 0.2);
+      color: #2ecc71;
+      padding: 5px 10px;
+      border-radius: 20px;
+      font-size: 0.85rem;
+      font-weight: bold;
+    }
   </style>
 </head>
-<body style="background: #f4f6f9;">
+<body>
   <header class="header">
-    <nav><ul class="header-menu"><li><a href="index.html">← Voltar à Loja</a></li></ul></nav>
+    <nav>
+        <ul class="header-menu">
+            <li><a href="index.html">← Voltar à Loja</a></li>
+            <li><a href="carrinho.html">🛒 Meu Carrinho</a></li>
+        </ul>
+    </nav>
   </header>
 
-  <main class="perfil-grid">
-    
-    <section class="card">
-      <h2>Configurações da Conta</h2>
-      <form id="formAtualizarPerfil">
-        <label>Nome de Usuário</label>
-        <input type="text" id="inputUser" name="username" readonly style="background: #eee;">
-        
-        <label>Novo E-mail</label>
-        <input type="email" id="inputEmail" name="email" required>
-        
-        <label>Nova Senha (deixe em branco para não alterar)</label>
-        <input type="password" name="password" placeholder="********">
-        
-        <button type="submit" class="btn-save">Atualizar Dados</button>
-      </form>
-      <p id="msgPerfil" style="margin-top:10px; text-align:center;"></p>
-    </section>
+  <main class="perfil-container">
+    <div class="perfil-header">
+      <h1>Área do Cliente</h1>
+      <p style="color: #a0a0b2; margin-top: 10px;">Gerencie suas informações e acompanhe seus pedidos.</p>
+    </div>
 
-    <section class="card">
-      <h2>Resumo</h2>
-      <div style="text-align: center; padding: 20px;">
-        <div style="font-size: 50px;">👤</div>
-        <h3 id="displayUser">...</h3>
-        <p id="displayEmail">...</p>
-        <hr>
-        <p>Membro desde: 2026</p>
-      </div>
-    </section>
+    <div class="perfil-grid">
+      
+      <section class="card">
+        <h2>⚙️ Configurações da Conta</h2>
+        <form id="formAtualizarPerfil">
+          <label>Nome de Usuário</label>
+          <input type="text" id="inputUser" name="username" readonly>
+          
+          <label>Endereço de E-mail</label>
+          <input type="email" id="inputEmail" name="email" required>
+          
+          <label>Nova Senha (opcional)</label>
+          <input type="password" name="password" placeholder="Digite para alterar...">
+          
+          <button type="submit" class="btn-save">Atualizar Dados</button>
+        </form>
+        <p id="msgPerfil" style="margin-top:15px; text-align:center; font-weight: bold;"></p>
+      </section>
 
-    <section class="card full-width">
-      <h2>Meus Pedidos Realizados</h2>
-      <table>
-        <thead>
-          <tr>
-            <th>Data</th>
-            <th>Produto</th>
-            <th>Qtd</th>
-            <th>Total</th>
-            <th>Status</th>
-          </tr>
-        </thead>
-        <tbody id="tabela-pedidos">
-          <tr><td colspan="5">Carregando histórico...</td></tr>
-        </tbody>
-      </table>
-    </section>
+      <section class="card">
+        <h2>👤 Perfil</h2>
+        <div style="text-align: center; padding: 30px 20px;">
+          <div style="font-size: 60px; margin-bottom: 15px;">🎮</div>
+          <h3 id="displayUser" style="color: #3498db; font-size: 1.8rem; margin: 0;">...</h3>
+          <p id="displayEmail" style="color: #a0a0b2; margin-top: 5px;">...</p>
+          <hr style="border: none; border-top: 1px solid rgba(255,255,255,0.1); margin: 20px 0;">
+          <p style="color: #2ecc71; font-weight: bold;">Membro Master desde 2026</p>
+        </div>
+      </section>
 
+      <section class="card full-width">
+        <h2>📦 Meus Pedidos Realizados</h2>
+        <div style="overflow-x: auto;">
+          <table>
+            <thead>
+              <tr>
+                <th>Data</th>
+                <th>Produto</th>
+                <th style="text-align: center;">Qtd</th>
+                <th style="text-align: right;">Total</th>
+                <th style="text-align: center;">Status</th>
+              </tr>
+            </thead>
+            <tbody id="tabela-pedidos">
+              <tr><td colspan="5" style="text-align:center; padding: 40px;">Carregando histórico...</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+    </div>
   </main>
+
+  <footer class="footer">
+    <div class="footer-container">
+      <div class="footer-coluna brand-info">
+        <h2>Bento <span>E-Commerce</span></h2>
+      </div>
+      <div class="footer-rodape" style="width: 100%; border-top: none; margin-top: 0; padding-top: 0;">
+        <p>&copy; 2026 Bento E-commerce. Desenvolvido com ☕ e código limpo.</p>
+      </div>
+    </div>
+  </footer>
 
   <script>
     async function carregarDados() {
-      const response = await fetch('./api/api_perfil.php', { credentials: 'include' });
-      const dados = await response.json();
+      try {
+        const response = await fetch('./api/api_perfil.php', { credentials: 'include' });
+        const dados = await response.json();
 
-      if (dados.logado) {
-        // Preenche os campos de edição
-        document.getElementById('inputUser').value = dados.perfil.username;
-        document.getElementById('inputEmail').value = dados.perfil.email;
-        
-        // Preenche o resumo lateral
-        document.getElementById('displayUser').textContent = dados.perfil.username;
-        document.getElementById('displayEmail').textContent = dados.perfil.email;
+        if (dados.logado) {
+          // Preenche os campos de edição
+          document.getElementById('inputUser').value = dados.perfil.username;
+          document.getElementById('inputEmail').value = dados.perfil.email;
+          
+          // Preenche o resumo lateral
+          document.getElementById('displayUser').textContent = dados.perfil.username;
+          document.getElementById('displayEmail').textContent = dados.perfil.email;
 
-        // Preenche a tabela de histórico
-        const tbody = document.getElementById('tabela-pedidos');
-        tbody.innerHTML = '';
-        if (dados.pedidos.length === 0) {
-          tbody.innerHTML = '<tr><td colspan="5">Ainda não realizou compras.</td></tr>';
+          // Preenche a tabela de histórico
+          const tbody = document.getElementById('tabela-pedidos');
+          tbody.innerHTML = '';
+          if (dados.pedidos.length === 0) {
+            tbody.innerHTML = '<tr><td colspan="5" style="text-align:center; padding: 40px; color: #7f8c8d;">Nenhuma compra realizada ainda. Vá explorar a loja!</td></tr>';
+          } else {
+            dados.pedidos.forEach(p => {
+              const precoTotal = Number(p.total).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+              tbody.innerHTML += `
+                <tr>
+                  <td>${new Date(p.data_compra).toLocaleDateString('pt-BR')}</td>
+                  <td style="color: #3498db; font-weight: bold;">${p.nome_produto}</td>
+                  <td style="text-align: center;">${p.quantidade}x</td>
+                  <td style="text-align: right; color: #2ecc71; font-weight: bold;">${precoTotal}</td>
+                  <td style="text-align: center;"><span class="status-badge">Aprovado</span></td>
+                </tr>`;
+            });
+          }
         } else {
-          dados.pedidos.forEach(p => {
-            tbody.innerHTML += `
-              <tr>
-                <td>${new Date(p.data_compra).toLocaleDateString('pt-BR')}</td>
-                <td><strong>${p.nome_produto}</strong></td>
-                <td>${p.quantidade}</td>
-                <td>${Number(p.total).toFixed(2)} Kwz</td>
-                <td><span style="color:green">✔ Concluído</span></td>
-              </tr>`;
-          });
+          window.location.href = 'index.html';
         }
-      } else {
-        window.location.href = 'index.html';
+      } catch (e) {
+          console.error(e);
       }
     }
 
@@ -111,18 +270,22 @@
       const formData = new FormData(e.target);
       const dados = Object.fromEntries(formData);
 
-      const res = await fetch('./api/atualizar_perfil.php', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(dados),
-        credentials: 'include'
-      });
-      const result = await res.json();
-      
-      const msg = document.getElementById('msgPerfil');
-      msg.textContent = result.sucesso ? "Dados atualizados com sucesso!" : "Erro: " + result.erro;
-      msg.style.color = result.sucesso ? "green" : "red";
-      if(result.sucesso) carregarDados();
+      try {
+          const res = await fetch('./api/atualizar_perfil.php', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(dados),
+            credentials: 'include'
+          });
+          const result = await res.json();
+          
+          const msg = document.getElementById('msgPerfil');
+          msg.textContent = result.sucesso ? "✅ Dados atualizados com sucesso!" : "❌ Erro: " + result.erro;
+          msg.style.color = result.sucesso ? "#2ecc71" : "#e74c3c";
+          if(result.sucesso) carregarDados();
+      } catch (err) {
+          console.error(err);
+      }
     });
 
     carregarDados();

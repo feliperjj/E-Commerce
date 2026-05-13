@@ -24,8 +24,8 @@ export function adicionarAoCarrinho(produto, usuarioLogado) {
     usuario: usuarioLogado
   };
 
-  // 🟢 CORRIGIDO: Agora o Front-end bate na pasta certa do servidor (/backend/)
-  fetch('/backend/adicionar_carrinho.php', {
+  // Retornamos a Promise para podermos aguardar (await) em outros arquivos
+  return fetch('/backend/adicionar_carrinho.php', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'
@@ -42,13 +42,15 @@ export function adicionarAoCarrinho(produto, usuarioLogado) {
   })
   .then((data) => {
     if (data.sucesso) {
-      // UX: Substitua esse alert futuro por um Toast Notification para ficar mais elegante
-      alert(`${produto.nome} adicionado ao carrinho com sucesso!`);
+      // Retorna sucesso em vez de dar alert (quem chamar decide se dá alert ou não)
+      return true;
     } else {
       alert("Erro ao adicionar: " + data.erro);
+      return false;
     }
   })
   .catch((error) => {
     alert("Erro de comunicação com o servidor.");
+    return false;
   });
 }

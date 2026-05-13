@@ -9,11 +9,12 @@
    TIPOGRAFIA E FUNDO GERAL
    ========================================= */
 body {
-  font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-  background-color: #f4f6f9; /* Fundo levemente acinzentado e moderno */
+  font-family: 'Inter', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  background: radial-gradient(circle at top, #1a1a24 0%, #111116 100%);
+  background-attachment: fixed;
   margin: 0;
   padding: 0;
-  color: #333;
+  color: #e0e0e0;
 }
 
 /* =========================================
@@ -52,13 +53,14 @@ th {
   padding: 8px 20px;
   margin: 5px;
   border-radius: 20px;
-  border: 1px solid #d1d8e0;
-  background: white;
-  color: #4b6584;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.05);
+  color: #a0a0b2;
   cursor: pointer;
   font-weight: 600;
   transition: all 0.3s ease;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+  box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+  backdrop-filter: blur(5px);
 }
 
 .btn-filtro.active, .btn-filtro:hover {
@@ -66,7 +68,7 @@ th {
   color: white;
   border-color: #3498db;
   transform: translateY(-2px);
-  box-shadow: 0 4px 8px rgba(52, 152, 219, 0.3);
+  box-shadow: 0 4px 15px rgba(52, 152, 219, 0.5);
 }
 
 .loader {
